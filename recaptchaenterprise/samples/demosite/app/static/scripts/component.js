@@ -9,7 +9,6 @@ import {
 } from "https://unpkg.com/lit@2.4.1/directives/ref.js?module";
 // import { asyncReplace } from "https://unpkg.com/lit@2.4.1/directives/async-replace.js?module";
 // import { classMap } from "https://unpkg.com/lit@2.4.1/directives/class-map.js?module";
-import "https://unpkg.com/@material/mwc-button@0.27.0/mwc-button.js?module";
 import "https://unpkg.com/@material/mwc-textfield@0.27.0/mwc-textfield.js?module";
 import "https://unpkg.com/@material/mwc-textarea@0.27.0/mwc-textarea.js?module";
 import "https://unpkg.com/@material/mwc-fab@0.27.0/mwc-fab.js?module";
@@ -118,10 +117,6 @@ class RecaptchaDemo extends LitElement {
         display: block;
         margin-bottom: 24px;
       }
-      mwc-button {
-        display: block;
-        margin-bottom: 24px;
-      }
       mwc-drawer {
         --mdc-drawer-width: 50vw;
       }
@@ -163,6 +158,7 @@ class RecaptchaDemo extends LitElement {
       /* Content */
       .content {
         /* cannot use flex or grid due to mwc-top-app-bar */
+        font-family: monospace;
         height: 100%;
         min-height: 100vh;
       }
@@ -181,43 +177,73 @@ class RecaptchaDemo extends LitElement {
       .example mwc-top-app-bar {
         margin: 0 0 auto;
       }
-      /* Slotted */
-      ::slotted(.g-recaptcha) {
-        display: block;
-      }
+      /* Checkbox */
       ::slotted(div.g-recaptcha) {
-        display: block;
-        margin-top: 24px;
-      }
-      ::slotted(button) {
-        pointer-events: none;
-      }
-      ::slotted(button[onclick]),
-      ::slotted(button.g-recaptcha) {
-        cursor: pointer;
-        pointer-events: auto;
+        display: flex;
+        justify-content: center;
+        margin: 0 auto 24px;
       }
       /* Button */
-      button.target,
-      .shadows button,
-      ::slotted(button) {
+      ::slotted(button),
+      .button {
         appearance: none;
-        background: transparent;
-        border: 0;
+        /* background: var(--blue-40); */
+        background: var(--pink-40);
+        border: 1px solid transparent;
+        border-radius: 4px;
         color: inherit;
+        cursor: pointer;
         display: block;
         font: inherit;
-        margin: 0;
+        font-family: "Press Start 2P", monospace;
+        margin: 0 auto 24px;
         outline: 0;
-        padding: 0;
-      }
-      ::slotted(button) {
-        padding: 24px 0;
+        padding: 16px 32px;
+        position: relative;
+        text-shadow: 2px 2px black;
         width: 100%;
       }
-      .submit {
-        --mdc-theme-primary: var(--blue-40);
+      ::slotted(button:focus),
+      .button:focus {
+        /* TODO focus styles */
       }
+      ::slotted(button:hover),
+      .button:hover {
+        /*
+        background: var(--blue-30);
+        box-shadow: 1px 2px 52px 2px var(--blue-50);
+        border-bottom: 1px solid var(--blue-60);
+        border-right: 1px solid var(--blue-60);
+        border-top: 1px solid var(--blue-40);
+        border-left: 1px solid var(--blue-40);
+        */
+        background: var(--pink-30);
+        box-shadow: 1px 2px 52px 2px var(--blue-50);
+        border-bottom: 1px solid var(--pink-60);
+        border-right: 1px solid var(--pink-60);
+        border-top: 1px solid var(--pink-40);
+        border-left: 1px solid var(--pink-40);
+      }
+      ::slotted(button:active),
+      .button:active {
+        box-shadow: none;
+        /* background: var(--blue-50); */
+        background: var(--pink-50);
+      }
+      /* 
+      TODO round shadow
+      ::slotted(button)::after,
+      .button::after {
+        content: "";
+        display: block;
+        background: red;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0; right: 0; bottom: 0; left: 0;
+        z-index: 10;
+      }
+      */
       /* Form */
       /* TODO */
       /* Guide */
@@ -316,15 +342,7 @@ class RecaptchaDemo extends LitElement {
 
   render() {
     const BUTTON = html`
-      <mwc-button
-        ${ref(this.button)}
-        @click=${this.handleSubmit}
-        fullwidth
-        class="submit"
-        unelevated
-      >
-        <slot @slotchange=${this.handleSlotchange}></slot>
-      </mwc-button>
+      <slot ${ref(this.button)} @click=${this.handleSubmit} @slotchange=${this.handleSlotchange}></slot>
     `;
 
     const FORMS = {
@@ -332,14 +350,13 @@ class RecaptchaDemo extends LitElement {
         <section class="example">
           <h2 class="h2">Homepage example</h2>
           <p>Text explaining example and next step.</p>
-          <mwc-button
+          <button
             @click=${this.handleSubmit}
-            fullwidth
-            class="submit"
-            unelevated
+            class="button"
+            type="button"
           >
             Continue
-          </mwc-button>
+          </button>
         </section>
       `,
       checkout: html`
