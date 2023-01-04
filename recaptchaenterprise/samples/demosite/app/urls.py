@@ -5,13 +5,13 @@ from flask import render_template, request, Response
 
 from backend.recaptcha import execute_create_assessment
 
-def buy() -> str:
+def home() -> str:
     # TODO: These env variables should be made available through Cloud Run's env vars.
     context = {
         "project_id": os.environ["GOOGLE_CLOUD_PROJECT"],
         "site_key": os.environ["SITE_KEY"]
     }
-    return render_template(template_name_or_list="buy.html", context=context)
+    return render_template(template_name_or_list="home.html", context=context)
 
 def signup() -> str:
     # TODO: These env variables should be made available through Cloud Run's env vars.

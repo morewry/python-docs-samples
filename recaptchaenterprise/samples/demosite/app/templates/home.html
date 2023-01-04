@@ -18,13 +18,13 @@
         const token = await grecaptcha.enterprise.execute(
           "{{context.site_key}}",
           {
-            action: "buy",
+            action: "home",
           }
         );
         console.log("on page load", token);
         // See https://cloud.google.com/recaptcha-enterprise/docs/create-assessment
         const score = await createAssessment({
-          action: "buy",
+          action: "home",
           sitekey: "{{context.site_key}}",
           token,
         });
@@ -34,6 +34,6 @@
     <!-- ATTENTION: reCAPTCHA Example (Part 1) Ends -->
   </head>
   <body>
-    <recaptcha-demo mode="human" step="buy"></recaptcha-demo>
+    <recaptcha-demo step="home"></recaptcha-demo>
   </body>
 </html>

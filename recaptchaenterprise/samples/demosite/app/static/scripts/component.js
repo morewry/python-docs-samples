@@ -7,8 +7,8 @@ import {
   ref,
   createRef,
 } from "https://unpkg.com/lit@2.4.1/directives/ref.js?module";
-import { asyncReplace } from "https://unpkg.com/lit@2.4.1/directives/async-replace.js?module";
-import { classMap } from "https://unpkg.com/lit@2.4.1/directives/class-map.js?module";
+// import { asyncReplace } from "https://unpkg.com/lit@2.4.1/directives/async-replace.js?module";
+// import { classMap } from "https://unpkg.com/lit@2.4.1/directives/class-map.js?module";
 import "https://unpkg.com/@material/mwc-button@0.27.0/mwc-button.js?module";
 import "https://unpkg.com/@material/mwc-textfield@0.27.0/mwc-textfield.js?module";
 import "https://unpkg.com/@material/mwc-textarea@0.27.0/mwc-textarea.js?module";
@@ -17,15 +17,7 @@ import "https://unpkg.com/@material/mwc-drawer@0.27.0/mwc-drawer.js?module";
 import "https://unpkg.com/@material/mwc-top-app-bar@0.27.0/mwc-top-app-bar.js?module";
 import "https://unpkg.com/@material/mwc-icon-button@0.27.0/mwc-icon-button.js?module";
 
-const STEPS = ["buy", "signup", "login", "checkout", "review"];
-
-async function* countTime(count) {
-  // TODO: legitimate while condition
-  while (count < 60) {
-    yield count++;
-    await new Promise((r) => setTimeout(r, 1000));
-  }
-}
+const STEPS = ["home", /* "game", */ "signup", "login", "checkout", "review"];
 
 class RecaptchaDemo extends LitElement {
   static get styles() {
@@ -276,7 +268,7 @@ class RecaptchaDemo extends LitElement {
 
   constructor() {
     super();
-    this.step = "buy";
+    this.step = "home";
     this.score = undefined;
     this.verdict = undefined;
     this.drawerOpen = true;
@@ -336,7 +328,7 @@ class RecaptchaDemo extends LitElement {
     `;
 
     const FORMS = {
-      buy: html`
+      home: html`
         <section class="example">
           <h2 class="h2">Homepage example</h2>
           <p>Text explaining example and next step.</p>
@@ -454,7 +446,7 @@ class RecaptchaDemo extends LitElement {
     `;
 
     const GUIDES = {
-      buy: html`
+      home: html`
         <h1 class="h1" slot="title">Score when the page loads</h1>
         <ul class="temp">
           <li>What is this an example of? (Answer: score on page load)</li>

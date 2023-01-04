@@ -4,7 +4,7 @@ import urls
 
 app = Flask(__name__)
 
-app.add_url_rule(rule="/", methods=["GET"], view_func=urls.buy)
+app.add_url_rule(rule="/", methods=["GET"], view_func=urls.home)
 app.add_url_rule(rule="/checkout", methods=["GET"], view_func=urls.checkout)
 app.add_url_rule(rule="/login", methods=["GET"], view_func=urls.login)
 app.add_url_rule(rule="/review", methods=["GET"], view_func=urls.review)
