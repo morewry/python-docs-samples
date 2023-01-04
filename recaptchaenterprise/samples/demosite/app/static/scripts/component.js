@@ -223,11 +223,7 @@ class RecaptchaDemo extends LitElement {
         padding: 24px 0;
         width: 100%;
       }
-      .submit.danger {
-        --mdc-theme-primary: var(--pink-40);
-        --mdc-button-outline-color: var(--pink-40);
-      }
-      .submit.success {
+      .submit {
         --mdc-theme-primary: var(--blue-40);
       }
       /* Form */
@@ -237,293 +233,7 @@ class RecaptchaDemo extends LitElement {
       ul.temp {
         height: 200vh;
       }
-      /* Menu */
-      nav.mode {
-        --mdc-theme-on-secondary: black;
-        --mdc-theme-secondary: white;
-      }
-      nav.mode ul {
-        display: flex;
-      }
-      img.mode {
-        width: 24px;
-      }
-      nav.mode .current {
-        --mdc-theme-on-secondary: black;
-        --mdc-theme-secondary: var(--teal);
-      }
-      /* Shadows */
-      @keyframes shadow-enter {
-        0% {
-          opacity: 0;
-        }
-        100% {
-          opacity: 1;
-        }
-      }
-      @keyframes shadow-drift {
-        0% {
-          transform: rotate(0deg) translateX(-6px) rotate(0deg);
-        }
-        100% {
-          transform: rotate(360deg) translateX(-6px) rotate(-360deg);
-        }
-      }
-      @keyframes shadow-shake {
-        0% {
-          transform: translateX(4px);
-        }
-        100% {
-          transform: translateX(-4px);
-        }
-      }
-      @keyframes shadow-capture {
-        0% {
-          opacity: 1;
-          transform: scale(1);
-        }
-        100% {
-          opacity: 0;
-          transform: scale(0);
-        }
-      }
-      @keyframes game-fade {
-        0% {
-          opacity: 1;
-        }
-        100% {
-          opacity: 0;
-        }
-      }
-      .game {
-        background: rgba(180, 180, 180, 0.33);
-        bottom: 0;
-        left: 0;
-        overflow: hidden;
-        position: fixed;
-        right: 0;
-        top: 0;
-      }
-      .game.enabled {
-        opacity: 1;
-        z-index: 4;
-      }
-      .game.fading {
-        animation: 1s ease-out 0s 1 normal forwards running game-fade;
-        z-index: 4;
-      }
-      .game.disabled {
-        display: none;
-        z-index: -1;
-      }
-      ul.shadows {
-        display: block;
-      }
-      ul.shadows li {
-        --delay: 500ms;
-        animation: 1s ease-out 0s 1 normal both running shadow-enter;
-        opacity: 0;
-        position: absolute;
-      }
-      ul.shadows li:nth-child(1) {
-        animation-delay: calc(1 * var(--delay));
-        left: calc(1 * 5vw - 5vw);
-        top: calc(1 * 5vw - 5vw);
-      }
-      ul.shadows li:nth-child(2) {
-        animation-delay: calc(2 * var(--delay));
-        left: calc(3 * 5vw - 5vw);
-        top: calc(2 * 5vw - 5vw);
-      }
-      ul.shadows li:nth-child(3) {
-        animation-delay: calc(3 * var(--delay));
-        bottom: 0;
-        left: 0;
-        margin-bottom: -10px;
-      }
-      ul.shadows li:nth-child(4) {
-        animation-delay: calc(4 * var(--delay));
-        bottom: calc(2 * 5vw - 5vw);
-        right: calc(2 * 5vw - 5vw);
-      }
-      ul.shadows li:nth-child(5) {
-        top: calc(2 * 5vw - 5vw);
-        right: calc(3 * 5vw - 5vw);
-        animation-delay: calc(5 * var(--delay));
-      }
-      ul.shadows li:nth-child(6) {
-        top: calc(1 * 5vw - 5vw);
-        right: calc(1 * 5vw - 5vw);
-        animation-delay: calc(6 * var(--delay));
-      }
-      ul.shadows img {
-        animation: 2s ease-in-out 0s infinite normal both running shadow-drift;
-        height: auto;
-        width: 100px;
-      }
-      ul.shadows img.flame {
-        width: 46px;
-      }
-      ul.shadows li:nth-child(1) img {
-        animation-delay: calc(1 * var(--delay));\
-      }
-      ul.shadows li:nth-child(2) img {
-        animation-delay: calc(2 * var(--delay));\
-      }
-      ul.shadows li:nth-child(3) img {
-        animation-delay: calc(3 * var(--delay));\
-      }
-      ul.shadows li:nth-child(4) img {
-        animation-delay: calc(4 * var(--delay));\
-      }
-      ul.shadows li:nth-child(5) img {
-        animation-delay: calc(5 * var(--delay));\
-      }
-      ul.shadows li:nth-child(6) img {
-        animation-delay: calc(6 * var(--delay));\
-      }
-      ul.shadows button {
-        cursor: url("../static/images/magnifier-unoptimized.svg") 32 32, auto;
-      }
-      ul.shadows button:focus img,
-      ul.shadows button:hover img {
-        animation: 150ms ease-in-out 0s infinite normal both running shadow-shake;        
-      }
-      ul.shadows button.captured {
-        animation: 500ms ease-out 0s 1 normal forwards running shadow-capture;
-      }
-      /* Castle */
-      @keyframes shadow-hop {
-        0% {
-          transform: rotate(-24deg) translateY(0);
-        }
-        100% {
-          transform: rotate(-18deg) translateY(-6px);
-        }
-      }
-      @keyframes shadow-travel {
-        0% {
-          transform: translateX(0);
-        }
-        100% {
-          transform: translateX(40vw);
-        }
-      }
-      @keyframes castle-destroy {
-        0% {
-          opacity: 1;
-          transform: scale(1);
-        }
-        25% {
-          opacity: 0.5;
-          transform: scale(1);
-        }
-        50% {
-          opacity: 1;
-          transform: scale(1);
-        }
-        75% {
-          opacity: 0.5;
-          transform: scale(1);
-        }
-        100% {
-          opacity: 0;
-          transform: scale(0);
-        }
-      }
-      @keyframes castle-shake {
-        0% {
-          transform: translateY(-2px);
-        }
-        100% {
-          transform: translateY(2px);
-        }
-      }
-      .destroy {
-        align-items: flex-end;
-        bottom: 0;
-        display: flex;
-        justify-content: space-between;
-        left: 25%;
-        position: absolute;
-        width: 50%;
-      }
-      .destroy .target {
-        cursor: url("../static/images/magnifier-unoptimized.svg") 32 32, auto;
-      }
-      .destroy .castle {
-        display: block;
-        height: 25vh;
-        margin-top: 9px; /* TODO: remove after asset cleanup */
-        max-width: 100%;
-        width: auto;
-      }
-      .destroy .shadow {
-        height: 25vh;
-        margin-top: -7px;
-        max-width: 100%;
-        transform: rotate(-24deg);
-        width: auto;
-      }
-      .destroy.free .target:focus,
-      .destroy.free .target:hover {
-        animation: 150ms ease-in-out 0s infinite normal both running castle-shake;        
-      }
-      .destroy.captured .target {
-        animation: 400ms linear 2.65s 1 normal forwards running castle-destroy;
-      }
-      .destroy.captured .destroyer {
-        animation: 3s ease-in 0s 1 normal forwards running shadow-travel;
-      }
-      .destroy .shadow {
-        animation: 1s linear 0s infinite alternate both running shadow-hop;
-      }
-      /* Grade */
-      .grade {
-        align-items: center;
-        background: var(--gray-10);
-        color: #000;
-        display: flex;
-        padding: 24px;
-      }
-      .grade img {
-        margin-right: 24px;
-      }
-      .grade.warning p {
-        display: none;
-      }
-      .grade.warning.human p.human,
-      .grade.warning.bot p.bot {
-        display: block;
-      }
       /* Score */
-      /*
-      Bar-style
-      dl.score {
-        align-items: center;
-        background: white;
-        bottom: 0;
-        box-shadow: 0 5px 10px 0 var(--gray-60);
-        display: flex;
-        flex-wrap: nowrap;
-        justify-content: flex-start;
-        left: 0;
-        margin-bottom: 0;
-        padding: 6px 12px 0 12px;
-        position: sticky;
-        white-space: nowrap;
-      }
-      .score dt {
-        flex: 0 1 auto;
-        margin-right: 12px;
-      }
-      .score dd {
-        flex: 1 0 auto;
-      }
-      .score dd:not(:last-child) {
-        margin-right: 36px;
-      }
-      */
       dl.score {
         align-items: center;
         bottom: 0;
@@ -555,68 +265,24 @@ class RecaptchaDemo extends LitElement {
   }
 
   static properties = {
-    capturedCastles: { type: Array, state: true, attribute: false },
-    capturedShadows: { type: Array, state: true, attribute: false },
     step: { type: String },
-    mode: { type: String },
-    timer: { type: Number, state: true, attribute: false },
-    done: { type: Boolean, state: true, attribute: false },
-    captured: { type: Boolean, state: true, attribute: false },
-    grade: { type: String, state: true, attribute: false },
     drawerOpen: { type: Boolean, state: true, attribute: false },
-    game: { type: String, state: true, attribute: false },
     /* TODO: update score/verdict when payload is standardized */
     score: { type: String },
     verdict: { type: String },
   };
 
-  badMugshot = createRef();
-  badStop = createRef();
-  badWarning = createRef();
   button = createRef();
-  goodCastle = createRef();
-  goodCelebrate = createRef();
-  goodMagnifier = createRef();
-  goodShield = createRef();
-  shadowArrow = createRef();
-  shadowBlob = createRef();
-  shadowCreeper = createRef();
-  shadowFlame = createRef();
-  shadowGhost = createRef();
-  shadowSkull = createRef();
 
   constructor() {
     super();
     this.step = "buy";
-    this.mode = "human";
     this.score = undefined;
     this.verdict = undefined;
-    this.capturedShadows = [];
-    this.capturedCastles = [];
-    this.timer = countTime(this.timer || 0);
-    this.captured = window?.sessionStorage.getItem("captured") === "true" ? true : false;
-    this.done = false;
-    this.grade = "warning";
     this.drawerOpen = true;
-    this.game = this.captured ? "off" : "on";
   }
 
-  willUpdate() {
-    if (this.score && this.verdict) {
-      if (this.mode === "human") {
-        this.done = this.capturedShadows.length >= 6;
-      } else {
-        this.done = this.capturedCastles.length >= 1;
-      }
-    }
-    if (this.mode === "human") {
-      this.captured = this.captured || this.capturedShadows.length >= 6;
-    } else {
-      this.captured = this.captured || this.capturedCastles.length >= 1;
-    }
-    window?.sessionStorage.setItem("captured", this.captured);
-    this.gradeStep();
-  }
+  willUpdate() {}
 
   updated() {
     setTimeout(() => {
@@ -624,23 +290,15 @@ class RecaptchaDemo extends LitElement {
         const button = this.button.value.shadowRoot.querySelector("button");
         const slot = button.querySelector(".slot-container");
         button.style.height = "auto";
+        button.style.width = "100%";
         slot.style.flexDirection = "column";
+        slot.style.width = "100%";
       }
     }, 0);
   }
 
   toggleDrawer() {
     this.drawerOpen = !this.drawerOpen;
-  }
-
-  goToBotMode() {
-    this.mode = "bot";
-    this.game = "on";
-  }
-
-  goToHumanMode() {
-    this.mode = "human";
-    this.game = "on";
   }
 
   goToNextStep() {
@@ -661,102 +319,17 @@ class RecaptchaDemo extends LitElement {
       this.goToNextStep();
       return;
     }
-    this.gradeStep();
     // TODO: interrogate slotted button for callback?
   }
 
-  gradeStep() {
-    console.log("gradestep");
-    // TODO
-    if (this.done && this.mode === "human") {
-      this.grade = "celebrate";
-      return;
-    }
-    if (this.done && this.mode === "bot") {
-      this.grade = "mugshot";
-      return;
-    }
-    if (!this.done && !this.captured) {
-      this.grade = "warning";
-      return;
-    }
-    if (!this.done && this.captured) {
-      this.grade = "stop";
-      return;
-    }
-  }
-
-  fullyCapture(event) {
-    if (
-      ["shadow-capture", "castle-destroy"].includes(event.animationName) &&
-      this.captured
-    ) {
-      this.game = "fade";
-    }
-    if (event.animationName === "game-fade") {
-      this.game = "off";
-    }
-  }
-
-  captureShadow(event) {
-    this.capturedShadows = [
-      ...this.capturedShadows,
-      event.currentTarget.dataset.shadowId,
-    ];
-  }
-
-  captureCastle(event) {
-    this.capturedCastles = [
-      ...this.capturedCastles,
-      event.currentTarget.dataset.shadowId,
-    ];
-  }
-
   render() {
-    const MENU = html`
-      <nav class="mode" slot="actionItems">
-        <ul class="unstyled">
-          <li>
-            <mwc-icon-button
-              @click=${this.goToHumanMode}
-              aria-description="Pose as a human"
-              aria-label="Human Mode"
-              class="${this.mode === "human" ? "current" : ""}"
-            >
-              <img
-                alt="Magnifying Glass Icon"
-                class="mode magnifier"
-                src="../static/images/magnifier-unoptimized.svg"
-              />
-            </mwc-icon-button>
-          </li>
-          <li>
-            <mwc-icon-button
-              @click=${this.goToBotMode}
-              aria-description="Pose as a bot"
-              aria-label="Bot Mode"
-              class="${this.mode === "bot" ? "current" : ""}"
-            >
-              <img
-                alt="Castle Icon"
-                class="mode castle"
-                src="../static/images/castle-unoptimized.svg"
-              />
-            </mwc-icon-button>
-          </li>
-        </ul>
-      </nav>
-    `;
-
     const BUTTON = html`
       <mwc-button
         ${ref(this.button)}
         @click=${this.handleSubmit}
         fullwidth
-        class="submit ${this.done ? "success" : "danger"}"
-        ?disabled=${!this.captured}
-        ?outlined=${!this.done}
-        ?unelevated=${this.done}
+        class="submit"
+        unelevated
       >
         <slot @slotchange=${this.handleSlotchange}></slot>
       </mwc-button>
@@ -770,10 +343,8 @@ class RecaptchaDemo extends LitElement {
           <mwc-button
             @click=${this.handleSubmit}
             fullwidth
-            class="submit ${this.done ? "success" : "danger"}"
-            ?disabled=${!this.captured}
-            ?outlined=${!this.done}
-            ?unelevated=${this.done}
+            class="submit"
+            unelevated
           >
             Continue
           </mwc-button>
@@ -864,226 +435,8 @@ class RecaptchaDemo extends LitElement {
       `,
     };
 
-    const OVERLAYS = {
-      human: html`
-        <div
-          @animationend=${this.fullyCapture}
-          class="game ${classMap({
-            enabled: this.game === "on",
-            disabled: this.game === "off",
-            fading: this.game === "fade",
-          })}"
-        >
-          <ul class="shadows unstyled">
-            <li>
-              <button
-                type="button"
-                @click=${this.captureShadow}
-                class="${this.capturedShadows.includes("arrow")
-                  ? "captured"
-                  : "free"}"
-                data-shadow-id="arrow"
-              >
-                <img
-                  ${ref(this.shadowArrow)}
-                  alt="The Arrow Bot"
-                  class="shadow arrow"
-                  src="../static/images/shadow-arrow-unoptimized.svg"
-                />
-              </button>
-            </li>
-            <li>
-              <button
-                type="button"
-                @click=${this.captureShadow}
-                class="${this.capturedShadows.includes("blob")
-                  ? "captured"
-                  : "free"}"
-                data-shadow-id="blob"
-              >
-                <img
-                  ${ref(this.shadowBlob)}
-                  alt="The Blob Bot"
-                  class="shadow blob"
-                  src="../static/images/shadow-blob-unoptimized.svg"
-                />
-              </button>
-            </li>
-            <li>
-              <button
-                type="button"
-                @click=${this.captureShadow}
-                class="${this.capturedShadows.includes("creeper")
-                  ? "captured"
-                  : "free"}"
-                data-shadow-id="creeper"
-              >
-                <img
-                  ${ref(this.shadowCreeper)}
-                  alt="The Creeper Bot"
-                  class="shadow creeper"
-                  src="../static/images/shadow-creeper-unoptimized.svg"
-                />
-              </button>
-            </li>
-            <li>
-              <button
-                type="button"
-                @click=${this.captureShadow}
-                class="${this.capturedShadows.includes("flame")
-                  ? "captured"
-                  : "free"}"
-                data-shadow-id="flame"
-              >
-                <img
-                  ${ref(this.shadowFlame)}
-                  alt="The Flame Bot"
-                  class="shadow flame"
-                  src="../static/images/shadow-flame-unoptimized.svg"
-                />
-              </button>
-            </li>
-            <li>
-              <button
-                type="button"
-                @click=${this.captureShadow}
-                class="${this.capturedShadows.includes("ghost")
-                  ? "captured"
-                  : "free"}"
-                data-shadow-id="ghost"
-              >
-                <img
-                  ${ref(this.shadowGhost)}
-                  alt="The Ghost Bot"
-                  class="shadow ghost"
-                  src="../static/images/shadow-ghost-unoptimized.svg"
-                />
-              </button>
-            </li>
-            <li>
-              <button
-                type="button"
-                @click=${this.captureShadow}
-                class="${this.capturedShadows.includes("skull")
-                  ? "captured"
-                  : "free"}"
-                data-shadow-id="skull"
-              >
-                <img
-                  ${ref(this.shadowSkull)}
-                  alt="The Skull Bot"
-                  class="shadow skull"
-                  src="../static/images/shadow-skull-unoptimized.svg"
-                />
-              </button>
-            </li>
-          </ul>
-        </div>
-      `,
-      bot: html`
-        <div
-          @animationend=${this.fullyCapture}
-          class="game ${classMap({
-            enabled: this.game === "on",
-            disabled: this.game === "off",
-            fading: this.game === "fade",
-          })}"
-        >
-          <div
-            class="destroy ${this.capturedCastles.includes("castle")
-              ? "captured"
-              : "free"}"
-          >
-            <div class="destroyer">
-              <img
-                ${ref(this.shadowGhost)}
-                alt="The Ghost Bot"
-                class="shadow ghost"
-                src="../static/images/shadow-ghost-unoptimized.svg"
-              />
-            </div>
-            <button
-              type="button"
-              @click=${this.captureCastle}
-              class="target"
-              data-shadow-id="castle"
-            >
-              <img
-                ${ref(this.goodCastle)}
-                alt="The Castle"
-                class="castle"
-                src="../static/images/castle-unoptimized.svg"
-              />
-            </button>
-          </div>
-        </div>
-      `,
-    };
-
-    const GRADE = {
-      celebrate: html`
-        <div class="grade celebrate" slot="subtitle">
-          <img
-            ${ref(this.goodCelebrate)}
-            alt="Celebrate"
-            src="../static/images/celebrate-unoptimized.svg"
-          />
-          <p>Message about winning by successfully letting humans through.</p>
-        </div>
-      `,
-      warning: html`
-        <div class="grade warning ${this.mode}" slot="subtitle">
-          <img
-            ${ref(this.badWarning)}
-            alt="Warning"
-            src="../static/images/warning-unoptimized.svg"
-          />
-          <p class="human">Prompt about capturing the shadows.</p>
-          <p class="bot">Prompt about capturing the castle.</p>
-        </div>
-      `,
-      stop: html`
-        <div class="grade stop" slot="subtitle">
-          <img
-            ${ref(this.badStop)}
-            alt="Stop"
-            src="../static/images/stop-unoptimized.svg"
-          />
-          <p>
-            Warning about needing to verify if the user is a human or a bot.
-          </p>
-        </div>
-      `,
-      mugshot: html`
-        <div class="grade mugshot" slot="subtitle">
-          <img
-            ${ref(this.badMugshot)}
-            alt="Bot Caught"
-            src="../static/images/mugshot-unoptimized.svg"
-          />
-          <p>Message about winning by successfully blocking a bot.</p>
-        </div>
-      `,
-    };
-
     const SCORE = html`
       <dl class="score unstyled">
-        <dt>
-          <img
-            alt="Shadows Captured"
-            class="shadow skull"
-            src="../static/images/shadow-skull-unoptimized.svg"
-          />
-        </dt>
-        <dd>${this.capturedShadows.length}</dd>
-        <dt>
-          <img
-            alt="Castles Captured"
-            class="target castle"
-            src="../static/images/castle-unoptimized.svg"
-          />
-        </dt>
-        <dd>${this.capturedCastles.length}</dd>
         <!-- 
         TODO: best practice re: local BE assessment payload
         <dt>Score:</dt>
@@ -1097,18 +450,12 @@ class RecaptchaDemo extends LitElement {
           />
         </dt>
         <dd>${this.verdict}</dd>
-        <!--
-        TODO: guy doesn't care about time anymore?
-        <dt>Time:</dt>
-        <dd>${asyncReplace(this.timer)}</dd>
-        -->
       </dl>
     `;
 
     const GUIDES = {
       buy: html`
         <h1 class="h1" slot="title">Score when the page loads</h1>
-        ${GRADE[this.grade]}
         <ul class="temp">
           <li>What is this an example of? (Answer: score on page load)</li>
           <li>Why would you verify when the page loads?</li>
@@ -1123,7 +470,6 @@ class RecaptchaDemo extends LitElement {
       `,
       checkout: html`
         <h1 class="h1" slot="title">Score when users interact</h1>
-        ${GRADE[this.grade]}
         <ul class="temp">
           <li>
             What is this an example of? (Answer: score on programmatic user
@@ -1143,7 +489,6 @@ class RecaptchaDemo extends LitElement {
       `,
       login: html`
         <h1 class="h1" slot="title">Add reCAPTCHA on an HTML button</h1>
-        ${GRADE[this.grade]}
         <ul class="temp">
           <li>
             What is this an example of? (Answer: score auto bind html button)
@@ -1160,7 +505,6 @@ class RecaptchaDemo extends LitElement {
       `,
       review: html`
         <h1 class="h1" slot="title">Automatically render a checkbox</h1>
-        ${GRADE[this.grade]}
         <ul class="temp">
           <li>
             What is this an example of? (Answer: checkbox automatically
@@ -1178,7 +522,6 @@ class RecaptchaDemo extends LitElement {
       `,
       signup: html`
         <h1 class="h1" slot="title">Explicitly render a checkbox</h1>
-        ${GRADE[this.grade]}
         <ul class="temp">
           <li>
             What is this an example of? (Answer: checkbox explicitly rendered)
@@ -1203,7 +546,7 @@ class RecaptchaDemo extends LitElement {
           @click=${this.toggleDrawer}
         ></mwc-icon-button>
         <h1 slot="title" class="h1">reCAPTCHA Example</h1>
-        ${MENU} ${FORMS[this.step]} ${OVERLAYS[this.mode]} ${SCORE}
+        ${FORMS[this.step]} ${SCORE}
       </mwc-top-app-bar>
     `;
 
@@ -1215,7 +558,6 @@ class RecaptchaDemo extends LitElement {
         ?open=${this.drawerOpen}
       >
         ${GUIDES[this.step]}
-        <!-- ${SCORE} -->
         <section slot="appContent" class="content">${BAR}</section>
       </mwc-drawer>
     `;
