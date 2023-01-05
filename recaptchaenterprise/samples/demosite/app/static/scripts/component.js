@@ -187,10 +187,9 @@ class RecaptchaDemo extends LitElement {
       ::slotted(button),
       .button {
         appearance: none;
-        /* background: var(--blue-40); */
-        background: var(--pink-40);
-        border: 1px solid transparent;
-        border-radius: 4px;
+        background: var(--blue-50);
+        border: 0;
+        border-radius: 1px;
         color: inherit;
         cursor: pointer;
         display: block;
@@ -202,48 +201,85 @@ class RecaptchaDemo extends LitElement {
         position: relative;
         text-shadow: 2px 2px black;
         width: 100%;
+        z-index: 0;
       }
-      ::slotted(button:focus),
-      .button:focus {
+      /* Button Layers */
+      ::slotted(button)::after,
+      .button::after,
+      ::slotted(button)::before,
+      .button::before {
+        border-radius: 1px;
+        content: "";
+        display: block;
+        position: absolute;
+        z-index: -1;
+      }
+      /* Button Background */
+      ::slotted(button)::after,
+      .button::after {
+        /* background: var(--blue-40); */
+        background: var(--pink-40);
+        inset: 0;
+      }
+      ::slotted(button:focus)::after,
+      .button:focus::after {
         /* TODO focus styles */
       }
-      ::slotted(button:hover),
-      .button:hover {
+      ::slotted(button:hover)::after,
+      .button:hover::after {
         /*
         background: var(--blue-30);
-        box-shadow: 1px 2px 52px 2px var(--blue-50);
-        border-bottom: 1px solid var(--blue-60);
-        border-right: 1px solid var(--blue-60);
-        border-top: 1px solid var(--blue-40);
-        border-left: 1px solid var(--blue-40);
         */
         background: var(--pink-30);
-        box-shadow: 1px 2px 52px 2px var(--blue-50);
-        border-bottom: 1px solid var(--pink-60);
-        border-right: 1px solid var(--pink-60);
-        border-top: 1px solid var(--pink-40);
-        border-left: 1px solid var(--pink-40);
       }
-      ::slotted(button:active),
-      .button:active {
-        box-shadow: none;
+      ::slotted(button:active)::after,
+      .button:active::after {
         /* background: var(--blue-50); */
         background: var(--pink-50);
       }
-      /* 
-      TODO round shadow
-      ::slotted(button)::after,
-      .button::after {
-        content: "";
-        display: block;
-        background: red;
-        width: 100%;
-        height: 100%;
-        position: absolute;
-        top: 0; right: 0; bottom: 0; left: 0;
-        z-index: 10;
+      /* Button Border */
+      ::slotted(button:focus)::after,
+      .button:focus::after,
+      ::slotted(button:hover)::after,
+      .button:hover::after {
+        border-bottom: 1px solid rgba(0,0,0,0.30);
+        border-right: 1px solid rgba(0,0,0,0.30);
+        border-top: 1px solid rgba(255,255,255,0.20);
+        border-left: 1px solid rgba(255,255,255,0.20);
       }
-      */
+      ::slotted(button:active)::after,
+      .button:active::after {
+        border-bottom: 1px solid rgba(255,255,255,0.20);
+        border-right: 1px solid rgba(255,255,255,0.20);
+        border-top: 1px solid rgba(0,0,0,0.30);
+        border-left: 1px solid rgba(0,0,0,0.30);
+      }
+      /* Button Shadow */
+      ::slotted(button)::before,
+      .button::before {
+        border-radius: 100%;
+        inset: 0 25%;
+      }
+      ::slotted(button:focus),
+      .button:focus,
+      ::slotted(button:hover),
+      .button:hover {
+        box-shadow: 1px 2px 32px 0 var(--blue-50);
+      }
+      ::slotted(button:active),
+      .button:active {
+        box-shadow: 1px 2px 32px 0 rgba(0,0,0,0.05);
+      }
+      ::slotted(button:focus)::before,
+      .button:focus::before,
+      ::slotted(button:hover)::before,
+      .button:hover::before {
+        box-shadow: 2px 2px 90px 18px var(--blue-50);
+      }
+      ::slotted(button:active)::before,
+      .button:active::before {
+        box-shadow: 2px 2px 90px 18px rgba(0,0,0,0.20);
+      }
       /* Form */
       /* TODO */
       /* Guide */
