@@ -177,6 +177,10 @@ import {
         .example mwc-top-app-bar {
           margin: 0 0 auto;
         }
+        .example fieldset {
+          position: relative;
+          z-index: 1;
+        }
         /* Checkbox */
         ::slotted(div.g-recaptcha) {
           display: flex;
@@ -282,6 +286,21 @@ import {
         }
         /* Form */
         /* TODO */
+        dl.cart {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        }
+        .cart dt {
+          flex: 1 0 auto;
+          margin-right: 24px;
+        }
+        .cart dt img {
+          margin-top: -24px; /* TODO optimize svg to remove padding */
+        }
+        .cart dd {
+          flex: 1 1 auto;
+        }
         /* Guide */
         /* TODO */
         ul.temp {
@@ -414,11 +433,6 @@ import {
                   ></mwc-textfield>
                 </dd>
               </dl>
-              <mwc-textfield
-                label="Address"
-                type="text"
-                value="123 Address Street City, ST 00000"
-              ></mwc-textfield>
               <mwc-textfield
                 label="Credit card"
                 type="number"
