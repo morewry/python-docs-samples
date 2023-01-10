@@ -9,8 +9,6 @@ import {
 } from "https://unpkg.com/lit@2.4.1/directives/ref.js?module";
 // import { asyncReplace } from "https://unpkg.com/lit@2.4.1/directives/async-replace.js?module";
 // import { classMap } from "https://unpkg.com/lit@2.4.1/directives/class-map.js?module";
-import "https://unpkg.com/@material/mwc-textfield@0.27.0/mwc-textfield.js?module";
-import "https://unpkg.com/@material/mwc-textarea@0.27.0/mwc-textarea.js?module";
 import "https://unpkg.com/@material/mwc-fab@0.27.0/mwc-fab.js?module";
 import "https://unpkg.com/@material/mwc-drawer@0.27.0/mwc-drawer.js?module";
 import "https://unpkg.com/@material/mwc-top-app-bar@0.27.0/mwc-top-app-bar.js?module";
@@ -116,14 +114,30 @@ class RecaptchaDemo extends LitElement {
         padding: 0;
         text-align: center;
       }
-      mwc-textfield {
+      label {
         display: block;
+        font-weight: bold;
+        letter-spacing: 0.5px;
+        line-height: 1;
         margin-bottom: 24px;
-        width: 100%;
       }
-      mwc-textarea {
+      label > span {
         display: block;
-        margin-bottom: 24px;
+        margin-bottom: 12px;
+      }
+      input,
+      textarea {
+        background: hsl(var(--gray-60));
+        border: 0 solid transparent;
+        border-radius: 2px;
+        box-sizing: border-box;
+        color: white;
+        display: block;
+        font-family: sans-serif;
+        line-height: 1;
+        margin: 0;
+        padding: 12px;
+        width: 100%;
       }
       mwc-drawer {
         --mdc-drawer-width: 50vw;
@@ -204,9 +218,10 @@ class RecaptchaDemo extends LitElement {
         border-radius: 1px;
         color: inherit;
         cursor: pointer;
-        display: block;
+        display: inline-block;
         font: inherit;
         font-family: "Press Start 2P", monospace;
+        font-size: 0.80rem;
         margin: 0 auto 24px;
         outline: 0;
         padding: 16px 32px;
@@ -214,6 +229,9 @@ class RecaptchaDemo extends LitElement {
         text-shadow: 2px 2px black;
         width: 100%;
         z-index: 0;
+      }
+      .button {
+        width: auto;
       }
       /* Button Layers */
       ::slotted(button)::after,
@@ -276,17 +294,17 @@ class RecaptchaDemo extends LitElement {
       .button:focus,
       ::slotted(button:hover),
       .button:hover {
-        box-shadow: 1px 2px 32px 0 hsl(var(--blue-50), 50%);
+        box-shadow: 1px 2px 32px 0 hsl(var(--blue-50), 40%);
       }
       ::slotted(button:active),
       .button:active {
-        box-shadow: 1px 2px 32px 0 rgba(0, 0, 0, 0.05);
+        box-shadow: 1px 2px 32px 0 rgba(0, 0, 0, 5%);
       }
       ::slotted(button:focus)::before,
       .button:focus::before,
       ::slotted(button:hover)::before,
       .button:hover::before {
-        box-shadow: 2px 2px 90px 18px hsl(var(--blue-50), 50%);
+        box-shadow: 2px 2px 90px 18px hsl(var(--blue-50), 40%);
       }
       ::slotted(button:active)::before,
       .button:active::before {
@@ -469,18 +487,16 @@ class RecaptchaDemo extends LitElement {
                 />
               </dt>
               <dd>
-                <mwc-textfield
-                  label="Amount"
-                  type="number"
-                  value="1"
-                ></mwc-textfield>
+                <label>
+                  <span>Amount</span>
+                  <input type="number" value="1" disabled />
+                </label>
               </dd>
             </dl>
-            <mwc-textfield
-              label="Credit card"
-              type="number"
-              value="7777-8888-3333-2222"
-            ></mwc-textfield>
+            <label>
+              <span>Credit card</span>
+              <input type="number" value="7777-8888-3333-2222" disabled />
+            </label>
           </fieldset>
           ${BUTTON}
         </form>
@@ -489,16 +505,14 @@ class RecaptchaDemo extends LitElement {
         <form class="example">
           <fieldset>
             <legend><h2 class="h2">Login example</h2></legend>
-            <mwc-textfield
-              label="Email"
-              type="email"
-              value="user@example.com"
-            ></mwc-textfield>
-            <mwc-textfield
-              label="Password"
-              type="password"
-              value="password"
-            ></mwc-textfield>
+            <label>
+              <span>Email</span>
+              <input type="email" value="user@example.com" disabled />
+            </label>
+            <label>
+              <span>Password</span>
+              <input type="password" value="password" disabled />
+            </label>
           </fieldset>
           ${BUTTON}
         </form>
@@ -506,8 +520,11 @@ class RecaptchaDemo extends LitElement {
       review: html`
         <form class="example">
           <fieldset>
-            <legend><h2 class="h2">Review example</h2></legend>
-            <mwc-textarea label="Review" value="Good job."></mwc-textarea>
+            <legend><h2 class="h2">Feedback example</h2></legend>
+            <label>
+              <span>Feedback</span>
+              <textarea disabled />Good job.</textarea>
+            </label>
           </fieldset>
           ${BUTTON}
         </form>
@@ -516,21 +533,18 @@ class RecaptchaDemo extends LitElement {
         <form class="example">
           <fieldset>
             <legend><h2 class="h2">Signup example</h2></legend>
-            <mwc-textfield
-              label="Email"
-              type="email"
-              value="user@example.com"
-            ></mwc-textfield>
-            <mwc-textfield
-              label="Password"
-              type="password"
-              value="password"
-            ></mwc-textfield>
-            <mwc-textfield
-              label="Confirm Password"
-              type="password"
-              value="password"
-            ></mwc-textfield>
+            <label>
+              <span>Email</span>
+              <input type="email" value="user@example.com" disabled />
+            </label>
+            <label>
+              <span>Password</span>
+              <input type="password" value="password" disabled />
+            </label>
+            <label>
+              <span>Confirm Password</span>
+              <input type="password" value="password" disabled />
+            </label>
           </fieldset>
           ${BUTTON}
         </form>
