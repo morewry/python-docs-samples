@@ -16,72 +16,6 @@ const STEPS = ["home", /* "game", */ "signup", "login", "checkout", "feedback"];
 class RecaptchaDemo extends LitElement {
   static get styles() {
     return css`
-      /* ... */
-      :host {
-        display: block;
-      }
-      :host,
-      .demo {
-        font-family: sans-serif;
-        height: 100%;
-        min-height: 100vh;
-        max-width: 100%;
-        width: 100%;
-      }
-      .demo {
-        /* Blues */
-        --blue-10: 217.2, 100%, 88.6%;
-        --blue-20: 217.4, 100%, 75.5%;
-        --blue-30: 217.5, 100%, 63.3%;
-        --blue-40: 214.1, 81.7%, 50.6%;
-        --blue-50: 211.3, 100%, 41.4%;
-        --blue-60: 214.4, 98%, 38.4%;
-        /* Grays */
-        --gray-10: 0, 0%, 93.7%;
-        --gray-20: 0, 0%, 86.7%;
-        --gray-30: 0, 0%, 74.9%;
-        --gray-40: 207.3, 4.5%, 52.4%;
-        --gray-50: 200, 4.3%, 41%;
-        --gray-60: 204, 3.8%, 25.7%;
-        /* Indigos */
-        --indigo-60: 227.1, 70.7%, 38.8%;
-        --indigo-70: 222.6, 81.7%, 25.7%;
-        --indigo-80: 225.3, 76%, 14.7%;
-        /* Purples */
-        --purple-30: 266, 69%, 63.3%;
-        --purple-40: 272.1, 62.3%, 40.6%;
-        --purple-50: 269.2, 75.2%, 28.4%;
-        /* Pinks */
-        --pink-20: 321.6, 100%, 77.6%;
-        --pink-30: 327.4, 83.3%, 62.4%;
-        --pink-40: 323.9, 98.3%, 47.1%;
-        --pink-50: 321.3, 92%, 39%;
-        /* Greens */
-        --green-20: 174.7, 41.3%, 78.6%;
-        --green-30: 172.4, 51.9%, 58.4%;
-        --green-40: 174.3, 41.8%, 50.8%;
-        --green-50: 172.7, 60.2%, 37.5%;
-        /* Sizes */
-        --game-bottom: 25vh;
-      }
-      .demo {
-        color: white;
-        display: grid;
-        grid-template-columns: 50vw 50vw;
-        grid-template-rows: 1fr;
-      }
-      .demo.closed {
-        grid-template-columns: 0vw 100vw;
-      }
-      .drawer {
-        background: hsl(var(--gray-60));
-        width: 50vw;
-        transition: width 500ms ease-out;
-      }
-      .closed .drawer {
-        overflow-x: hidden;
-        width: 0;
-      }
       /* Generic */
       ul.unstyled {
         padding: 0;
@@ -170,6 +104,71 @@ class RecaptchaDemo extends LitElement {
         margin: 0;
         padding: 0;
       }
+      /* Demo */
+      :host {
+        display: block;
+      }
+      :host,
+      .demo {
+        font-family: sans-serif;
+        height: 100%;
+        min-height: 100vh;
+        max-width: 100%;
+        width: 100%;
+      }
+      .demo {
+        /* Blues */
+        --blue-10: 217.2, 100%, 88.6%;
+        --blue-20: 217.4, 100%, 75.5%;
+        --blue-30: 217.5, 100%, 63.3%;
+        --blue-40: 214.1, 81.7%, 50.6%;
+        --blue-50: 211.3, 100%, 41.4%;
+        --blue-60: 214.4, 98%, 38.4%;
+        /* Grays */
+        --gray-10: 0, 0%, 93.7%;
+        --gray-20: 0, 0%, 86.7%;
+        --gray-30: 0, 0%, 74.9%;
+        --gray-40: 207.3, 4.5%, 52.4%;
+        --gray-50: 200, 4.3%, 41%;
+        --gray-60: 204, 3.8%, 25.7%;
+        /* Indigos */
+        --indigo-60: 227.1, 70.7%, 38.8%;
+        --indigo-70: 222.6, 81.7%, 25.7%;
+        --indigo-80: 225.3, 76%, 14.7%;
+        /* Purples */
+        --purple-30: 266, 69%, 63.3%;
+        --purple-40: 272.1, 62.3%, 40.6%;
+        --purple-50: 269.2, 75.2%, 28.4%;
+        /* Pinks */
+        --pink-20: 321.6, 100%, 77.6%;
+        --pink-30: 327.4, 83.3%, 62.4%;
+        --pink-40: 323.9, 98.3%, 47.1%;
+        --pink-50: 321.3, 92%, 39%;
+        /* Greens */
+        --green-20: 174.7, 41.3%, 78.6%;
+        --green-30: 172.4, 51.9%, 58.4%;
+        --green-40: 174.3, 41.8%, 50.8%;
+        --green-50: 172.7, 60.2%, 37.5%;
+        /* Sizes */
+        --game-bottom: 25vh;
+      }
+      .demo {
+        color: white;
+        display: grid;
+        grid-template-columns: 50vw 50vw;
+        grid-template-rows: 1fr;
+        transition: grid-template-columns 300ms ease-out;
+      }
+      .demo.closed {
+        grid-template-columns: 0vw 100vw;
+      }
+      .drawer {
+        background: hsl(var(--gray-60));
+        overflow-y: visible;
+      }
+      .closed .drawer {
+        overflow: hidden;
+      }
       /* Content */
       .content {
         background: url("../static/images/castle-alternate-unoptimized.svg")
@@ -195,10 +194,11 @@ class RecaptchaDemo extends LitElement {
       }
       /* Example */
       .example {
-        flex: 1 0 auto;
         margin: auto;
         max-width: 350px;
         padding: 48px 0 var(--game-bottom) 0;
+        position: relative
+        z-index: 1;
       }
       .example .h2,
       .example p {
@@ -210,28 +210,11 @@ class RecaptchaDemo extends LitElement {
       }
       /* Form */
       /* TODO */
-      dl.cart {
-      }
-      .cart .item {
-        display: flex;
-        align-items: top;
-        justify-content: space-between;
-      }
-      .cart dt {
-        flex: 0 0 5em;
-        margin-right: 24px;
-        margin-top: 12px;
-      }
-      .cart dd:not(:last-child) {
-        flex: 1 0 auto;
-        margin-top: calc(1em + 12px);
-      }
-      .cart dd:last-child {
-        flex: 0 0 5em;
-      }
       /* Guide */
       .guide {
-        margin: 0 2rem;
+        box-sizing: border-box;
+        padding: 0 2rem;
+        width: 50vw;
         height: 300vh;
       }
       .guide p,
@@ -273,7 +256,27 @@ class RecaptchaDemo extends LitElement {
       .stagger.visible .score {
         opacity: 1;
       }
-      /* Score */
+      /* Checkout Card */
+      dl.cart {
+      }
+      .cart .item {
+        display: flex;
+        align-items: top;
+        justify-content: space-between;
+      }
+      .cart dt {
+        flex: 0 0 5em;
+        margin-right: 24px;
+        margin-top: 12px;
+      }
+      .cart dd:not(:last-child) {
+        flex: 1 0 auto;
+        margin-top: calc(1em + 12px);
+      }
+      .cart dd:last-child {
+        flex: 0 0 5em;
+      }
+      /* Guide Score */
       dl.score {
         align-items: center;
         display: flex;
@@ -293,19 +296,21 @@ class RecaptchaDemo extends LitElement {
         display: block;
         width: 1.75rem;
       }
-      /* Checkbox */
+      /* Slotted Checkbox */
       ::slotted(div.g-recaptcha) {
         display: flex;
         justify-content: center;
         margin: 0 auto 24px;
+        position: relative;
+        z-index: 1;
       }
-      /* Button */
+      /* Slotted Button / Button */
       ::slotted(button),
       .button {
         appearance: none;
         background: transparent /* hsl(var(--blue-50)) */;
         border: 0;
-        border-radius: 1px;
+        border-radius: 0;
         color: inherit;
         cursor: pointer;
         display: inline-block;
@@ -323,16 +328,54 @@ class RecaptchaDemo extends LitElement {
       .button {
         width: auto;
       }
+      /* Button Animation */
+      ::slotted(button),
+      .button,
+      ::slotted(button)::after,
+      .button::after,
+      ::slotted(button)::before,
+      .button::before {
+        transition: border 50ms ease-out 0s, border-radius 150ms ease-out 50ms,
+          background 100ms ease 0s, box-shadow 200ms ease-out 0s, outline 50ms ease-out 0s;
+      }
       /* Button Layers */
       ::slotted(button)::after,
       .button::after,
       ::slotted(button)::before,
       .button::before {
-        border-radius: 1px;
         content: "";
         display: block;
         position: absolute;
         z-index: -1;
+      }
+      /* Button Shape */
+      ::slotted(button)::before,
+      .button::before {
+        /* Round Glow Shape */
+        border-radius: 100%;
+        inset: 0 25%;
+      }
+      ::slotted(button),
+      .button,
+      ::slotted(button)::after,
+      .button::after {
+        /* Normal Shape */
+        border-radius: 1px;
+      }
+      ::slotted(button:focus),
+      .button:focus,
+      ::slotted(button:focus)::after,
+      .button:focus::after,
+      ::slotted(button:hover),
+      .button:hover,
+      ::slotted(button:hover)::after,
+      .button:hover::after,
+      ::slotted(button:active),
+      .button:active,
+      ::slotted(button:active)::after,
+      .button:active::after {
+        /* Focus/Hover/Active Shape */
+        border-radius: 22px;
       }
       /* Button Background */
       ::slotted(button)::after,
@@ -358,47 +401,64 @@ class RecaptchaDemo extends LitElement {
         background: hsl(var(--pink-50));
       }
       /* Button Border */
+      ::slotted(button)::after,
+      .button::after {
+        border: 1px solid transparent;
+      }
       ::slotted(button:focus)::after,
       .button:focus::after,
       ::slotted(button:hover)::after,
       .button:hover::after {
-        border-bottom: 1px solid rgba(0, 0, 0, 0.3);
-        border-right: 1px solid rgba(0, 0, 0, 0.3);
-        border-top: 1px solid rgba(255, 255, 255, 0.2);
-        border-left: 1px solid rgba(255, 255, 255, 0.2);
+        /* Focus/Hover Border */
+        border-bottom: 1px solid rgba(0, 0, 0, 30%);
+        border-right: 1px solid rgba(0, 0, 0, 30%);
+        border-top: 1px solid rgba(255, 255, 255, 20%);
+        border-left: 1px solid rgba(255, 255, 255, 20%);
       }
       ::slotted(button:active)::after,
       .button:active::after {
-        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-        border-right: 1px solid rgba(255, 255, 255, 0.2);
-        border-top: 1px solid rgba(0, 0, 0, 0.3);
-        border-left: 1px solid rgba(0, 0, 0, 0.3);
+        /* Active Border */
+        border-bottom: 1px solid rgba(255, 255, 255, 20%);
+        border-right: 1px solid rgba(255, 255, 255, 20%);
+        border-top: 1px solid rgba(0, 0, 0, 30%);
+        border-left: 1px solid rgba(0, 0, 0, 30%);
+      }
+      ::slotted(button:focus-visible)::after,
+      .button:focus-visible::after {
+        /* Focus Outline */
+        outline: 2px solid hsl(var(--pink-30));
+        outline-offset: 4px;
+      }
+      ::slotted(button:hover)::after,
+      .button:hover::after,
+      ::slotted(button:active)::after,
+      .button:active::after {
+        outline: none;
       }
       /* Button Shadow */
-      ::slotted(button)::before,
-      .button::before {
-        border-radius: 100%;
-        inset: 0 25%;
-      }
       ::slotted(button:focus),
       .button:focus,
       ::slotted(button:hover),
       .button:hover {
-        box-shadow: 1px 2px 32px 0 hsl(var(--blue-50), 40%);
+        /* Focus/Hover Square Glow */
+        box-shadow: 1px 2px 42px 2px hsl(var(--blue-50), 45%);
       }
       ::slotted(button:active),
       .button:active {
-        box-shadow: 1px 2px 32px 0 rgba(0, 0, 0, 5%);
+        /* Active Square Glow */
+        box-shadow: 1px 2px 42px 2px rgba(0, 0, 0, 20%);
       }
       ::slotted(button:focus)::before,
       .button:focus::before,
       ::slotted(button:hover)::before,
       .button:hover::before {
-        box-shadow: 2px 2px 90px 18px hsl(var(--blue-50), 40%);
+        /* Focus/Hover Round Glow */
+        box-shadow: 2px 2px 100px 20px hsl(var(--blue-50), 45%);
       }
       ::slotted(button:active)::before,
       .button:active::before {
-        box-shadow: 2px 2px 90px 18px rgba(0, 0, 0, 0.2);
+        /* Active Round Glow */
+        box-shadow: 2px 2px 100px 20px rgba(0, 0, 0, 20%);
       }
     `;
   }
