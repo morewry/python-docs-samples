@@ -37,12 +37,12 @@ def checkout() -> str:
     }
     return render_template(template_name_or_list="checkout.html", context=context)
 
-def review() -> str:
+def feedback() -> str:
     context = {
         "project_id": os.environ["GOOGLE_CLOUD_PROJECT"],
         "checkbox_site_key": os.environ["CHECKBOX_SITE_KEY"]
     }
-    return render_template(template_name_or_list="review.html", context=context)
+    return render_template(template_name_or_list="feedback.html", context=context)
 
 def create_assessment() -> Response:
     json_data = json.loads(request.data)

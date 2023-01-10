@@ -3,18 +3,15 @@ import {
   css,
   html,
 } from "https://unpkg.com/lit@2.4.1/index.js?module";
-import {
-  ref,
-  createRef,
-} from "https://unpkg.com/lit@2.4.1/directives/ref.js?module";
+// import {
+//   ref,
+//   createRef,
+// } from "https://unpkg.com/lit@2.4.1/directives/ref.js?module";
 // import { asyncReplace } from "https://unpkg.com/lit@2.4.1/directives/async-replace.js?module";
 // import { classMap } from "https://unpkg.com/lit@2.4.1/directives/class-map.js?module";
-import "https://unpkg.com/@material/mwc-fab@0.27.0/mwc-fab.js?module";
-import "https://unpkg.com/@material/mwc-drawer@0.27.0/mwc-drawer.js?module";
-import "https://unpkg.com/@material/mwc-top-app-bar@0.27.0/mwc-top-app-bar.js?module";
 import "https://unpkg.com/@material/mwc-icon-button@0.27.0/mwc-icon-button.js?module";
 
-const STEPS = ["home", /* "game", */ "signup", "login", "checkout", "review"];
+const STEPS = ["home", /* "game", */ "signup", "login", "checkout", "feedback"];
 
 class RecaptchaDemo extends LitElement {
   static get styles() {
@@ -28,6 +25,8 @@ class RecaptchaDemo extends LitElement {
         font-family: sans-serif;
         height: 100%;
         min-height: 100vh;
+        max-width: 100%;
+        width: 100%;
       }
       .demo {
         /* Blues */
@@ -66,23 +65,22 @@ class RecaptchaDemo extends LitElement {
         --game-bottom: 25vh;
       }
       .demo {
-        background: url("../static/images/castle-alternate-unoptimized.svg")
-            center bottom / auto var(--game-bottom) no-repeat fixed,
-          url("../static/images/land-unoptimized.svg") center bottom / auto 10vh
-            no-repeat fixed,
-          linear-gradient(to bottom, transparent 0, hsl(var(--pink-40)) 500%)
-            center bottom / 100vw var(--game-bottom) no-repeat fixed,
-          radial-gradient(
-              ellipse at bottom,
-              hsl(var(--purple-30)) -25%,
-              transparent 45%
-            )
-            center bottom / 200vw 50vh no-repeat fixed,
-          hsl(var(--indigo-80));
+        color: white;
+        display: grid;
+        grid-template-columns: 50vw 50vw;
+        grid-template-rows: 1fr;
       }
-      mwc-drawer[open].demo {
-        background-position: 75% bottom, 50% bottom, 50% bottom, 50% bottom,
-          50% bottom;
+      .demo.closed {
+        grid-template-columns: 0vw 100vw;
+      }
+      .drawer {
+        background: hsl(var(--gray-60));
+        width: 50vw;
+        transition: width 500ms ease-out;
+      }
+      .closed .drawer {
+        overflow-x: hidden;
+        width: 0;
       }
       /* Generic */
       ul.unstyled {
@@ -131,7 +129,7 @@ class RecaptchaDemo extends LitElement {
         border: 0 solid transparent;
         border-radius: 2px;
         box-sizing: border-box;
-        color: white;
+        color: inherit;
         display: block;
         font-family: sans-serif;
         line-height: 1;
@@ -139,22 +137,17 @@ class RecaptchaDemo extends LitElement {
         padding: 12px;
         width: 100%;
       }
-      mwc-drawer {
-        --mdc-drawer-width: 50vw;
-      }
-      mwc-drawer[open] mwc-top-app-bar {
-        /* Default width of drawer is 256px. See CSS Custom Properties below */
-        --mdc-top-app-bar-width: calc(100% - var(--mdc-drawer-width, 50vw));
-      }
-      mwc-top-app-bar {
-        --mdc-theme-primary: hsl(var(--indigo-80));
-      }
       a {
         color: hsl(var(--blue-60));
         display: block;
         font-weight: bold;
         /* text-align: center; */
         text-decoration: none;
+      }
+      a:focus,
+      a:hover,
+      a:active {
+        text-decoration: underline;
       }
       p,
       h1,
@@ -179,14 +172,29 @@ class RecaptchaDemo extends LitElement {
       }
       /* Content */
       .content {
-        /* cannot use flex or grid due to mwc-top-app-bar */
+        background: url("../static/images/castle-alternate-unoptimized.svg")
+            center bottom / auto var(--game-bottom) no-repeat fixed,
+          url("../static/images/land-unoptimized.svg") center bottom / auto 10vh
+            no-repeat fixed,
+          linear-gradient(to bottom, transparent 0, hsl(var(--pink-40)) 500%)
+            center bottom / 100vw var(--game-bottom) no-repeat fixed,
+          radial-gradient(
+              ellipse at bottom,
+              hsl(var(--purple-30)) -25%,
+              transparent 45%
+            )
+            center bottom / 200vw 50vh no-repeat fixed,
+          hsl(var(--indigo-80));
+      }
+      .open .content {
+        background-position: 75% bottom, 50% bottom, 50% bottom, 50% bottom,
+          50% bottom;
+      }
+      .content {
         font-family: monospace;
-        height: 100%;
-        min-height: 100vh;
       }
       /* Example */
       .example {
-        color: white;
         flex: 1 0 auto;
         margin: auto;
         max-width: 350px;
@@ -196,12 +204,94 @@ class RecaptchaDemo extends LitElement {
       .example p {
         margin-bottom: 24px;
       }
-      .example mwc-top-app-bar {
-        margin: 0 0 auto;
-      }
       .example fieldset {
         position: relative;
         z-index: 1;
+      }
+      /* Form */
+      /* TODO */
+      dl.cart {
+      }
+      .cart .item {
+        display: flex;
+        align-items: top;
+        justify-content: space-between;
+      }
+      .cart dt {
+        flex: 0 0 5em;
+        margin-right: 24px;
+        margin-top: 12px;
+      }
+      .cart dd:not(:last-child) {
+        flex: 1 0 auto;
+        margin-top: calc(1em + 12px);
+      }
+      .cart dd:last-child {
+        flex: 0 0 5em;
+      }
+      /* Guide */
+      .guide {
+        margin: 0 2rem;
+        height: 300vh;
+      }
+      .guide p,
+      .guide a,
+      .guide .h1,
+      .guide dl.score {
+        margin-bottom: 2rem;
+      }
+      .guide .h1 {
+        line-height: 1.25em;
+      }
+      .guide a {
+        color: hsl(var(--pink-40));
+        margin-bottom: 3rem;
+      }
+      .stagger dl.stagger {
+        transition-delay: 300ms;
+      }
+      .stagger p.stagger {
+        transition-delay: 900ms;
+      }
+      mwc-icon-button {
+        color: white;
+      }
+      mwc-icon-button,
+      .stagger {
+        transition: opacity 500ms ease-out;
+      }
+      mwc-icon-button.hidden {
+        display: none;
+      }
+      mwc-icon-button.hidden,
+      .stagger.hidden,
+      .stagger.hidden .score {
+        opacity: 0;
+      }
+      mwc-icon-button.visible,
+      .stagger.visible,
+      .stagger.visible .score {
+        opacity: 1;
+      }
+      /* Score */
+      dl.score {
+        align-items: center;
+        display: flex;
+        font-family: "Press Start 2P", monospace;
+        gap: 6px calc(1 * 0.85em);
+        line-height: 1;
+        max-width: calc(14 * 0.85em);
+        padding: 0;
+      }
+      .score dt {
+        flex: 0 0 auto;
+      }
+      .score dd {
+        flex: 1 0 auto;
+      }
+      .score img {
+        display: block;
+        width: 1.75rem;
       }
       /* Checkbox */
       ::slotted(div.g-recaptcha) {
@@ -221,7 +311,7 @@ class RecaptchaDemo extends LitElement {
         display: inline-block;
         font: inherit;
         font-family: "Press Start 2P", monospace;
-        font-size: 0.80rem;
+        font-size: 0.8rem;
         margin: 0 auto 24px;
         outline: 0;
         padding: 16px 32px;
@@ -310,94 +400,6 @@ class RecaptchaDemo extends LitElement {
       .button:active::before {
         box-shadow: 2px 2px 90px 18px rgba(0, 0, 0, 0.2);
       }
-      /* Form */
-      /* TODO */
-      dl.cart {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-      }
-      .cart dt {
-        flex: 1 0 auto;
-        margin-right: 24px;
-      }
-      .cart dt img {
-        margin-top: -24px; /* TODO optimize svg to remove padding */
-      }
-      .cart dd {
-        flex: 1 1 auto;
-      }
-      /* Guide */
-      mwc-drawer {
-        --mdc-theme-surface: hsl(var(--indigo-80), 75%);
-      }
-      .guide {
-        margin: 0 2rem;
-      }
-      .guide.h1 {
-        margin: 0 1rem;
-      }
-      .guide,
-      .guide.h1 {
-        color: white;
-      }
-      .guide p,
-      .guide a,
-      .guide h2.h1,
-      .guide dl.score {
-        margin-bottom: 2rem;
-      }
-      .guide.h1,
-      .guide h2.h1 {
-        line-height: 1.25em;
-      }
-      .guide a {
-        color: hsl(var(--pink-40));
-        margin-bottom: 3rem;
-      }
-      .stagger dl.stagger {
-        transition-delay: 300ms;
-      }
-      .stagger p.stagger {
-        transition-delay: 900ms;
-      }
-      mwc-icon-button,
-      .stagger {
-        transition: opacity 500ms ease-out;
-      }
-      mwc-icon-button.hidden {
-        display: none;
-      }
-      mwc-icon-button.hidden,
-      .stagger.hidden,
-      .stagger.hidden .score {
-        opacity: 0;
-      }
-      mwc-icon-button.visible,
-      .stagger.visible,
-      .stagger.visible .score {
-        opacity: 1;
-      }
-      /* Score */
-      dl.score {
-        align-items: center;
-        display: flex;
-        font-family: "Press Start 2P", monospace;
-        gap: 6px calc(1 * 0.85em);
-        line-height: 1;
-        max-width: calc(14 * 0.85em);
-        padding: 0;
-      }
-      .score dt {
-        flex: 0 0 auto;
-      }
-      .score dd {
-        flex: 1 0 auto;
-      }
-      .score img {
-        display: block;
-        width: 1.75rem;
-      }
     `;
   }
 
@@ -409,8 +411,6 @@ class RecaptchaDemo extends LitElement {
     score: { type: String },
     verdict: { type: String },
   };
-
-  button = createRef();
 
   constructor() {
     super();
@@ -459,7 +459,6 @@ class RecaptchaDemo extends LitElement {
   render() {
     const BUTTON = html`
       <slot
-        ${ref(this.button)}
         @click=${this.handleSubmit}
         @slotchange=${this.handleSlotchange}
       ></slot>
@@ -480,22 +479,40 @@ class RecaptchaDemo extends LitElement {
           <fieldset>
             <legend><h2 class="h2">Checkout example</h2></legend>
             <dl class="unstyled cart">
-              <dt>
-                <img
-                  alt="Demo Product Shield"
-                  src="../static/images/shield-unoptimized.svg"
-                />
-              </dt>
-              <dd>
-                <label>
-                  <span>Amount</span>
-                  <input type="number" value="1" disabled />
-                </label>
-              </dd>
+              <div class="item">
+                <dt>
+                  <img
+                    alt="Demo Product Shield"
+                    src="../static/images/shield-unoptimized.svg"
+                  />
+                </dt>
+                <dd>Castle Shield</dd>
+                <dd>
+                  <label>
+                    <span>Amount</span>
+                    <input type="number" value="1" disabled />
+                  </label>
+                </dd>
+              </div>
+              <div class="item">
+                <dt>
+                  <img
+                    alt="Demo Product Magnifier"
+                    src="../static/images/magnifier-unoptimized.svg"
+                  />
+                </dt>
+                <dd>Bot Inspector</dd>
+                <dd>
+                  <label>
+                    <span>Amount</span>
+                    <input type="number" value="1" disabled />
+                  </label>
+                </dd>
+              </div>
             </dl>
             <label>
               <span>Credit card</span>
-              <input type="number" value="7777-8888-3333-2222" disabled />
+              <input type="text" value="7777-8888-3333-2222" disabled />
             </label>
           </fieldset>
           ${BUTTON}
@@ -517,7 +534,7 @@ class RecaptchaDemo extends LitElement {
           ${BUTTON}
         </form>
       `,
-      review: html`
+      feedback: html`
         <form class="example">
           <fieldset>
             <legend><h2 class="h2">Feedback example</h2></legend>
@@ -565,14 +582,14 @@ class RecaptchaDemo extends LitElement {
             src="../static/images/magnifier-unoptimized.svg"
           />
         </dt>
-        <dd>${this.verdict || '?????'}</dd>
+        <dd>${this.verdict || "?????"}</dd>
       </dl>
     `;
 
     const GUIDES = {
       home: html`
-        <h1 class="h1 guide" slot="title">Score when the page loads</h1>
-        <div class="guide">
+        <section class="guide">
+          <h1 class="h1">Score when the page loads</h1>
           <p>
             What is this an example of (score when the page loads)? Why would
             you verify when the page loads? What kind of key? Why? How would you
@@ -584,22 +601,22 @@ class RecaptchaDemo extends LitElement {
             target="_blank"
             >Learn more about...</a
           >
-          <div class="stagger ${this.initialized ? 'visible' : 'hidden'}">
+          <div class="stagger ${this.initialized ? "visible" : "hidden"}">
             <h2 class="h1">What's your score?</h2>
             <p>
               How would you fetch the token? How would you create an assessment?
             </p>
             ${SCORE}
-            <p class="stagger ${this.verdict ? 'visible' : 'hidden'}">
+            <p class="stagger ${this.verdict ? "visible" : "hidden"}">
               How would you interpret the score? How would you handle the final
               score?
             </p>
           </div>
-        </div>
+        </section>
       `,
       checkout: html`
-        <h1 class="h1 guide" slot="title">Score when users interact</h1>
-        <div class="guide">
+        <section class="guide">
+          <h1 class="h1">Score when users interact</h1>
           <p>
             What is this an example of (score on programmatic user action)? Why
             would you use an score programmatically on user interaction? What
@@ -611,22 +628,22 @@ class RecaptchaDemo extends LitElement {
             target="_blank"
             >Learn more about...</a
           >
-          <div class="stagger ${this.initialized ? 'visible' : 'hidden'}">
+          <div class="stagger ${this.initialized ? "visible" : "hidden"}">
             <h2 class="h1">What's your score?</h2>
             <p>
               How would you fetch the token? How would you create an assessment?
             </p>
             ${SCORE}
-            <p class="stagger ${this.verdict ? 'visible' : 'hidden'}">
+            <p class="stagger ${this.verdict ? "visible" : "hidden"}">
               How would you interpret the score? How would you handle the final
               score?
             </p>
           </div>
-        </div>
+        </section>
       `,
       login: html`
-        <h1 class="h1 guide" slot="title">Add reCAPTCHA on an HTML button</h1>
-        <div class="guide">
+        <section class="guide">
+          <h1 class="h1">Add reCAPTCHA on an HTML button</h1>
           <p>
             What is this an example of (score auto bind html button)? Why would
             you use an score auto bound to an html button? What kind of key?
@@ -638,22 +655,22 @@ class RecaptchaDemo extends LitElement {
             target="_blank"
             >Learn more about...</a
           >
-          <div class="stagger ${this.initialized ? 'visible' : 'hidden'}">
+          <div class="stagger ${this.initialized ? "visible" : "hidden"}">
             <h2 class="h1">What's your score?</h2>
             <p>
               How would you fetch the token? How would you create an assessment?
             </p>
             ${SCORE}
-            <p class="stagger ${this.verdict ? 'visible' : 'hidden'}">
+            <p class="stagger ${this.verdict ? "visible" : "hidden"}">
               How would you interpret the score? How would you handle the final
               score?
             </p>
           </div>
-        </div>
+        </section>
       `,
-      review: html`
-        <h1 class="h1 guide" slot="title">Automatically render a checkbox</h1>
-        <div class="guide">
+      feedback: html`
+        <section class="guide">
+          <h1 class="h1">Automatically render a checkbox</h1>
           <p>
             What is this an example of (checkbox automatically rendered)? Why
             would you use a checkbox and automatically render it? What kind of
@@ -665,22 +682,22 @@ class RecaptchaDemo extends LitElement {
             target="_blank"
             >Learn more about...</a
           >
-          <div class="stagger ${this.initialized ? 'visible' : 'hidden'}">
+          <div class="stagger ${this.initialized ? "visible" : "hidden"}">
             <h2 class="h1">What's your score?</h2>
             <p>
               How would you fetch the token? How would you create an assessment?
             </p>
             ${SCORE}
-            <p class="stagger ${this.verdict ? 'visible' : 'hidden'}">
+            <p class="stagger ${this.verdict ? "visible" : "hidden"}">
               How would you interpret the score? How would you handle the final
               score?
             </p>
           </div>
-        </div>
+        </section>
       `,
       signup: html`
-        <h1 class="h1 guide" slot="title">Explicitly render a checkbox</h1>
-        <div class="guide">
+        <section class="guide">
+          <h1 class="h1">Explicitly render a checkbox</h1>
           <p>
             What is this an example of (checkbox explicitly rendered)? Why would
             you use a checkbox and explicitly render it? What kind of key? Why?
@@ -692,50 +709,46 @@ class RecaptchaDemo extends LitElement {
             target="_blank"
             >Learn more about...</a
           >
-          <div class="stagger ${this.initialized ? 'visible' : 'hidden'}">
+          <div class="stagger ${this.initialized ? "visible" : "hidden"}">
             <h2 class="h1">What's your score?</h2>
             <p>
               How would you fetch the token? How would you create an assessment?
             </p>
             ${SCORE}
-            <p class="stagger ${this.verdict ? 'visible' : 'hidden'}">
+            <p class="stagger ${this.verdict ? "visible" : "hidden"}">
               How would you interpret the score? How would you handle the final
               score?
             </p>
           </div>
-        </div>
+        </section>
       `,
     };
 
     const BAR = html`
-      <mwc-top-app-bar>
+      <div class="bar" id="bar">
         <mwc-icon-button
-          slot="navigationIcon"
           icon="menu"
+          aria-controls="drawer"
+          aria-expanded="${this.drawerOpen ? "true" : "false"}"
           @click=${this.toggleDrawer}
-          class="${this.drawerOpen ? 'hidden' : 'visible'}"
+          class="${this.drawerOpen ? "hidden" : "visible"}"
         ></mwc-icon-button>
         <mwc-icon-button
-          slot="navigationIcon"
           icon="close"
+          aria-controls="drawer"
+          aria-expanded="${this.drawerOpen ? "true" : "false"}"
           @click=${this.toggleDrawer}
-          class="${this.drawerOpen ? 'visible' : 'hidden'}"
+          class="${this.drawerOpen ? "visible" : "hidden"}"
         ></mwc-icon-button>
-        <h1 slot="title" class="h1">reCAPTCHA Example</h1>
-        ${FORMS[this.step]}
-      </mwc-top-app-bar>
+        <h1 class="h1">reCAPTCHA Examples</h1>
+      </div>
     `;
 
     return html`
-      <mwc-drawer
-        class="demo"
-        hasheader
-        type="dismissible"
-        ?open=${this.drawerOpen}
-      >
-        ${GUIDES[this.step]}
-        <section slot="appContent" class="content">${BAR}</section>
-      </mwc-drawer>
+      <div id="demo" class="demo ${this.drawerOpen ? "open" : "closed"}">
+        <div id="drawer" class="drawer">${GUIDES[this.step]}</div>
+        <div id="content" class="content">${BAR} ${FORMS[this.step]}</div>
+      </div>
     `;
   }
 }
