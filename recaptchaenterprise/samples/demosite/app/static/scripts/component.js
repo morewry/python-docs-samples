@@ -157,13 +157,15 @@ class RecaptchaDemo extends LitElement {
         display: grid;
         grid-template-columns: 50vw 50vw;
         grid-template-rows: 1fr;
-        transition: grid-template-columns 300ms ease-out;
+        transition: grid-template-columns 150ms ease-out;
       }
       .demo.closed {
         grid-template-columns: 0vw 100vw;
       }
       .drawer {
-        background: hsl(var(--gray-60));
+        background: #111;
+        border: 2px solid transparent;
+        border-color: #000 #333 #333 #000;
         overflow-y: visible;
       }
       .closed .drawer {
@@ -192,12 +194,24 @@ class RecaptchaDemo extends LitElement {
       .content {
         font-family: monospace;
       }
+      .content > .sticky {
+        position: sticky;
+        top: 0;
+      }
+      /* Bar */
+      .bar {
+        align-items: center;
+        display: flex;
+        gap: 24px;
+      }
       /* Example */
       .example {
+        box-sizing: border-box;
+        min-height: 100vh;
         margin: auto;
         max-width: 350px;
         padding: 48px 0 var(--game-bottom) 0;
-        position: relative
+        position: relative;
         z-index: 1;
       }
       .example .h2,
@@ -213,7 +227,7 @@ class RecaptchaDemo extends LitElement {
       /* Guide */
       .guide {
         box-sizing: border-box;
-        padding: 0 2rem;
+        padding: 2rem 2rem 0;
         width: 50vw;
         height: 300vh;
       }
@@ -835,7 +849,9 @@ class RecaptchaDemo extends LitElement {
     return html`
       <div id="demo" class="demo ${this.drawerOpen ? "open" : "closed"}">
         <div id="drawer" class="drawer">${GUIDES[this.step]}</div>
-        <div id="content" class="content">${BAR} ${FORMS[this.step]}</div>
+        <div id="content" class="content">
+          <div class="sticky">${BAR} ${FORMS[this.step]}</div>
+        </div>
       </div>
     `;
   }
