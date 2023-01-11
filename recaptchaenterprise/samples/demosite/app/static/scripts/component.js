@@ -321,7 +321,6 @@ class RecaptchaDemo extends LitElement {
         outline: 0;
         padding: 16px 32px;
         position: relative;
-        text-shadow: 2px 2px black;
         width: 100%;
         z-index: 0;
       }
@@ -336,8 +335,9 @@ class RecaptchaDemo extends LitElement {
       ::slotted(button)::before,
       .button::before {
         transition: border 50ms ease-out 0s, border-radius 150ms ease-out 50ms,
-          background 100ms ease 0s, box-shadow 200ms ease-out 0s, outline 50ms ease-out 0s;
-      }
+          background 100ms ease 0s, box-shadow 200ms ease-out 0s, outline 50ms ease-out 0s,
+          text-shadow 50ms ease-out 0s, transform 100ms ease-out 0s;
+      }      
       /* Button Layers */
       ::slotted(button)::after,
       .button::after,
@@ -347,6 +347,45 @@ class RecaptchaDemo extends LitElement {
         display: block;
         position: absolute;
         z-index: -1;
+      }
+      /* Button Text */
+      ::slotted(button),
+      .button {
+        text-shadow: 2px 2px black;
+      }
+      ::slotted(button:focus),
+      .button:focus,
+      ::slotted(button:hover),
+      .button:hover,
+      ::slotted(button:active),
+      .button:active {
+        text-shadow: black 2px 2px, hsl(var(--gray-50)) 4px 4px;
+      }
+      ::slotted(button),
+      .button {
+        text-shadow: 2px 2px black;
+      }
+      ::slotted(button:focus),
+      .button:focus,
+      ::slotted(button:hover),
+      .button:hover,
+      ::slotted(button:active),
+      .button:active {
+        transform: scale(1.24);
+      }
+      ::slotted(button:focus)::after,
+      .button:focus::after,
+      ::slotted(button:focus)::before,
+      .button:focus::before,
+      ::slotted(button:hover)::after,
+      .button:hover::after,
+      ::slotted(button:hover)::before,
+      .button:hover::before,
+      ::slotted(button:active)::after,
+      .button:active::after,
+      ::slotted(button:active)::before,
+      .button:active::before {
+        transform: scale(0.81);
       }
       /* Button Shape */
       ::slotted(button)::before,
@@ -383,17 +422,6 @@ class RecaptchaDemo extends LitElement {
         /* background: hsl(var(--blue-40)); */
         background: hsl(var(--pink-40));
         inset: 0;
-      }
-      ::slotted(button:focus)::after,
-      .button:focus::after {
-        /* TODO focus styles */
-      }
-      ::slotted(button:hover)::after,
-      .button:hover::after {
-        /*
-        background: hsl(var(--blue-30));
-        */
-        /* TODO hover background: hsl(var(--pink-30)); */
       }
       ::slotted(button:active)::after,
       .button:active::after {
@@ -436,15 +464,15 @@ class RecaptchaDemo extends LitElement {
         outline: none;
       }
       /* Button Shadow */
-      ::slotted(button:focus),
-      .button:focus,
-      ::slotted(button:hover),
-      .button:hover {
+      ::slotted(button:focus)::after,
+      .button:focus::after,
+      ::slotted(button:hover)::after,
+      .button:hover::after {
         /* Focus/Hover Square Glow */
         box-shadow: 1px 2px 42px 2px hsl(var(--blue-50), 45%);
       }
-      ::slotted(button:active),
-      .button:active {
+      ::slotted(button:active)::after,
+      .button:active::after {
         /* Active Square Glow */
         box-shadow: 1px 2px 42px 2px rgba(0, 0, 0, 20%);
       }
