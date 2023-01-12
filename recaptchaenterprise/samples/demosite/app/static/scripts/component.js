@@ -10,6 +10,7 @@ import {
 // import { asyncReplace } from "https://unpkg.com/lit@2.4.1/directives/async-replace.js?module";
 // import { classMap } from "https://unpkg.com/lit@2.4.1/directives/class-map.js?module";
 import "https://unpkg.com/@material/mwc-icon-button@0.27.0/mwc-icon-button.js?module";
+import "https://unpkg.com/@material/mwc-icon@0.27.0/mwc-icon.js?module";
 
 const STEPS = ["home", /* "game", */ "signup", "login", "checkout", "feedback"];
 
@@ -75,7 +76,6 @@ class RecaptchaDemo extends LitElement {
         color: hsl(var(--blue-60));
         display: block;
         font-weight: bold;
-        /* text-align: center; */
         text-decoration: none;
       }
       a:focus,
@@ -229,7 +229,7 @@ class RecaptchaDemo extends LitElement {
         box-sizing: border-box;
         padding: 2rem 2rem 0;
         width: 50vw;
-        height: 300vh;
+        /* TODO scrolling and responsive height: 300vh; */
       }
       .guide p,
       .guide a,
@@ -241,34 +241,91 @@ class RecaptchaDemo extends LitElement {
         line-height: 1.25em;
       }
       .guide a {
+        align-items: center;
         color: hsl(var(--pink-40));
+        display: inline-flex;
         margin-bottom: 3rem;
       }
-      .stagger dl.stagger {
-        transition-delay: 300ms;
+      .guide a:focus,
+      .guide a:hover,
+      .guide a:active {
+        text-decoration: none;
       }
-      .stagger p.stagger {
-        transition-delay: 900ms;
+      .guide a span {
+        transition: 300ms ease-out;
+      }
+      .guide a:focus span,
+      .guide a:hover span,
+      .guide a:active span {
+        text-decoration: dashed underline 0.75px;
+        text-underline-offset: 1px;
+      }
+      .guide a mwc-icon {
+        --mdc-icon-size: 1em;
+        flex: 0 0 auto;
+        margin-left: 0.25em;
+        text-decoration: none !important;
+        transition: 300ms ease-out;
+      }
+      .guide a:focus mwc-icon,
+      .guide a:hover mwc-icon,
+      .guide a:active mwc-icon {
+        transform: scale(1.25);
+      }
+      mwc-icon:hover {
+        text-decoration: none !important;
       }
       mwc-icon-button {
         color: white;
       }
-      mwc-icon-button,
+      @keyframes stagger {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+      @keyframes bump {
+        0% {
+          transform: scale(1) translate(0,0);
+        }
+        50% {
+          transform: scale(1.1) translate(0.5em,0);
+        }
+        100% {
+          transform: scale(1) translate(0,0);
+        }
+      }
       .stagger {
-        transition: opacity 500ms ease-out;
+        animation: 300ms linear 0s 1 normal both paused stagger;
+      }
+      .stagger:nth-child(1) {
+        animation-delay: 0ms;
+      }
+      .stagger:nth-child(2) {
+        animation-delay: 600ms;
+      }
+      .stagger:nth-child(3) {
+        animation-delay: 1200ms;
+      }
+      .guide .hidden {
+        opacity: 0;
+      }
+      .guide .visible {
+        animation-direction: normal;
+        animation-play-state: running;
+      }
+      .guide .scored {
+        animation: 300ms linear 0s 1 normal both running bump;
+        transform-origin: left center;
+      }
+      /* Menu */
+      mwc-icon-button.visible {
+        display: block;
       }
       mwc-icon-button.hidden {
         display: none;
-      }
-      mwc-icon-button.hidden,
-      .stagger.hidden,
-      .stagger.hidden .score {
-        opacity: 0;
-      }
-      mwc-icon-button.visible,
-      .stagger.visible,
-      .stagger.visible .score {
-        opacity: 1;
       }
       /* Checkout Card */
       dl.cart {
@@ -299,6 +356,9 @@ class RecaptchaDemo extends LitElement {
         line-height: 1;
         max-width: calc(14 * 0.85em);
         padding: 0;
+      }
+      .unknown .score {
+        /* TODO color: hsl(var(--gray-40)); */
       }
       .score dt {
         flex: 0 0 auto;
@@ -349,9 +409,10 @@ class RecaptchaDemo extends LitElement {
       ::slotted(button)::before,
       .button::before {
         transition: border 50ms ease-out 0s, border-radius 150ms ease-out 50ms,
-          background 100ms ease 0s, box-shadow 200ms ease-out 0s, outline 50ms ease-out 0s,
-          text-shadow 50ms ease-out 0s, transform 100ms ease-out 0s;
-      }      
+          background 100ms ease 0s, box-shadow 200ms ease-out 0s,
+          outline 50ms ease-out 0s, text-shadow 50ms ease-out 0s,
+          transform 100ms ease-out 0s;
+      }
       /* Button Layers */
       ::slotted(button)::after,
       .button::after,
@@ -671,7 +732,7 @@ class RecaptchaDemo extends LitElement {
     };
 
     const SCORE = html`
-      <dl class="score stagger unstyled">
+      <dl class="score unstyled">
         <!-- 
         TODO: best practice re: local BE assessment payload
         <dt>Score:</dt>
@@ -690,139 +751,189 @@ class RecaptchaDemo extends LitElement {
 
     const GUIDES = {
       home: html`
-        <section class="guide">
-          <h1 class="h1">Score when the page loads</h1>
-          <p>
-            What is this an example of (score when the page loads)? Why would
-            you verify when the page loads? What kind of key? Why? How would you
-            create? How would you load JS API? How would you set up the
-            challenge?
-          </p>
-          <a
-            href="https://cloud.google.com/recaptcha-enterprise/docs/instrument-web-pages#page-load"
-            target="_blank"
-            >Learn more about...</a
-          >
-          <div class="stagger ${this.initialized ? "visible" : "hidden"}">
-            <h2 class="h1">What's your score?</h2>
+        <div class="guide">
+          <section class="static">
+            <h1 class="h1">Score when the page loads</h1>
             <p>
-              How would you fetch the token? How would you create an assessment?
+              What is this an example of (score when the page loads)? Why would
+              you verify when the page loads? What kind of key? Why? How would
+              you create? How would you load JS API? How would you set up the
+              challenge?
             </p>
-            ${SCORE}
-            <p class="stagger ${this.verdict ? "visible" : "hidden"}">
-              How would you interpret the score? How would you handle the final
-              score?
-            </p>
-          </div>
-        </section>
+            <a
+              href="https://cloud.google.com/recaptcha-enterprise/docs/instrument-web-pages#page-load"
+              target="_blank"
+              ><span>Learn more about scoring when the page loads</span>
+              <mwc-icon>launch</mwc-icon></a
+            >
+          </section>
+          <section>
+            <div class="stagger ${this.initialized ? "visible" : "hidden"}">
+              <h2 class="h1">What's your score?</h2>
+              <p>
+                How would you fetch the token? How would you create an
+                assessment?
+              </p>
+            </div>
+            <div class="stagger ${this.initialized ? "visible" : "hidden"} ${this.verdict ? "scored" : "unknown"}">
+              ${SCORE}
+            </div>
+            <div class="stagger ${this.verdict ? "visible" : "hidden"}">
+              <p>
+                How would you interpret the score? How would you handle the
+                final score?
+              </p>
+            </div>
+          </section>
+        </div>
       `,
       checkout: html`
-        <section class="guide">
-          <h1 class="h1">Score when users interact</h1>
-          <p>
-            What is this an example of (score on programmatic user action)? Why
-            would you use an score programmatically on user interaction? What
-            kind of key? Why? How would you create? How would you load JS API?
-            How would you set up the challenge?
-          </p>
-          <a
-            href="https://cloud.google.com/recaptcha-enterprise/docs/instrument-web-pages#user-action"
-            target="_blank"
-            >Learn more about...</a
-          >
-          <div class="stagger ${this.initialized ? "visible" : "hidden"}">
-            <h2 class="h1">What's your score?</h2>
+        <div class="guide">
+          <section class="static">
+            <h1 class="h1">Score when users interact</h1>
             <p>
-              How would you fetch the token? How would you create an assessment?
+              What is this an example of (score on programmatic user action)?
+              Why would you use an score programmatically on user interaction?
+              What kind of key? Why? How would you create? How would you load JS
+              API? How would you set up the challenge?
             </p>
-            ${SCORE}
-            <p class="stagger ${this.verdict ? "visible" : "hidden"}">
-              How would you interpret the score? How would you handle the final
-              score?
-            </p>
-          </div>
-        </section>
+            <a
+              href="https://cloud.google.com/recaptcha-enterprise/docs/instrument-web-pages#user-action"
+              target="_blank"
+              ><span>Learn more about scoring when users interact</span>
+              <mwc-icon>launch</mwc-icon></a
+            >
+          </section>
+          <section>
+            <div class="stagger ${this.initialized ? "visible" : "hidden"}">
+              <h2 class="h1">What's your score?</h2>
+              <p>
+                How would you fetch the token? How would you create an
+                assessment?
+              </p>
+            </div>
+            <div class="stagger ${this.initialized ? "visible" : "hidden"} ${this.verdict ? "scored" : "unknown"}">
+              ${SCORE}
+            </div>
+            <div class="stagger ${this.verdict ? "visible" : "hidden"}">
+              <p>
+                How would you interpret the score? How would you handle the
+                final score?
+              </p>
+            </div>
+          </section>
+        </div>
       `,
       login: html`
-        <section class="guide">
-          <h1 class="h1">Add reCAPTCHA on an HTML button</h1>
-          <p>
-            What is this an example of (score auto bind html button)? Why would
-            you use an score auto bound to an html button? What kind of key?
-            Why? How would you create? How would you load JS API? How would you
-            set up the challenge?
-          </p>
-          <a
-            href="https://cloud.google.com/recaptcha-enterprise/docs/instrument-web-pages#html-button"
-            target="_blank"
-            >Learn more about...</a
-          >
-          <div class="stagger ${this.initialized ? "visible" : "hidden"}">
-            <h2 class="h1">What's your score?</h2>
+        <div class="guide">
+          <section class="static">
+            <h1 class="h1">Add reCAPTCHA on an HTML button</h1>
             <p>
-              How would you fetch the token? How would you create an assessment?
+              What is this an example of (score auto bind html button)? Why
+              would you use an score auto bound to an html button? What kind of
+              key? Why? How would you create? How would you load JS API? How
+              would you set up the challenge?
             </p>
-            ${SCORE}
-            <p class="stagger ${this.verdict ? "visible" : "hidden"}">
-              How would you interpret the score? How would you handle the final
-              score?
-            </p>
-          </div>
-        </section>
+            <a
+              href="https://cloud.google.com/recaptcha-enterprise/docs/instrument-web-pages#html-button"
+              target="_blank"
+              ><span>Learn more about adding reCATPCHA on an HTML button</span>
+              <mwc-icon>launch</mwc-icon></a
+            >
+          </section>
+          <section>
+            <div class="stagger ${this.initialized ? "visible" : "hidden"}">
+              <h2 class="h1">What's your score?</h2>
+              <p>
+                How would you fetch the token? How would you create an
+                assessment?
+              </p>
+            </div>
+            <div class="stagger ${this.initialized ? "visible" : "hidden"} ${this.verdict ? "scored" : "unknown"}">
+              ${SCORE}
+            </div>
+            <div class="stagger ${this.verdict ? "visible" : "hidden"}">
+              <p>
+                How would you interpret the score? How would you handle the
+                final score?
+              </p>
+            </div>
+          </section>
+        </div>
       `,
       feedback: html`
-        <section class="guide">
-          <h1 class="h1">Automatically render a checkbox</h1>
-          <p>
-            What is this an example of (checkbox automatically rendered)? Why
-            would you use a checkbox and automatically render it? What kind of
-            key? Why? How would you create? How would you load JS API? How would
-            you set up the challenge?
-          </p>
-          <a
-            href="https://cloud.google.com/recaptcha-enterprise/docs/instrument-web-pages-with-checkbox#expandable-1"
-            target="_blank"
-            >Learn more about...</a
-          >
-          <div class="stagger ${this.initialized ? "visible" : "hidden"}">
-            <h2 class="h1">What's your score?</h2>
+        <div class="guide">
+          <section class="static">
+            <h1 class="h1">Automatically render a checkbox</h1>
             <p>
-              How would you fetch the token? How would you create an assessment?
+              What is this an example of (checkbox automatically rendered)? Why
+              would you use a checkbox and automatically render it? What kind of
+              key? Why? How would you create? How would you load JS API? How
+              would you set up the challenge?
             </p>
-            ${SCORE}
-            <p class="stagger ${this.verdict ? "visible" : "hidden"}">
-              How would you interpret the score? How would you handle the final
-              score?
-            </p>
-          </div>
-        </section>
+            <a
+              href="https://cloud.google.com/recaptcha-enterprise/docs/instrument-web-pages-with-checkbox#expandable-1"
+              target="_blank"
+              ><span>Learn more about automatically rendering checkboxes</span>
+              <mwc-icon>launch</mwc-icon></a
+            >
+          </section>
+          <section>
+            <div class="stagger ${this.initialized ? "visible" : "hidden"}">
+              <h2 class="h1">What's your score?</h2>
+              <p>
+                How would you fetch the token? How would you create an
+                assessment?
+              </p>
+            </div>
+            <div class="stagger ${this.initialized ? "visible" : "hidden"} ${this.verdict ? "scored" : "unknown"}">
+              ${SCORE}
+            </div>
+            <div class="stagger ${this.verdict ? "visible" : "hidden"}">
+              <p>
+                How would you interpret the score? How would you handle the
+                final score?
+              </p>
+            </div>
+          </section>
+        </div>
       `,
       signup: html`
-        <section class="guide">
-          <h1 class="h1">Explicitly render a checkbox</h1>
-          <p>
-            What is this an example of (checkbox explicitly rendered)? Why would
-            you use a checkbox and explicitly render it? What kind of key? Why?
-            How would you create? How would you load JS API? How would you set
-            up the challenge?
-          </p>
-          <a
-            href="https://cloud.google.com/recaptcha-enterprise/docs/instrument-web-pages-with-checkbox#expandable-2"
-            target="_blank"
-            >Learn more about...</a
-          >
-          <div class="stagger ${this.initialized ? "visible" : "hidden"}">
-            <h2 class="h1">What's your score?</h2>
+        <div class="guide">
+          <section class="static">
+            <h1 class="h1">Explicitly render a checkbox</h1>
             <p>
-              How would you fetch the token? How would you create an assessment?
+              What is this an example of (checkbox explicitly rendered)? Why
+              would you use a checkbox and explicitly render it? What kind of
+              key? Why? How would you create? How would you load JS API? How
+              would you set up the challenge?
             </p>
-            ${SCORE}
-            <p class="stagger ${this.verdict ? "visible" : "hidden"}">
-              How would you interpret the score? How would you handle the final
-              score?
-            </p>
-          </div>
-        </section>
+            <a
+              href="https://cloud.google.com/recaptcha-enterprise/docs/instrument-web-pages-with-checkbox#expandable-2"
+              target="_blank"
+              ><span>Learn more about explicitly rendering checkboxes</span>
+              <mwc-icon>launch</mwc-icon></a
+            >
+          </section>
+          <section>
+            <div class="stagger ${this.initialized ? "visible" : "hidden"}">
+              <h2 class="h1">What's your score?</h2>
+              <p>
+                How would you fetch the token? How would you create an
+                assessment?
+              </p>
+            </div>
+            <div class="stagger ${this.initialized ? "visible" : "hidden"} ${this.verdict ? "scored" : "unknown"}">
+              ${SCORE}
+            </div>
+            <div class="stagger ${this.verdict ? "visible" : "hidden"}">
+              <p>
+                How would you interpret the score? How would you handle the
+                final score?
+              </p>
+            </div>
+          </section>
+        </div>
       `,
     };
 
