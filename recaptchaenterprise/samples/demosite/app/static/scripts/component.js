@@ -197,6 +197,10 @@ class RecaptchaDemo extends LitElement {
       .content > .sticky {
         position: sticky;
         top: 0;
+        /* TODO layout */
+        display: flex;
+        flex-direction: column;
+        min-height: 100%;
       }
       /* Bar */
       .bar {
@@ -207,9 +211,9 @@ class RecaptchaDemo extends LitElement {
       /* Example */
       .example {
         box-sizing: border-box;
-        min-height: 100vh;
         margin: auto;
         max-width: 350px;
+        width: 100%;
         padding: 48px 0 var(--game-bottom) 0;
         position: relative;
         z-index: 1;
@@ -222,8 +226,13 @@ class RecaptchaDemo extends LitElement {
         position: relative;
         z-index: 1;
       }
+      .example .h2 {
+        margin-bottom: 48px;
+        font-size: 80%;
+        text-transform: uppercase;
+      }
       /* Form */
-      /* TODO */
+      /* TODO any form styles */
       /* Guide */
       .guide {
         box-sizing: border-box;
@@ -446,7 +455,7 @@ class RecaptchaDemo extends LitElement {
       .button:hover,
       ::slotted(button:active),
       .button:active {
-        transform: scale(1.24);
+        transform: scale(1.12);
       }
       ::slotted(button:focus)::after,
       .button:focus::after,
@@ -460,7 +469,7 @@ class RecaptchaDemo extends LitElement {
       .button:active::after,
       ::slotted(button:active)::before,
       .button:active::before {
-        transform: scale(0.81);
+        transform: scale(0.89);
       }
       /* Button Shape */
       ::slotted(button)::before,
@@ -627,6 +636,7 @@ class RecaptchaDemo extends LitElement {
       ></slot>
     `;
 
+    // TODO update login/checkout form examples with feedback
     const FORMS = {
       home: html`
         <section class="example">
@@ -731,6 +741,7 @@ class RecaptchaDemo extends LitElement {
       `,
     };
 
+    // TODO undefined case when it expires
     const SCORE = html`
       <dl class="score unstyled">
         <!-- 
@@ -940,7 +951,7 @@ class RecaptchaDemo extends LitElement {
     const BAR = html`
       <div class="bar" id="bar">
         <mwc-icon-button
-          icon="menu"
+          icon="help_outline"
           aria-controls="drawer"
           aria-expanded="${this.drawerOpen ? "true" : "false"}"
           @click=${this.toggleDrawer}
