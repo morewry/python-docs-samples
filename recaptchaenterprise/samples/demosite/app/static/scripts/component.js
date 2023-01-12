@@ -161,15 +161,33 @@ class RecaptchaDemo extends LitElement {
       }
       .demo.closed {
         grid-template-columns: 0vw 100vw;
+        transition-delay: 150ms;
       }
       .drawer {
         background: #111;
-        border: 2px solid transparent;
-        border-color: #000 #333 #333 #000;
         overflow-y: visible;
+        position: relative;
+      }
+      .drawer::after {
+        border: 2px solid transparent;
+        border-color: #000 hsl(var(--indigo-60), 50%) #333 #000;
+        box-shadow: 3px 3px 3px -1px hsl(var(--indigo-60), 20%), inset 3px 3px 5px -2px #000;
+        box-sizing: border-box;
+        content: '';
+        height: 100vh;
+        inset: 0 auto auto auto;
+        position: fixed;
+        transition: opacity 150ms ease-out;
+        width: 50vw;
       }
       .closed .drawer {
         overflow: hidden;
+      }
+      .closed .drawer::after {
+        opacity: 0;
+      }
+      .open .drawer::after {
+        transition-delay: 150ms;
       }
       /* Content */
       .content {
@@ -195,12 +213,11 @@ class RecaptchaDemo extends LitElement {
         font-family: monospace;
       }
       .content > .sticky {
-        position: sticky;
-        top: 0;
-        /* TODO layout */
         display: flex;
         flex-direction: column;
-        min-height: 100%;
+        min-height: 100vh;
+        position: sticky;
+        top: 0;
       }
       /* Bar */
       .bar {
@@ -238,7 +255,7 @@ class RecaptchaDemo extends LitElement {
         box-sizing: border-box;
         padding: 2rem 2rem 0;
         width: 50vw;
-        /* TODO scrolling and responsive height: 300vh; */
+        height: 300vh;
       }
       .guide p,
       .guide a,
