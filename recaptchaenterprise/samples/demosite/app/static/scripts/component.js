@@ -300,7 +300,7 @@ class RecaptchaDemo extends LitElement {
           transform: scale(1) translate(0,0);
         }
         50% {
-          transform: scale(1.1) translate(0.5em,0);
+          transform: scale(1.12) translate(0.5em,0);
         }
         100% {
           transform: scale(1) translate(0,0);
@@ -404,6 +404,7 @@ class RecaptchaDemo extends LitElement {
         outline: 0;
         padding: 16px 32px;
         position: relative;
+        text-transform: uppercase;
         width: 100%;
         z-index: 0;
       }
@@ -437,6 +438,7 @@ class RecaptchaDemo extends LitElement {
       .button {
         text-shadow: 2px 2px black;
       }
+      /*
       ::slotted(button:focus),
       .button:focus,
       ::slotted(button:hover),
@@ -444,10 +446,6 @@ class RecaptchaDemo extends LitElement {
       ::slotted(button:active),
       .button:active {
         text-shadow: black 2px 2px, hsl(var(--gray-50)) 4px 4px;
-      }
-      ::slotted(button),
-      .button {
-        text-shadow: 2px 2px black;
       }
       ::slotted(button:focus),
       .button:focus,
@@ -471,6 +469,7 @@ class RecaptchaDemo extends LitElement {
       .button:active::before {
         transform: scale(0.89);
       }
+      */
       /* Button Shape */
       ::slotted(button)::before,
       .button::before {
