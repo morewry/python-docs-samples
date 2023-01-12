@@ -164,16 +164,21 @@ class RecaptchaDemo extends LitElement {
         transition-delay: 150ms;
       }
       .drawer {
-        background: #111;
+        background: radial-gradient(#000 1%, transparent 69%) -65vw -75vh /
+            100vw 200vh no-repeat fixed,
+          radial-gradient(#222 1%, transparent 69%) 25vw -25vh / 100vw 200vh no-repeat
+            fixed,
+          #111;
         overflow-y: visible;
         position: relative;
       }
       .drawer::after {
         border: 2px solid transparent;
-        border-color: #000 hsl(var(--indigo-60), 50%) #333 #000;
-        box-shadow: 3px 3px 3px -1px hsl(var(--indigo-60), 20%), inset 3px 3px 5px -2px #000;
+        border-color: #000 hsl(var(--indigo-60), 40%) #333 #000;
+        box-shadow: 3px 3px 3px -1px hsl(var(--indigo-60), 12%),
+          inset 3px 3px 5px -2px #000;
         box-sizing: border-box;
-        content: '';
+        content: "";
         height: 100vh;
         inset: 0 auto auto auto;
         position: fixed;
@@ -314,13 +319,13 @@ class RecaptchaDemo extends LitElement {
       }
       @keyframes bump {
         0% {
-          transform: scale(1) translate(0,0);
+          transform: scale(1) translate(0, 0);
         }
         50% {
-          transform: scale(1.12) translate(0.5em,0);
+          transform: scale(1.12) translate(0.5em, 0);
         }
         100% {
-          transform: scale(1) translate(0,0);
+          transform: scale(1) translate(0, 0);
         }
       }
       .stagger {
@@ -802,7 +807,12 @@ class RecaptchaDemo extends LitElement {
                 assessment?
               </p>
             </div>
-            <div class="stagger ${this.initialized ? "visible" : "hidden"} ${this.verdict ? "scored" : "unknown"}">
+            <div
+              class="stagger ${this.initialized ? "visible" : "hidden"} ${this
+                .verdict
+                ? "scored"
+                : "unknown"}"
+            >
               ${SCORE}
             </div>
             <div class="stagger ${this.verdict ? "visible" : "hidden"}">
@@ -839,7 +849,12 @@ class RecaptchaDemo extends LitElement {
                 assessment?
               </p>
             </div>
-            <div class="stagger ${this.initialized ? "visible" : "hidden"} ${this.verdict ? "scored" : "unknown"}">
+            <div
+              class="stagger ${this.initialized ? "visible" : "hidden"} ${this
+                .verdict
+                ? "scored"
+                : "unknown"}"
+            >
               ${SCORE}
             </div>
             <div class="stagger ${this.verdict ? "visible" : "hidden"}">
@@ -876,7 +891,12 @@ class RecaptchaDemo extends LitElement {
                 assessment?
               </p>
             </div>
-            <div class="stagger ${this.initialized ? "visible" : "hidden"} ${this.verdict ? "scored" : "unknown"}">
+            <div
+              class="stagger ${this.initialized ? "visible" : "hidden"} ${this
+                .verdict
+                ? "scored"
+                : "unknown"}"
+            >
               ${SCORE}
             </div>
             <div class="stagger ${this.verdict ? "visible" : "hidden"}">
@@ -913,7 +933,12 @@ class RecaptchaDemo extends LitElement {
                 assessment?
               </p>
             </div>
-            <div class="stagger ${this.initialized ? "visible" : "hidden"} ${this.verdict ? "scored" : "unknown"}">
+            <div
+              class="stagger ${this.initialized ? "visible" : "hidden"} ${this
+                .verdict
+                ? "scored"
+                : "unknown"}"
+            >
               ${SCORE}
             </div>
             <div class="stagger ${this.verdict ? "visible" : "hidden"}">
@@ -950,7 +975,12 @@ class RecaptchaDemo extends LitElement {
                 assessment?
               </p>
             </div>
-            <div class="stagger ${this.initialized ? "visible" : "hidden"} ${this.verdict ? "scored" : "unknown"}">
+            <div
+              class="stagger ${this.initialized ? "visible" : "hidden"} ${this
+                .verdict
+                ? "scored"
+                : "unknown"}"
+            >
               ${SCORE}
             </div>
             <div class="stagger ${this.verdict ? "visible" : "hidden"}">
