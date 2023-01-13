@@ -46,6 +46,8 @@ class RecaptchaDemo extends LitElement {
         font-weight: bold;
         letter-spacing: 0.5px;
         line-height: 1;
+      }
+      label:not(:last-child) {
         margin-bottom: 24px;
       }
       label > span {
@@ -230,18 +232,26 @@ class RecaptchaDemo extends LitElement {
         position: relative;
         z-index: 1;
       }
-      .example .h2,
-      .example p {
-        margin-bottom: 24px;
-      }
       .example fieldset {
+        margin-bottom: 48px;
         position: relative;
         z-index: 1;
       }
-      .example .h2 {
+      .example legend {
+        text-align: center;
+      }
+      .example legend .h2,
+      .example p {
         margin-bottom: 48px;
+      }
+      .example .h2 {
         font-size: 80%;
+        line-height: 1.25em;
+        margin-bottom: 24px;
         text-transform: uppercase;
+      }
+      .example p {
+        line-height: 1.65em;
       }
       /* Form */
       /* TODO any form styles */
@@ -362,6 +372,7 @@ class RecaptchaDemo extends LitElement {
       }
       /* Checkout Card */
       dl.cart {
+        margin-bottom: 36px;
       }
       .cart .item {
         display: flex;
@@ -393,10 +404,14 @@ class RecaptchaDemo extends LitElement {
         background: hsl(var(--gray-60));
         border: 1px inset hsl(var--gray-50), 75%);
         border-radius: 0.25em;
+        font-size: 125%;
         padding: 0.75em 1.25em;
       }
       .unknown .score {
         /* TODO color: hsl(var(--gray-40)); */
+      }
+      .score mwc-icon {
+        --mdc-icon-size: 1.25em;
       }
       .score .hide {
         display: none;
@@ -407,6 +422,7 @@ class RecaptchaDemo extends LitElement {
       .score dd {
         flex: 1 0 auto;
         line-height: 1.25em;
+        text-transform: uppercase;
       }
       .score img {
         display: block;
@@ -416,7 +432,7 @@ class RecaptchaDemo extends LitElement {
       ::slotted(div.g-recaptcha) {
         display: flex;
         justify-content: center;
-        margin: 0 auto 24px;
+        margin: 0 auto 36px;
         position: relative;
         z-index: 1;
       }
@@ -673,7 +689,11 @@ class RecaptchaDemo extends LitElement {
       home: html`
         <section class="example">
           <h2 class="h2">Homepage example</h2>
-          <p>Text explaining example and next step.</p>
+          <p>
+            Text explaining example and next step. For example, might say that
+            this a set of reCAPTCHA examples, say that there is a game, and say
+            that there is an information panel.
+          </p>
           <button @click=${this.handleSubmit} class="button" type="button">
             Continue
           </button>
