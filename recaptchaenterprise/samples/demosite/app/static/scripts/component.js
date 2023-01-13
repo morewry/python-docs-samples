@@ -191,7 +191,7 @@ class RecaptchaDemo extends LitElement {
             center bottom / 100vw var(--game-bottom) no-repeat fixed,
           radial-gradient(
               ellipse at bottom,
-              hsl(var(--purple-30)) -25%,
+              hsl(var(--purple-30), 70%) -25%,
               transparent 45%
             )
             center bottom / 200vw 50vh no-repeat fixed,
@@ -228,7 +228,8 @@ class RecaptchaDemo extends LitElement {
         margin: auto;
         max-width: 350px;
         width: 100%;
-        padding: 48px 0 var(--game-bottom) 0;
+        /* padding: 48px 0 var(--game-bottom) 0; */
+        padding-bottom: 48px;
         position: relative;
         z-index: 1;
       }
@@ -239,10 +240,22 @@ class RecaptchaDemo extends LitElement {
       }
       .example legend {
         text-align: center;
+        width: 100%;
       }
-      .example legend .h2,
       .example p {
         margin-bottom: 48px;
+      }
+      .example legend .h2 {
+        background: 
+          linear-gradient(90deg, transparent 0%, hsl(var(--purple-50), 25%) 20%, hsl(var(--purple-50), 25%) 80%, transparent 100%) center bottom / 100% 1px no-repeat scroll,
+          radial-gradient(hsl(var(--purple-50), 25%), transparent 73%) center 0.8em / 100% 100% no-repeat scroll,
+          transparent;
+        margin: 0 -2em 16px;
+        padding: 0 2em 1em;
+        text-shadow: 2px 2px 0 #000;
+      }
+      .example fieldset p {
+        margin-bottom: 36px;
       }
       .example .h2 {
         font-size: 80%;
@@ -260,7 +273,7 @@ class RecaptchaDemo extends LitElement {
         box-sizing: border-box;
         padding: 2rem 2rem 0;
         width: 50vw;
-        height: 300vh;
+        /* height: 300vh; */
       }
       .guide .text {
         max-width: 36em;
@@ -372,21 +385,29 @@ class RecaptchaDemo extends LitElement {
       }
       /* Checkout Card */
       dl.cart {
-        margin-bottom: 36px;
+        margin-bottom: 48px;
       }
       .cart .item {
         display: flex;
         align-items: top;
         justify-content: space-between;
+        margin-bottom: 24px;
+      }
+      .cart img {
+        height: auto;
+        width: 50px;
+      }
+      .cart .stoplight img {
+        margin-top: -13px; /* TODO: sigh magic numbers */
       }
       .cart dt {
         flex: 0 0 5em;
         margin-right: 24px;
-        margin-top: 12px;
+        padding-top: 13px;
       }
       .cart dd:not(:last-child) {
         flex: 1 0 auto;
-        margin-top: calc(1em + 12px);
+        margin-top: calc(1em + 13px + 12px);
       }
       .cart dd:last-child {
         flex: 0 0 5em;
@@ -404,7 +425,7 @@ class RecaptchaDemo extends LitElement {
         background: hsl(var(--gray-60));
         border: 1px inset hsl(var--gray-50), 75%);
         border-radius: 0.25em;
-        font-size: 125%;
+        font-size: 107%;
         padding: 0.75em 1.25em;
       }
       .unknown .score {
@@ -412,12 +433,16 @@ class RecaptchaDemo extends LitElement {
       }
       .score mwc-icon {
         --mdc-icon-size: 1.25em;
+        display: block;
+        position: relative;
+        top: -1px;
       }
       .score .hide {
         display: none;
       }
       .score dt {
         flex: 0 0 auto;
+        margin-top: -1px;
       }
       .score dd {
         flex: 1 0 auto;
@@ -703,15 +728,16 @@ class RecaptchaDemo extends LitElement {
         <form class="example">
           <fieldset>
             <legend><h2 class="h2">Checkout example</h2></legend>
+            <p>Some text prompting to solve the reCAPTCHA and/or click the button to see the verdict.</p>
             <dl class="unstyled cart">
-              <div class="item">
+              <div class="item hydrant">
                 <dt>
                   <img
-                    alt="Demo Product Shield"
-                    src="../static/images/shield-unoptimized.svg"
+                    alt="Demo Product Hydrant"
+                    src="../static/images/item-hydrant-unoptimized.svg"
                   />
                 </dt>
-                <dd>Castle Shield</dd>
+                <dd>Hydrant</dd>
                 <dd>
                   <label>
                     <span>Amount</span>
@@ -719,14 +745,14 @@ class RecaptchaDemo extends LitElement {
                   </label>
                 </dd>
               </div>
-              <div class="item">
+              <div class="item stoplight">
                 <dt>
                   <img
-                    alt="Demo Product Magnifier"
-                    src="../static/images/magnifier-unoptimized.svg"
+                    alt="Demo Product Stoplight"
+                    src="../static/images/item-stoplight-unoptimized.svg"
                   />
                 </dt>
-                <dd>Bot Inspector</dd>
+                <dd>Stoplight</dd>
                 <dd>
                   <label>
                     <span>Amount</span>
@@ -747,6 +773,7 @@ class RecaptchaDemo extends LitElement {
         <form class="example">
           <fieldset>
             <legend><h2 class="h2">Login example</h2></legend>
+            <p>Some text prompting to solve the reCAPTCHA and/or click the button to see the verdict.</p>
             <label>
               <span>Email</span>
               <input type="email" value="user@example.com" disabled />
@@ -763,6 +790,7 @@ class RecaptchaDemo extends LitElement {
         <form class="example">
           <fieldset>
             <legend><h2 class="h2">Feedback example</h2></legend>
+            <p>Some text prompting to solve the reCAPTCHA and/or click the button to see the verdict.</p>
             <label>
               <span>Feedback</span>
               <textarea disabled />Good job.</textarea>
@@ -775,6 +803,7 @@ class RecaptchaDemo extends LitElement {
         <form class="example">
           <fieldset>
             <legend><h2 class="h2">Signup example</h2></legend>
+            <p>Some text prompting to solve the reCAPTCHA and/or click the button to see the verdict.</p>
             <label>
               <span>Email</span>
               <input type="email" value="user@example.com" disabled />
