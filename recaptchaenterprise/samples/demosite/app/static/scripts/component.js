@@ -29,10 +29,6 @@ class RecaptchaDemo extends LitElement {
         margin: 0;
         padding: 0;
       }
-      img {
-        height: auto;
-        max-width: 5vw;
-      }
       fieldset {
         border: 0;
         display: block;
@@ -42,10 +38,8 @@ class RecaptchaDemo extends LitElement {
       legend {
         display: block;
         font: inherit;
-        font-family: "Press Start 2P", monospace;
         margin: 0;
         padding: 0;
-        text-align: center;
       }
       label {
         display: block;
@@ -88,19 +82,6 @@ class RecaptchaDemo extends LitElement {
       h2,
       h3 {
         font: inherit;
-        margin: 0;
-        padding: 0;
-      }
-      /* Shared */
-      .h1 {
-        font-family: "Press Start 2P", monospace;
-        font-size: 1rem;
-        margin: 0;
-        padding: 0;
-      }
-      .h2 {
-        font-family: "Press Start 2P", monospace;
-        font-size: 1rem;
         margin: 0;
         padding: 0;
       }
@@ -164,15 +145,17 @@ class RecaptchaDemo extends LitElement {
         transition-delay: 150ms;
       }
       .drawer {
-        background: radial-gradient(#000 1%, transparent 69%) -65vw -75vh /
-            100vw 200vh no-repeat fixed,
-          radial-gradient(#222 1%, transparent 69%) 25vw -25vh / 100vw 200vh no-repeat
-            fixed,
-          #111;
+        background: #111;
         overflow-y: visible;
         position: relative;
+        z-index: 1;
       }
       .drawer::after {
+        background: radial-gradient(ellipse, #000 1%, transparent 69%) -65vw -100vh /
+            100vw 200vh no-repeat fixed,
+          radial-gradient(ellipse, #222 1%, transparent 69%) 25vw 0vh / 100vw
+            200vh no-repeat fixed,
+          #111;
         border: 2px solid transparent;
         border-color: #000 hsl(var(--indigo-60), 40%) #333 #000;
         box-shadow: 3px 3px 3px -1px hsl(var(--indigo-60), 12%),
@@ -184,12 +167,14 @@ class RecaptchaDemo extends LitElement {
         position: fixed;
         transition: opacity 150ms ease-out;
         width: 50vw;
+        z-index: -1;
       }
       .closed .drawer {
         overflow: hidden;
       }
       .closed .drawer::after {
         opacity: 0;
+        width: 0;
       }
       .open .drawer::after {
         transition-delay: 150ms;
@@ -223,6 +208,11 @@ class RecaptchaDemo extends LitElement {
         min-height: 100vh;
         position: sticky;
         top: 0;
+      }
+      .content .h1,
+      .content .h2 {
+        font-family: "Press Start 2P", monospace;
+        line-height: 1.25em;
       }
       /* Bar */
       .bar {
@@ -262,20 +252,32 @@ class RecaptchaDemo extends LitElement {
         width: 50vw;
         height: 300vh;
       }
+      .guide .text {
+        max-width: 36em;
+      }
       .guide p,
-      .guide a,
       .guide .h1,
+      .guide .h2,
       .guide dl.score {
         margin-bottom: 2rem;
       }
+      .guide .text:nth-child(1) {
+        margin-bottom: 4rem;
+      }
+      .guide .h1,
+      .guide .h2 {
+        font-weight: bold;
+      }
       .guide .h1 {
-        line-height: 1.25em;
+        font-size: 2rem;
+      }
+      .guide .h2 {
+        font-size: 1.5rem;
       }
       .guide a {
         align-items: center;
         color: hsl(var(--pink-40));
         display: inline-flex;
-        margin-bottom: 3rem;
       }
       .guide a:focus,
       .guide a:hover,
@@ -380,22 +382,31 @@ class RecaptchaDemo extends LitElement {
       }
       /* Guide Score */
       dl.score {
-        align-items: center;
+        align-items: flex-end;
         display: flex;
         font-family: "Press Start 2P", monospace;
-        gap: 6px calc(1 * 0.85em);
+        gap: 0.5em calc(1 * 0.85em);
         line-height: 1;
-        max-width: calc(14 * 0.85em);
-        padding: 0;
+        max-width: calc(10 * 0.85em);
+      }
+      dl.score {
+        background: hsl(var(--gray-60));
+        border: 1px inset hsl(var--gray-50), 75%);
+        border-radius: 0.25em;
+        padding: 0.75em 1.25em;
       }
       .unknown .score {
         /* TODO color: hsl(var(--gray-40)); */
+      }
+      .score .hide {
+        display: none;
       }
       .score dt {
         flex: 0 0 auto;
       }
       .score dd {
         flex: 1 0 auto;
+        line-height: 1.25em;
       }
       .score img {
         display: block;
@@ -771,11 +782,13 @@ class RecaptchaDemo extends LitElement {
         <dd>${this.score}</dd>
         -->
         <dt>
-          <img
-            alt="reCAPTCHA assessment"
-            class="magnifier"
-            src="../static/images/magnifier-unoptimized.svg"
-          />
+          <mwc-icon class="${!this.verdict ? "show" : "hide"}">mouse</mwc-icon>
+          <mwc-icon class="${this.verdict === "Human" ? "show" : "hide"}"
+            >face</mwc-icon
+          >
+          <mwc-icon class="${this.verdict === "Bot" ? "show" : "hide"}"
+            >precision_manufacturing</mwc-icon
+          >
         </dt>
         <dd>${this.verdict || "?????"}</dd>
       </dl>
@@ -784,7 +797,7 @@ class RecaptchaDemo extends LitElement {
     const GUIDES = {
       home: html`
         <div class="guide">
-          <section class="static">
+          <section class="text static">
             <h1 class="h1">Score when the page loads</h1>
             <p>
               What is this an example of (score when the page loads)? Why would
@@ -799,12 +812,14 @@ class RecaptchaDemo extends LitElement {
               <mwc-icon>launch</mwc-icon></a
             >
           </section>
-          <section>
+          <section class="text">
             <div class="stagger ${this.initialized ? "visible" : "hidden"}">
-              <h2 class="h1">What's your score?</h2>
+              <h2 class="h2">What's your score?</h2>
               <p>
-                How would you fetch the token? How would you create an
-                assessment?
+                How would you fetch the token? For example, do you send a
+                client-side request to a backend? How would you create an
+                assessment? For example, do you require a backend to send a
+                request to Google?
               </p>
             </div>
             <div
@@ -817,8 +832,10 @@ class RecaptchaDemo extends LitElement {
             </div>
             <div class="stagger ${this.verdict ? "visible" : "hidden"}">
               <p>
-                How would you interpret the score? How would you handle the
-                final score?
+                How would you interpret the score? For example, what does a
+                score of 0.4 mean vs 0.6? How would you handle the final score?
+                For example, would you output an error, fail silently, use a
+                "redemption path", or supplement with another product?
               </p>
             </div>
           </section>
@@ -826,7 +843,7 @@ class RecaptchaDemo extends LitElement {
       `,
       checkout: html`
         <div class="guide">
-          <section class="static">
+          <section class="text static">
             <h1 class="h1">Score when users interact</h1>
             <p>
               What is this an example of (score on programmatic user action)?
@@ -841,12 +858,14 @@ class RecaptchaDemo extends LitElement {
               <mwc-icon>launch</mwc-icon></a
             >
           </section>
-          <section>
+          <section class="text">
             <div class="stagger ${this.initialized ? "visible" : "hidden"}">
-              <h2 class="h1">What's your score?</h2>
+              <h2 class="h2">What's your score?</h2>
               <p>
-                How would you fetch the token? How would you create an
-                assessment?
+                How would you fetch the token? For example, do you send a
+                client-side request to a backend? How would you create an
+                assessment? For example, do you require a backend to send a
+                request to Google?
               </p>
             </div>
             <div
@@ -859,8 +878,10 @@ class RecaptchaDemo extends LitElement {
             </div>
             <div class="stagger ${this.verdict ? "visible" : "hidden"}">
               <p>
-                How would you interpret the score? How would you handle the
-                final score?
+                How would you interpret the score? For example, what does a
+                score of 0.4 mean vs 0.6? How would you handle the final score?
+                For example, would you output an error, fail silently, use a
+                "redemption path", or supplement with another product?
               </p>
             </div>
           </section>
@@ -868,7 +889,7 @@ class RecaptchaDemo extends LitElement {
       `,
       login: html`
         <div class="guide">
-          <section class="static">
+          <section class="text static">
             <h1 class="h1">Add reCAPTCHA on an HTML button</h1>
             <p>
               What is this an example of (score auto bind html button)? Why
@@ -883,12 +904,14 @@ class RecaptchaDemo extends LitElement {
               <mwc-icon>launch</mwc-icon></a
             >
           </section>
-          <section>
+          <section class="text">
             <div class="stagger ${this.initialized ? "visible" : "hidden"}">
-              <h2 class="h1">What's your score?</h2>
+              <h2 class="h2">What's your score?</h2>
               <p>
-                How would you fetch the token? How would you create an
-                assessment?
+                How would you fetch the token? For example, do you send a
+                client-side request to a backend? How would you create an
+                assessment? For example, do you require a backend to send a
+                request to Google?
               </p>
             </div>
             <div
@@ -901,8 +924,10 @@ class RecaptchaDemo extends LitElement {
             </div>
             <div class="stagger ${this.verdict ? "visible" : "hidden"}">
               <p>
-                How would you interpret the score? How would you handle the
-                final score?
+                How would you interpret the score? For example, what does a
+                score of 0.4 mean vs 0.6? How would you handle the final score?
+                For example, would you output an error, fail silently, use a
+                "redemption path", or supplement with another product?
               </p>
             </div>
           </section>
@@ -910,7 +935,7 @@ class RecaptchaDemo extends LitElement {
       `,
       feedback: html`
         <div class="guide">
-          <section class="static">
+          <section class="text static">
             <h1 class="h1">Automatically render a checkbox</h1>
             <p>
               What is this an example of (checkbox automatically rendered)? Why
@@ -925,12 +950,14 @@ class RecaptchaDemo extends LitElement {
               <mwc-icon>launch</mwc-icon></a
             >
           </section>
-          <section>
+          <section class="text">
             <div class="stagger ${this.initialized ? "visible" : "hidden"}">
-              <h2 class="h1">What's your score?</h2>
+              <h2 class="h2">What's your score?</h2>
               <p>
-                How would you fetch the token? How would you create an
-                assessment?
+                How would you fetch the token? For example, do you send a
+                client-side request to a backend? How would you create an
+                assessment? For example, do you require a backend to send a
+                request to Google?
               </p>
             </div>
             <div
@@ -943,8 +970,10 @@ class RecaptchaDemo extends LitElement {
             </div>
             <div class="stagger ${this.verdict ? "visible" : "hidden"}">
               <p>
-                How would you interpret the score? How would you handle the
-                final score?
+                How would you interpret the score? For example, what does a
+                score of 0.4 mean vs 0.6? How would you handle the final score?
+                For example, would you output an error, fail silently, use a
+                "redemption path", or supplement with another product?
               </p>
             </div>
           </section>
@@ -952,7 +981,7 @@ class RecaptchaDemo extends LitElement {
       `,
       signup: html`
         <div class="guide">
-          <section class="static">
+          <section class="text static">
             <h1 class="h1">Explicitly render a checkbox</h1>
             <p>
               What is this an example of (checkbox explicitly rendered)? Why
@@ -967,12 +996,14 @@ class RecaptchaDemo extends LitElement {
               <mwc-icon>launch</mwc-icon></a
             >
           </section>
-          <section>
+          <section class="text">
             <div class="stagger ${this.initialized ? "visible" : "hidden"}">
-              <h2 class="h1">What's your score?</h2>
+              <h2 class="h2">What's your score?</h2>
               <p>
-                How would you fetch the token? How would you create an
-                assessment?
+                How would you fetch the token? For example, do you send a
+                client-side request to a backend? How would you create an
+                assessment? For example, do you require a backend to send a
+                request to Google?
               </p>
             </div>
             <div
@@ -985,8 +1016,10 @@ class RecaptchaDemo extends LitElement {
             </div>
             <div class="stagger ${this.verdict ? "visible" : "hidden"}">
               <p>
-                How would you interpret the score? How would you handle the
-                final score?
+                How would you interpret the score? For example, what does a
+                score of 0.4 mean vs 0.6? How would you handle the final score?
+                For example, would you output an error, fail silently, use a
+                "redemption path", or supplement with another product?
               </p>
             </div>
           </section>
