@@ -292,10 +292,10 @@ class RecaptchaDemo extends LitElement {
         font-weight: bold;
       }
       .guide .h1 {
-        font-size: 2rem;
+        font-size: 1.4rem;
       }
       .guide .h2 {
-        font-size: 1.5rem;
+        font-size: 1.2rem;
       }
       .guide a {
         align-items: center;
@@ -462,6 +462,9 @@ class RecaptchaDemo extends LitElement {
         z-index: 1;
       }
       /* Slotted Button / Button */
+      .button {
+        margin-bottom: 48px;
+      }
       ::slotted(button),
       .button {
         appearance: none;
