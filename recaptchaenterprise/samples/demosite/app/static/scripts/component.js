@@ -133,12 +133,14 @@ class RecaptchaDemo extends LitElement {
         --green-40: 174.3, 41.8%, 50.8%;
         --green-50: 172.7, 60.2%, 37.5%;
         /* Sizes */
+        --drawer-width: 34vw;
+        --example-width: 66vw;
         --game-bottom: 25vh;
       }
       .demo {
         color: white;
         display: grid;
-        grid-template-columns: 50vw 50vw;
+        grid-template-columns: var(--drawer-width) var(--example-width);
         grid-template-rows: 1fr;
         transition: grid-template-columns 150ms ease-out;
       }
@@ -147,39 +149,65 @@ class RecaptchaDemo extends LitElement {
         transition-delay: 150ms;
       }
       .drawer {
-        background: #111;
+        --highlight: 0, 0%, 10%;
+        --lowlight: 0, 0%, 0%;
+        --surface: 0, 0%, 5%;
+        --glow: hsl(var(--indigo-60), 12%);
+        --ditch: hsl(var(--indigo-60), 40%);
+        /*
+        --lowlight: 245, 100%, 50%;
+        --highlight: 0, 100%, 50%;
+        */
+        background: radial-gradient(ellipse, hsl(var(--lowlight), 75%) 0, transparent 70%) calc((100vw - (var(--drawer-width) / 2)) * -1) -50vh / 100vw 200vh no-repeat fixed,
+          radial-gradient(ellipse, hsl(var(--highlight), 75%) 0, transparent 70%) calc(var(--drawer-width) / 2) -50vh / 100vw 200vh no-repeat fixed,
+          linear-gradient(to right, hsl(var(--lowlight), 25%) 0, transparent 10px) 0 0 / var(--drawer-width) 100vh no-repeat fixed,
+          linear-gradient(to bottom, hsl(var(--lowlight), 25%) 0, transparent 10px) 0 0 / var(--drawer-width) 100vh no-repeat fixed,
+          linear-gradient(to left, hsl(var(--highlight), 25%) 0, transparent 10px) 0 0 / var(--drawer-width) 100vh no-repeat fixed,
+          linear-gradient(to top, hsl(var(--highlight), 25%) 0, transparent 10px) 0 0 / var(--drawer-width) 100vh no-repeat fixed,
+          linear-gradient(to right, hsl(var(--lowlight)) 1px, transparent 2px) 0 0 / var(--drawer-width) 100vh no-repeat fixed,
+          linear-gradient(to bottom, hsl(var(--lowlight)) 1px, transparent 2px) 0 0 / var(--drawer-width) 100vh no-repeat fixed,
+          linear-gradient(to left, hsl(var(--highlight)) 1px, transparent 2px) 0 0 / var(--drawer-width) 100vh no-repeat fixed,
+          linear-gradient(to top, hsl(var(--highlight)) 1px, transparent 2px) 0 0 / var(--drawer-width) 100vh no-repeat fixed,
+          hsl(var(--surface));
+        box-shadow: 3px 0 3px -1px var(--glow);
         overflow-y: visible;
         position: relative;
         z-index: 1;
       }
+      /*
       .drawer::after {
-        background: radial-gradient(ellipse, #000 1%, transparent 69%) -65vw -100vh /
-            100vw 200vh no-repeat fixed,
-          radial-gradient(ellipse, #222 1%, transparent 69%) 25vw 0vh / 100vw
-            200vh no-repeat fixed,
-          #111;
-        border: 2px solid transparent;
-        border-color: #000 hsl(var(--indigo-60), 40%) #333 #000;
-        box-shadow: 3px 3px 3px -1px hsl(var(--indigo-60), 12%),
-          inset 3px 3px 5px -2px #000;
+        background: radial-gradient(ellipse, var(--lowlight) -30%, transparent 70%) calc((100vw - (var(--drawer-width) / 2)) * -1) -25vh /
+            100vw 150vh no-repeat fixed,
+          radial-gradient(ellipse, var(--highlight) -30%, transparent 70%) calc(var(--drawer-width) / 2) -25vh / 100vw
+            150vh no-repeat fixed,
+          var(--surface);
+        border: 1px solid transparent;
+        border-color: var(--lowlight) var(--ditch) var(--highlight) var(--lowlight);
+        box-shadow: 3px 0 3px -1px var(--glow),
+          inset -3px -3px 6px -3px var(--highlight),
+          inset 3px 3px 6px -3px var(--lowlight);
         box-sizing: border-box;
         content: "";
+        display: block;
         height: 100vh;
         inset: 0 auto auto auto;
+        max-width: var(--drawer-width);
         position: fixed;
-        transition: opacity 150ms ease-out;
-        width: 50vw;
+        transition: width 150ms ease-out;
+        width: 100%;
         z-index: -1;
       }
+      */
       .closed .drawer {
         overflow: hidden;
       }
       .closed .drawer::after {
-        opacity: 0;
-        width: 0;
+        position: absolute;
+        /* opacity: 0; */
+        /* width: 0; */
       }
       .open .drawer::after {
-        transition-delay: 150ms;
+        /* transition-delay: 150ms; */
       }
       /* Content */
       .content {
@@ -246,13 +274,20 @@ class RecaptchaDemo extends LitElement {
         margin-bottom: 48px;
       }
       .example legend .h2 {
-        background: 
-          linear-gradient(90deg, transparent 0%, hsl(var(--purple-50), 25%) 20%, hsl(var(--purple-50), 25%) 80%, transparent 100%) center bottom / 100% 1px no-repeat scroll,
-          radial-gradient(hsl(var(--purple-50), 25%), transparent 73%) center 0.8em / 100% 100% no-repeat scroll,
+        background: linear-gradient(
+              90deg,
+              transparent 0%,
+              hsl(var(--purple-50), 25%) 20%,
+              hsl(var(--purple-50), 25%) 80%,
+              transparent 100%
+            )
+            center bottom / 100% 1px no-repeat scroll,
+          radial-gradient(hsl(var(--purple-50), 25%), transparent 73%) center
+            0.8em / 100% 100% no-repeat scroll,
           transparent;
         margin: 0 -2em 16px;
         padding: 0 2em 1em;
-        text-shadow: 2px 2px 0 #000;
+        text-shadow: 2px 2px 0 black;
       }
       .example fieldset p {
         margin-bottom: 36px;
@@ -272,8 +307,8 @@ class RecaptchaDemo extends LitElement {
       .guide {
         box-sizing: border-box;
         padding: 2rem 2rem 0;
-        width: 50vw;
-        /* height: 300vh; */
+        width: var(--drawer-width);
+        height: 300vh;
       }
       .guide .text {
         max-width: 36em;
@@ -423,7 +458,7 @@ class RecaptchaDemo extends LitElement {
       }
       dl.score {
         background: hsl(var(--gray-60));
-        border: 1px inset hsl(var--gray-50), 75%);
+        border: 1px inset hsl(var(--gray-50), 75%);
         border-radius: 0.25em;
         font-size: 107%;
         padding: 0.75em 1.25em;
@@ -731,7 +766,10 @@ class RecaptchaDemo extends LitElement {
         <form class="example">
           <fieldset>
             <legend><h2 class="h2">Checkout example</h2></legend>
-            <p>Some text prompting to solve the reCAPTCHA and/or click the button to see the verdict.</p>
+            <p>
+              Some text prompting to solve the reCAPTCHA and/or click the button
+              to see the verdict.
+            </p>
             <dl class="unstyled cart">
               <div class="item hydrant">
                 <dt>
@@ -776,7 +814,10 @@ class RecaptchaDemo extends LitElement {
         <form class="example">
           <fieldset>
             <legend><h2 class="h2">Login example</h2></legend>
-            <p>Some text prompting to solve the reCAPTCHA and/or click the button to see the verdict.</p>
+            <p>
+              Some text prompting to solve the reCAPTCHA and/or click the button
+              to see the verdict.
+            </p>
             <label>
               <span>Email</span>
               <input type="email" value="user@example.com" disabled />
@@ -806,7 +847,10 @@ class RecaptchaDemo extends LitElement {
         <form class="example">
           <fieldset>
             <legend><h2 class="h2">Signup example</h2></legend>
-            <p>Some text prompting to solve the reCAPTCHA and/or click the button to see the verdict.</p>
+            <p>
+              Some text prompting to solve the reCAPTCHA and/or click the button
+              to see the verdict.
+            </p>
             <label>
               <span>Email</span>
               <input type="email" value="user@example.com" disabled />
