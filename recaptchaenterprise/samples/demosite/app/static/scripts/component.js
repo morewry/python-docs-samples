@@ -146,88 +146,114 @@ class RecaptchaDemo extends LitElement {
       }
       .demo.closed {
         grid-template-columns: 0vw 100vw;
-        transition-delay: 150ms;
       }
       .drawer {
-        --highlight: 0, 0%, 10%;
-        --lowlight: 0, 0%, 0%;
-        --surface: 0, 0%, 5%;
-        --glow: hsl(var(--indigo-60), 12%);
-        --ditch: hsl(var(--indigo-60), 40%);
+        --highlight: 240, 52%, 11%;
+        --lowlight: 240, 52%, 1%;
+        --surface: 240, 52%, 6%;
+        --glow: hsl(var(--indigo-60), 15%);
+        --ditch: hsl(var(--indigo-60), 45%);
         /*
         --lowlight: 245, 100%, 50%;
         --highlight: 0, 100%, 50%;
         */
-        background: radial-gradient(ellipse, hsl(var(--lowlight), 75%) 0, transparent 70%) calc((100vw - (var(--drawer-width) / 2)) * -1) -50vh / 100vw 200vh no-repeat fixed,
-          radial-gradient(ellipse, hsl(var(--highlight), 75%) 0, transparent 70%) calc(var(--drawer-width) / 2) -50vh / 100vw 200vh no-repeat fixed,
-          linear-gradient(to right, hsl(var(--lowlight), 25%) 0, transparent 10px) 0 0 / var(--drawer-width) 100vh no-repeat fixed,
-          linear-gradient(to bottom, hsl(var(--lowlight), 25%) 0, transparent 10px) 0 0 / var(--drawer-width) 100vh no-repeat fixed,
-          linear-gradient(to left, hsl(var(--highlight), 25%) 0, transparent 10px) 0 0 / var(--drawer-width) 100vh no-repeat fixed,
-          linear-gradient(to top, hsl(var(--highlight), 25%) 0, transparent 10px) 0 0 / var(--drawer-width) 100vh no-repeat fixed,
-          linear-gradient(to right, hsl(var(--lowlight)) 1px, transparent 2px) 0 0 / var(--drawer-width) 100vh no-repeat fixed,
-          linear-gradient(to bottom, hsl(var(--lowlight)) 1px, transparent 2px) 0 0 / var(--drawer-width) 100vh no-repeat fixed,
-          linear-gradient(to left, hsl(var(--highlight)) 1px, transparent 2px) 0 0 / var(--drawer-width) 100vh no-repeat fixed,
-          linear-gradient(to top, hsl(var(--highlight)) 1px, transparent 2px) 0 0 / var(--drawer-width) 100vh no-repeat fixed,
+        background: radial-gradient(
+              ellipse,
+              hsl(var(--lowlight), 75%) -10%,
+              transparent 69%
+            )
+            calc((100vw - (var(--drawer-width) / 2)) * -1) -50vh / 100vw 200vh no-repeat
+            fixed,
+          radial-gradient(
+              ellipse,
+              hsl(var(--highlight), 75%) -10%,
+              transparent 69%
+            )
+            calc(var(--drawer-width) / 2) -50vh / 100vw 200vh no-repeat fixed,
+          linear-gradient(
+              to right,
+              hsl(var(--lowlight), 25%) 0,
+              transparent 50%
+            )
+            0 0 / var(--drawer-width) 100vh no-repeat fixed,
+          linear-gradient(
+              to bottom,
+              hsl(var(--lowlight), 35%) 0,
+              transparent 50%
+            )
+            0 0 / var(--drawer-width) 100vh no-repeat fixed,
+          linear-gradient(
+              to left,
+              hsl(var(--highlight), 15%) 0,
+              transparent 25%
+            )
+            0 0 / var(--drawer-width) 100vh no-repeat fixed,
+          linear-gradient(to top, hsl(var(--highlight), 15%) 0, transparent 50%)
+            0 0 / var(--drawer-width) 100vh no-repeat fixed,
+          linear-gradient(
+              to right,
+              hsl(var(--lowlight), 85%) 2px,
+              transparent 2px
+            )
+            0 0 / var(--drawer-width) 100vh no-repeat fixed,
+          linear-gradient(
+              to bottom,
+              hsl(var(--lowlight), 85%) 2px,
+              transparent 2px
+            )
+            0 0 / var(--drawer-width) 100vh no-repeat fixed,
+          linear-gradient(
+              to left,
+              hsl(var(--highlight), 85%) 1px,
+              transparent 1px
+            )
+            0 0 / var(--drawer-width) 100vh no-repeat fixed,
+          linear-gradient(
+              to top,
+              hsl(var(--highlight), 85%) 1px,
+              transparent 1px
+            )
+            0 0 / var(--drawer-width) 100vh no-repeat fixed,
           hsl(var(--surface));
         box-shadow: 3px 0 3px -1px var(--glow);
         overflow-y: visible;
         position: relative;
         z-index: 1;
       }
-      /*
-      .drawer::after {
-        background: radial-gradient(ellipse, var(--lowlight) -30%, transparent 70%) calc((100vw - (var(--drawer-width) / 2)) * -1) -25vh /
-            100vw 150vh no-repeat fixed,
-          radial-gradient(ellipse, var(--highlight) -30%, transparent 70%) calc(var(--drawer-width) / 2) -25vh / 100vw
-            150vh no-repeat fixed,
-          var(--surface);
-        border: 1px solid transparent;
-        border-color: var(--lowlight) var(--ditch) var(--highlight) var(--lowlight);
-        box-shadow: 3px 0 3px -1px var(--glow),
-          inset -3px -3px 6px -3px var(--highlight),
-          inset 3px 3px 6px -3px var(--lowlight);
-        box-sizing: border-box;
-        content: "";
-        display: block;
-        height: 100vh;
-        inset: 0 auto auto auto;
-        max-width: var(--drawer-width);
-        position: fixed;
-        transition: width 150ms ease-out;
-        width: 100%;
-        z-index: -1;
-      }
-      */
       .closed .drawer {
         overflow: hidden;
       }
-      .closed .drawer::after {
-        position: absolute;
-        /* opacity: 0; */
-        /* width: 0; */
-      }
-      .open .drawer::after {
-        /* transition-delay: 150ms; */
-      }
       /* Content */
       .content {
+        --lowlight: 227, 63, 4%;
+        --surface: 227, 63%, 9%;
+        --highlight: 227, 63%, 14%;
+        --glow: 235, 69%, 18%;
         background: url("../static/images/castle-alternate-unoptimized.svg")
             center bottom / auto var(--game-bottom) no-repeat fixed,
           url("../static/images/land-unoptimized.svg") center bottom / auto 10vh
             no-repeat fixed,
-          linear-gradient(to bottom, transparent 0, hsl(var(--pink-40)) 500%)
-            center bottom / 100vw var(--game-bottom) no-repeat fixed,
           radial-gradient(
               ellipse at bottom,
-              hsl(var(--purple-30), 70%) -25%,
-              transparent 45%
+              hsl(var(--pink-40), 69%) 0,
+              transparent 69%
             )
-            center bottom / 200vw 50vh no-repeat fixed,
-          hsl(var(--indigo-80));
+            center 75vh / 100vw 100vh no-repeat fixed,
+          radial-gradient(
+              ellipse at bottom,
+              hsl(var(--purple-30), 69%) 0,
+              transparent 69%
+            )
+            center 50vh / 200vw 100vh no-repeat fixed,
+          radial-gradient(circle, hsl(var(--glow), 90%) 0, transparent 44%)
+            center center / 100vw 100vh no-repeat fixed,
+          hsl(var(--surface));
+        transition: background-position 150ms ease-out;
       }
       .open .content {
-        background-position: 75% bottom, 50% bottom, 50% bottom, 50% bottom,
-          50% bottom;
+        --offset: calc(50% + (var(--drawer-width) / 2));
+        background-position: var(--offset) bottom, var(--offset) bottom,
+          var(--offset) 75vh, var(--offset) 50vh, var(--offset) center;
       }
       .content {
         font-family: monospace;
