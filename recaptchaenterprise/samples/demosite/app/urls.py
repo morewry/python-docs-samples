@@ -29,20 +29,20 @@ def login() -> str:
     }
     return render_template(template_name_or_list="login.html", context=context)
 
-def checkout() -> str:
+def store() -> str:
     # TODO: These env variables should be made available through Cloud Run's env vars.
     context = {
         "project_id": os.environ["GOOGLE_CLOUD_PROJECT"],
         "site_key": os.environ["SITE_KEY"]
     }
-    return render_template(template_name_or_list="checkout.html", context=context)
+    return render_template(template_name_or_list="store.html", context=context)
 
-def feedback() -> str:
+def comment() -> str:
     context = {
         "project_id": os.environ["GOOGLE_CLOUD_PROJECT"],
         "checkbox_site_key": os.environ["CHECKBOX_SITE_KEY"]
     }
-    return render_template(template_name_or_list="feedback.html", context=context)
+    return render_template(template_name_or_list="comment.html", context=context)
 
 def create_assessment() -> Response:
     json_data = json.loads(request.data)

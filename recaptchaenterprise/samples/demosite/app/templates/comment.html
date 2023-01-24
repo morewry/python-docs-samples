@@ -22,7 +22,7 @@
         console.log("handleResponse", token);
         // See https://cloud.google.com/recaptcha-enterprise/docs/create-assessment
         const score = await createAssessment({
-          action: "send_feedback",
+          action: "send_comment",
           sitekey: "{{context.checkbox_site_key}}",
           token,
         });
@@ -32,15 +32,15 @@
     <!-- ATTENTION: reCAPTCHA Example (Part 1) Ends -->
   </head>
   <body>
-    <recaptcha-demo step="feedback">
+    <recaptcha-demo step="comment">
       <!-- ATTENTION: reCAPTCHA Example (Part 2) Starts -->
       <div
         class="g-recaptcha"
-        data-action="send_feedback"
+        data-action="send_comment"
         data-callback="handleResponse"
         data-sitekey="{{context.checkbox_site_key}}"
       ></div>
-      <button type="submit">Send feedback</button>
+      <button type="submit">Send comment</button>
       <!-- ATTENTION: reCAPTCHA Example (Part 2) Ends -->
     </recaptcha-demo>
   </body>

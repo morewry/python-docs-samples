@@ -12,7 +12,7 @@ import {
 import "https://unpkg.com/@material/mwc-icon-button@0.27.0/mwc-icon-button.js?module";
 import "https://unpkg.com/@material/mwc-icon@0.27.0/mwc-icon.js?module";
 
-const STEPS = ["home", /* "game", */ "signup", "login", "checkout", "feedback"];
+const STEPS = ["home", /* "game", */ "signup", "login", "store", "comment"];
 
 class RecaptchaDemo extends LitElement {
   static get styles() {
@@ -316,7 +316,8 @@ class RecaptchaDemo extends LitElement {
         background: hsl(var(--content-surface));
         inset: 0 0 0 0;
         position: fixed;
-        transition: transform var(--full-lapse) ease-out, opacity var(--full-lapse) var(--half-lapse) ease-in;
+        transition: transform var(--full-lapse) ease-out,
+          opacity var(--full-lapse) var(--half-lapse) ease-in;
         z-index: 7;
       }
       .sitemap-open {
@@ -515,7 +516,7 @@ class RecaptchaDemo extends LitElement {
       .guide a mwc-icon + span {
         margin-left: 0.5em;
       }
-      /* Checkout Card */
+      /* Store Card */
       dl.cart {
         margin-bottom: var(--xxlarge-space);
       }
@@ -851,7 +852,7 @@ class RecaptchaDemo extends LitElement {
       ></slot>
     `;
 
-    // TODO update login/checkout form examples with feedback
+    // TODO update login/store form examples with comment
     const FORMS = {
       home: html`
         <section class="example">
@@ -866,10 +867,10 @@ class RecaptchaDemo extends LitElement {
           </button>
         </section>
       `,
-      checkout: html`
+      store: html`
         <form class="example">
           <fieldset>
-            <legend><h2 class="h2">Checkout example</h2></legend>
+            <legend><h2 class="h2">Store example</h2></legend>
             <p>
               Some text prompting to solve the reCAPTCHA and/or click the button
               to see the verdict.
@@ -934,13 +935,13 @@ class RecaptchaDemo extends LitElement {
           ${BUTTON}
         </form>
       `,
-      feedback: html`
+      comment: html`
         <form class="example">
           <fieldset>
-            <legend><h2 class="h2">Feedback example</h2></legend>
+            <legend><h2 class="h2">Comment example</h2></legend>
             <p>Some text prompting to solve the reCAPTCHA and/or click the button to see the verdict.</p>
             <label>
-              <span>Feedback</span>
+              <span>Comment</span>
               <textarea disabled />Good job.</textarea>
             </label>
           </fieldset>
@@ -1042,10 +1043,11 @@ class RecaptchaDemo extends LitElement {
           <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
         </div>
       `,
-      checkout: html`
+      store: html`
         <div class="guide">
           <section class="text static">
-            <h1 class="h1">Score when users interact</h1>
+            <h1 class="h1">Pattern</h1>
+            <h2 class="h2">When users interact</h2>
             <p>
               What is this an example of (score on programmatic user action)?
               Why would you use an score programmatically on user interaction?
@@ -1060,29 +1062,20 @@ class RecaptchaDemo extends LitElement {
             >
           </section>
           <section class="text">
-            <div class="stagger ${this.initialized ? "visible" : "hidden"}">
-              <h2 class="h2">What's your score?</h2>
-              <p>
-                How would you fetch the token? For example, do you send a
-                client-side request to a backend? How would you create an
-                assessment? For example, do you require a backend to send a
-                request to Google?
-              </p>
-            </div>
-            <div
-              class="stagger ${this.initialized ? "visible" : "hidden"} ${this
-                .verdict
-                ? "scored"
-                : "unknown"}"
-            >
-              ${SCORE}
-            </div>
+            <h1 class="h1">Result</h1>
+            ${SCORE}
+            <h2 class="h1">Response Details</h2>
             <p>
-              How would you interpret the score? For example, what does a score
-              of 0.4 mean vs 0.6? How would you handle the final score? For
-              example, would you output an error, fail silently, use a
-              "redemption path", or supplement with another product?
+              How would you fetch the token? For example, do you send a
+              client-side request to a backend? How would you create an
+              assessment? For example, do you require a backend to send a
+              request to Google?
             </p>
+            <code> TODO code snippet </code>
+            <a href="#" target="_blank">
+              <mwc-icon>description</mwc-icon>
+              <span>View log</span>
+            </a>
           </section>
           <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
           <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
@@ -1093,7 +1086,8 @@ class RecaptchaDemo extends LitElement {
       login: html`
         <div class="guide">
           <section class="text static">
-            <h1 class="h1">Add reCAPTCHA on an HTML button</h1>
+            <h1 class="h1">Pattern</h1>
+            <h2 class="h2">On an HTML button</h2>
             <p>
               What is this an example of (score auto bind html button)? Why
               would you use an score auto bound to an html button? What kind of
@@ -1108,31 +1102,20 @@ class RecaptchaDemo extends LitElement {
             >
           </section>
           <section class="text">
-            <div class="stagger ${this.initialized ? "visible" : "hidden"}">
-              <h2 class="h2">What's your score?</h2>
-              <p>
-                How would you fetch the token? For example, do you send a
-                client-side request to a backend? How would you create an
-                assessment? For example, do you require a backend to send a
-                request to Google?
-              </p>
-            </div>
-            <div
-              class="stagger ${this.initialized ? "visible" : "hidden"} ${this
-                .verdict
-                ? "scored"
-                : "unknown"}"
-            >
-              ${SCORE}
-            </div>
-            <div>
-              <p>
-                How would you interpret the score? For example, what does a
-                score of 0.4 mean vs 0.6? How would you handle the final score?
-                For example, would you output an error, fail silently, use a
-                "redemption path", or supplement with another product?
-              </p>
-            </div>
+            <h1 class="h1">Result</h1>
+            ${SCORE}
+            <h2 class="h1">Response Details</h2>
+            <p>
+              How would you fetch the token? For example, do you send a
+              client-side request to a backend? How would you create an
+              assessment? For example, do you require a backend to send a
+              request to Google?
+            </p>
+            <code> TODO code snippet </code>
+            <a href="#" target="_blank">
+              <mwc-icon>description</mwc-icon>
+              <span>View log</span>
+            </a>
           </section>
           <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
           <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
@@ -1140,10 +1123,11 @@ class RecaptchaDemo extends LitElement {
           <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
         </div>
       `,
-      feedback: html`
+      comment: html`
         <div class="guide">
           <section class="text static">
-            <h1 class="h1">Automatically render a checkbox</h1>
+            <h1 class="h1">Pattern</h1>
+            <h2 class="h2">Automatically render a checkbox</h2>
             <p>
               What is this an example of (checkbox automatically rendered)? Why
               would you use a checkbox and automatically render it? What kind of
@@ -1158,31 +1142,20 @@ class RecaptchaDemo extends LitElement {
             >
           </section>
           <section class="text">
-            <div class="stagger ${this.initialized ? "visible" : "hidden"}">
-              <h2 class="h2">What's your score?</h2>
-              <p>
-                How would you fetch the token? For example, do you send a
-                client-side request to a backend? How would you create an
-                assessment? For example, do you require a backend to send a
-                request to Google?
-              </p>
-            </div>
-            <div
-              class="stagger ${this.initialized ? "visible" : "hidden"} ${this
-                .verdict
-                ? "scored"
-                : "unknown"}"
-            >
-              ${SCORE}
-            </div>
-            <div>
-              <p>
-                How would you interpret the score? For example, what does a
-                score of 0.4 mean vs 0.6? How would you handle the final score?
-                For example, would you output an error, fail silently, use a
-                "redemption path", or supplement with another product?
-              </p>
-            </div>
+            <h1 class="h1">Result</h1>
+            ${SCORE}
+            <h2 class="h1">Response Details</h2>
+            <p>
+              How would you fetch the token? For example, do you send a
+              client-side request to a backend? How would you create an
+              assessment? For example, do you require a backend to send a
+              request to Google?
+            </p>
+            <code> TODO code snippet </code>
+            <a href="#" target="_blank">
+              <mwc-icon>description</mwc-icon>
+              <span>View log</span>
+            </a>
           </section>
           <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
           <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
@@ -1193,7 +1166,8 @@ class RecaptchaDemo extends LitElement {
       signup: html`
         <div class="guide">
           <section class="text static">
-            <h1 class="h1">Explicitly render a checkbox</h1>
+            <h1 class="h1">Pattern</h1>
+            <h2 class="h2">Explicitly render a checkbox</h2>
             <p>
               What is this an example of (checkbox explicitly rendered)? Why
               would you use a checkbox and explicitly render it? What kind of
@@ -1208,31 +1182,20 @@ class RecaptchaDemo extends LitElement {
             >
           </section>
           <section class="text">
-            <div class="stagger ${this.initialized ? "visible" : "hidden"}">
-              <h2 class="h2">What's your score?</h2>
-              <p>
-                How would you fetch the token? For example, do you send a
-                client-side request to a backend? How would you create an
-                assessment? For example, do you require a backend to send a
-                request to Google?
-              </p>
-            </div>
-            <div
-              class="stagger ${this.initialized ? "visible" : "hidden"} ${this
-                .verdict
-                ? "scored"
-                : "unknown"}"
-            >
-              ${SCORE}
-            </div>
-            <div>
-              <p>
-                How would you interpret the score? For example, what does a
-                score of 0.4 mean vs 0.6? How would you handle the final score?
-                For example, would you output an error, fail silently, use a
-                "redemption path", or supplement with another product?
-              </p>
-            </div>
+            <h1 class="h1">Result</h1>
+            ${SCORE}
+            <h2 class="h1">Response Details</h2>
+            <p>
+              How would you fetch the token? For example, do you send a
+              client-side request to a backend? How would you create an
+              assessment? For example, do you require a backend to send a
+              request to Google?
+            </p>
+            <code> TODO code snippet </code>
+            <a href="#" target="_blank">
+              <mwc-icon>description</mwc-icon>
+              <span>View log</span>
+            </a>
           </section>
           <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
           <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
