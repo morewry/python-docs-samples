@@ -135,14 +135,14 @@ class RecaptchaDemo extends LitElement {
         /* Sizes */
         --drawer-width: 34vw;
         --example-width: 66vw;
-        --game-bottom: 25vh;
+        --castle-bottom: 25vh;
       }
       .demo {
         color: white;
         display: grid;
         grid-template-columns: var(--drawer-width) var(--example-width);
         grid-template-rows: 1fr;
-        transition: grid-template-columns 150ms ease-out;
+        transition: grid-template-columns 300ms ease-out;
       }
       .demo.closed {
         grid-template-columns: 0vw 100vw;
@@ -151,13 +151,15 @@ class RecaptchaDemo extends LitElement {
         --highlight: 240, 52%, 11%;
         --lowlight: 240, 52%, 1%;
         --surface: 240, 52%, 6%;
-        --glow: hsl(var(--indigo-60), 15%);
-        --ditch: hsl(var(--indigo-60), 45%);
+        --glow: hsl(227, 63%, 14%, 16%);
+        --ditch: hsl(227, 63%, 14%, 98%);
         /*
         --lowlight: 245, 100%, 50%;
         --highlight: 0, 100%, 50%;
         */
-        background: radial-gradient(
+        background: linear-gradient(to left, var(--ditch) 1px, transparent 1px)
+            0 0 / var(--drawer-width) 100vh no-repeat fixed,
+          radial-gradient(
               ellipse,
               hsl(var(--lowlight), 75%) -10%,
               transparent 69%
@@ -215,55 +217,58 @@ class RecaptchaDemo extends LitElement {
             )
             0 0 / var(--drawer-width) 100vh no-repeat fixed,
           hsl(var(--surface));
-        box-shadow: 3px 0 3px -1px var(--glow);
-        overflow-y: visible;
-        position: relative;
-        z-index: 1;
-      }
-      .closed .drawer {
-        overflow: hidden;
+        box-shadow: 5px 0 9px 0 var(--glow);
       }
       /* Content */
       .content {
-        --lowlight: 227, 63, 4%;
-        --surface: 227, 63%, 9%;
-        --highlight: 227, 63%, 14%;
-        --glow: 235, 69%, 18%;
-        background: url("../static/images/castle-alternate-unoptimized.svg")
-            center bottom / auto var(--game-bottom) no-repeat fixed,
-          url("../static/images/land-unoptimized.svg") center bottom / auto 10vh
-            no-repeat fixed,
-          radial-gradient(
-              ellipse at bottom,
-              hsl(var(--pink-40), 69%) 0,
-              transparent 69%
-            )
-            center 75vh / 100vw 100vh no-repeat fixed,
-          radial-gradient(
-              ellipse at bottom,
-              hsl(var(--purple-30), 69%) 0,
-              transparent 69%
-            )
-            center 50vh / 200vw 100vh no-repeat fixed,
-          radial-gradient(circle, hsl(var(--glow), 90%) 0, transparent 44%)
-            center center / 100vw 100vh no-repeat fixed,
-          hsl(var(--surface));
-        transition: background-position 150ms ease-out;
-      }
-      .open .content {
-        --offset: calc(50% + (var(--drawer-width) / 2));
-        background-position: var(--offset) bottom, var(--offset) bottom,
-          var(--offset) 75vh, var(--offset) 50vh, var(--offset) center;
+        /* This transform is required due to paint issues with animated elements in drawer
+           However, using this also prevents background-attachment: fixed from functioning
+           Therefore, background has to be moved to internal wrapper .sticky */
+        transform: translateZ(0);
       }
       .content {
         font-family: monospace;
       }
       .content > .sticky {
+        /* Due to CSS grid and sticky restrictions, have to add internal wrapper
+           to get sticky behavior, centering in viewport behavior, and fixed background */
         display: flex;
         flex-direction: column;
         min-height: 100vh;
         position: sticky;
         top: 0;
+      }
+      .content > .sticky {
+        --lowlight: 227, 63, 4%;
+        --surface: 227, 63%, 9%;
+        --highlight: 227, 63%, 14%;
+        --glow: 235, 69%, 18%;
+        --bottom: calc(100vh - var(--castle-bottom));
+        --land-bottom: 10vh;
+        background: 
+          /* castle */ url("../static/images/castle-alternate-unoptimized.svg")
+            center var(--bottom) / auto var(--castle-bottom) no-repeat fixed,
+          /* land */ url("../static/images/land-unoptimized.svg") center
+            calc(100vh - var(--land-bottom)) / auto var(--land-bottom) no-repeat
+            fixed,
+          /* pink */
+            radial-gradient(
+              ellipse at bottom,
+              hsl(var(--pink-40), 69%) 0,
+              transparent 69%
+            )
+            center 75vh / 100vw 100vh no-repeat fixed,
+          /* purple */
+            radial-gradient(
+              ellipse at bottom,
+              hsl(var(--purple-30), 69%) 0,
+              transparent 69%
+            )
+            center 50vh / 200vw 100vh no-repeat fixed,
+          /* blue */
+            radial-gradient(circle, hsl(var(--glow), 85%) 0, transparent 44%)
+            center -12vh / 100vw 100vh no-repeat fixed,
+          /* color */ hsl(var(--surface));
       }
       .content .h1,
       .content .h2 {
@@ -282,7 +287,7 @@ class RecaptchaDemo extends LitElement {
         margin: auto;
         max-width: 350px;
         width: 100%;
-        /* padding: 48px 0 var(--game-bottom) 0; */
+        /* padding: 48px 0 var(--castle-bottom) 0; */
         padding-bottom: 48px;
         position: relative;
         z-index: 1;
@@ -331,41 +336,68 @@ class RecaptchaDemo extends LitElement {
       /* TODO any form styles */
       /* Guide */
       .guide {
-        box-sizing: border-box;
-        padding: 2rem 2rem 0;
+        --guide-space: 2rem;
+        overflow: hidden;
+        position: relative;
+        transform: translateZ(0);
         width: var(--drawer-width);
-        height: 300vh;
+        z-index: 0;
       }
-      .guide .text {
-        max-width: 36em;
+      .guide .h1 {
+        border: 0 solid var(--ditch);
+        border-width: 1px 0;
+        letter-spacing: 0.5px;
+        padding: 12px var(--guide-space);
+        text-transform: uppercase;
       }
-      .guide p,
-      .guide .h1,
-      .guide .h2,
-      .guide dl.score {
-        margin-bottom: 2rem;
-      }
-      .guide .text:nth-child(1) {
-        margin-bottom: 4rem;
+      .guide .text:first-child .h1 {
+        border-top-color: transparent;
       }
       .guide .h1,
       .guide .h2 {
         font-weight: bold;
       }
       .guide .h1 {
-        font-size: 1.4rem;
+        line-height: 1;
       }
       .guide .h2 {
-        font-size: 1.2rem;
+        line-height: 1.25em;
+        margin-bottom: 12px;
+        text-transform: capitalize;
+      }
+      .guide .h2,
+      .guide p,
+      .guide a {
+        padding: 0 var(--guide-space);
+      }
+      .guide .h1,
+      .guide p,
+      .guide a,
+      .guide code {
+        margin-bottom: var(--guide-space);
+      }
+      .guide p {
+        line-height: 1.35em;
+        max-width: 36em;
+      }
+      .guide code {
+        /* TODO: background color */
+        background: hsl(0, 0%, 100%, 4%);
+        display: block;
+        margin: 0 var(--guide-space) var(--guide-space);
+        min-height: 4rem;
+        padding: 1rem;
       }
       .guide a {
+        --link-color: 218;
         align-items: center;
-        color: hsl(var(--pink-40));
+        color: hsl(var(--link-color), 27%, 68%);
         display: inline-flex;
       }
       .guide a:focus,
       .guide a:hover,
       .guide a:active {
+        color: hsl(var(--link-color), 35%, 68%);
         text-decoration: none;
       }
       .guide a span {
@@ -374,13 +406,13 @@ class RecaptchaDemo extends LitElement {
       .guide a:focus span,
       .guide a:hover span,
       .guide a:active span {
-        text-decoration: dashed underline 0.75px;
-        text-underline-offset: 1px;
+        text-decoration: white dashed underline 1px;
+        text-underline-offset: 2px;
       }
       .guide a mwc-icon {
         --mdc-icon-size: 1em;
+        color: white;
         flex: 0 0 auto;
-        margin-left: 0.25em;
         text-decoration: none !important;
         transition: 300ms ease-out;
       }
@@ -389,53 +421,9 @@ class RecaptchaDemo extends LitElement {
       .guide a:active mwc-icon {
         transform: scale(1.25);
       }
-      mwc-icon:hover {
-        text-decoration: none !important;
-      }
-      mwc-icon-button {
-        color: white;
-      }
-      @keyframes stagger {
-        from {
-          opacity: 0;
-        }
-        to {
-          opacity: 1;
-        }
-      }
-      @keyframes bump {
-        0% {
-          transform: scale(1) translate(0, 0);
-        }
-        50% {
-          transform: scale(1.12) translate(0.5em, 0);
-        }
-        100% {
-          transform: scale(1) translate(0, 0);
-        }
-      }
-      .stagger {
-        animation: 300ms linear 0s 1 normal both paused stagger;
-      }
-      .stagger:nth-child(1) {
-        animation-delay: 0ms;
-      }
-      .stagger:nth-child(2) {
-        animation-delay: 600ms;
-      }
-      .stagger:nth-child(3) {
-        animation-delay: 1200ms;
-      }
-      .guide .hidden {
-        opacity: 0;
-      }
-      .guide .visible {
-        animation-direction: normal;
-        animation-play-state: running;
-      }
-      .guide .scored {
-        animation: 300ms linear 0s 1 normal both running bump;
-        transform-origin: left center;
+      .guide a span + mwc-icon,
+      .guide a mwc-icon + span {
+        margin-left: 0.5em;
       }
       /* Menu */
       mwc-icon-button.visible {
@@ -475,43 +463,39 @@ class RecaptchaDemo extends LitElement {
       }
       /* Guide Score */
       dl.score {
+        --custom-blue: 221, 91%, 65%;
         align-items: flex-end;
         display: flex;
         font-family: "Press Start 2P", monospace;
         gap: 0.5em calc(1 * 0.85em);
         line-height: 1;
+        margin: 0 var(--guide-space) var(--guide-space);
         max-width: calc(10 * 0.85em);
       }
-      dl.score {
-        background: hsl(var(--gray-60));
-        border: 1px inset hsl(var(--gray-50), 75%);
-        border-radius: 0.25em;
-        font-size: 107%;
-        padding: 0.75em 1.25em;
-      }
-      .unknown .score {
-        /* TODO color: hsl(var(--gray-40)); */
-      }
-      .score mwc-icon {
-        --mdc-icon-size: 1.25em;
-        display: block;
-        position: relative;
-        top: -1px;
-      }
-      .score .hide {
-        display: none;
-      }
       .score dt {
-        flex: 0 0 auto;
-        margin-top: -1px;
+        height: 1px;
+        left: -10000px;
+        overflow: hidden;
+        position: absolute;
+        top: auto;
+        width: 1px;
       }
       .score dd {
         flex: 1 0 auto;
+        font-size: 1.25rem;
         line-height: 1.25em;
         text-transform: uppercase;
       }
-      .score img {
+      dd.score-result {
+        color: hsl(var(--custom-blue));
+      }
+      .score img.hide {
+        display: none;
+      }
+      .score img.show {
         display: block;
+      }
+      .score img {
         width: 1.75rem;
       }
       /* Slotted Checkbox */
@@ -897,30 +881,39 @@ class RecaptchaDemo extends LitElement {
 
     // TODO undefined case when it expires
     const SCORE = html`
-      <dl class="score unstyled">
-        <!-- 
-        TODO: best practice re: local BE assessment payload
-        <dt>Score:</dt>
-        <dd>${this.score}</dd>
-        -->
-        <dt>
-          <mwc-icon class="${!this.verdict ? "show" : "hide"}">mouse</mwc-icon>
-          <mwc-icon class="${this.verdict === "Human" ? "show" : "hide"}"
-            >face</mwc-icon
-          >
-          <mwc-icon class="${this.verdict === "Bot" ? "show" : "hide"}"
-            >precision_manufacturing</mwc-icon
-          >
-        </dt>
-        <dd>${this.verdict || "?????"}</dd>
-      </dl>
+      <div>
+        <dl class="score unstyled">
+          <dt>Score</dt>
+          <dd class="score-result">${this.score || "???"}</dd>
+          <dt>Verdict</dt>
+          <dd class="verdict-result">
+            <img
+              src="../static/images/human-color-unoptimized.svg"
+              alt="Human"
+              class="${this.verdict === "Human" ? "show" : "hide"}"
+            />
+            <img
+              src="../static/images/bot-color-unoptimized.svg"
+              alt="Bot"
+              class="${this.verdict === "Bot" ? "show" : "hide"}"
+            />
+          </dd>
+        </dl>
+        <p>
+          How would you interpret the score? For example, what does a score of
+          0.4 mean vs 0.6? How would you handle the final score? For example,
+          would you output an error, fail silently, use a "redemption path", or
+          supplement with another product?
+        </p>
+      </div>
     `;
 
     const GUIDES = {
       home: html`
         <div class="guide">
           <section class="text static">
-            <h1 class="h1">Score when the page loads</h1>
+            <h1 class="h1">Pattern</h1>
+            <h2 class="h2">On page load</h2>
             <p>
               What is this an example of (score when the page loads)? Why would
               you verify when the page loads? What kind of key? Why? How would
@@ -930,37 +923,36 @@ class RecaptchaDemo extends LitElement {
             <a
               href="https://cloud.google.com/recaptcha-enterprise/docs/instrument-web-pages#page-load"
               target="_blank"
-              ><span>Learn more about scoring when the page loads</span>
-              <mwc-icon>launch</mwc-icon></a
             >
+              <span>Learn more about scoring when the page loads</span>
+              <mwc-icon>launch</mwc-icon>
+            </a>
           </section>
           <section class="text">
-            <div class="stagger ${this.initialized ? "visible" : "hidden"}">
-              <h2 class="h2">What's your score?</h2>
-              <p>
-                How would you fetch the token? For example, do you send a
-                client-side request to a backend? How would you create an
-                assessment? For example, do you require a backend to send a
-                request to Google?
-              </p>
-            </div>
-            <div
-              class="stagger ${this.initialized ? "visible" : "hidden"} ${this
-                .verdict
-                ? "scored"
-                : "unknown"}"
+            <h1 class="h1">Result</h1>
+            ${SCORE}
+            <h2 class="h1">Response Details</h2>
+            <p>
+              How would you fetch the token? For example, do you send a
+              client-side request to a backend? How would you create an
+              assessment? For example, do you require a backend to send a
+              request to Google?
+            </p>
+            <code>
+            TODO code snippet
+            </code>
+            <a
+              href="#"
+              target="_blank"
             >
-              ${SCORE}
-            </div>
-            <div class="stagger ${this.verdict ? "visible" : "hidden"}">
-              <p>
-                How would you interpret the score? For example, what does a
-                score of 0.4 mean vs 0.6? How would you handle the final score?
-                For example, would you output an error, fail silently, use a
-                "redemption path", or supplement with another product?
-              </p>
-            </div>
+              <mwc-icon>description</mwc-icon>
+              <span>View log</span>
+            </a>
           </section>
+          <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+          <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+          <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+          <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
         </div>
       `,
       checkout: html`
@@ -998,15 +990,17 @@ class RecaptchaDemo extends LitElement {
             >
               ${SCORE}
             </div>
-            <div class="stagger ${this.verdict ? "visible" : "hidden"}">
-              <p>
-                How would you interpret the score? For example, what does a
-                score of 0.4 mean vs 0.6? How would you handle the final score?
-                For example, would you output an error, fail silently, use a
-                "redemption path", or supplement with another product?
-              </p>
-            </div>
+            <p>
+              How would you interpret the score? For example, what does a score
+              of 0.4 mean vs 0.6? How would you handle the final score? For
+              example, would you output an error, fail silently, use a
+              "redemption path", or supplement with another product?
+            </p>
           </section>
+          <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+          <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+          <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+          <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
         </div>
       `,
       login: html`
@@ -1044,7 +1038,7 @@ class RecaptchaDemo extends LitElement {
             >
               ${SCORE}
             </div>
-            <div class="stagger ${this.verdict ? "visible" : "hidden"}">
+            <div>
               <p>
                 How would you interpret the score? For example, what does a
                 score of 0.4 mean vs 0.6? How would you handle the final score?
@@ -1053,6 +1047,10 @@ class RecaptchaDemo extends LitElement {
               </p>
             </div>
           </section>
+          <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+          <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+          <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+          <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
         </div>
       `,
       feedback: html`
@@ -1090,7 +1088,7 @@ class RecaptchaDemo extends LitElement {
             >
               ${SCORE}
             </div>
-            <div class="stagger ${this.verdict ? "visible" : "hidden"}">
+            <div>
               <p>
                 How would you interpret the score? For example, what does a
                 score of 0.4 mean vs 0.6? How would you handle the final score?
@@ -1099,6 +1097,10 @@ class RecaptchaDemo extends LitElement {
               </p>
             </div>
           </section>
+          <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+          <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+          <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+          <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
         </div>
       `,
       signup: html`
@@ -1136,7 +1138,7 @@ class RecaptchaDemo extends LitElement {
             >
               ${SCORE}
             </div>
-            <div class="stagger ${this.verdict ? "visible" : "hidden"}">
+            <div>
               <p>
                 How would you interpret the score? For example, what does a
                 score of 0.4 mean vs 0.6? How would you handle the final score?
@@ -1145,6 +1147,10 @@ class RecaptchaDemo extends LitElement {
               </p>
             </div>
           </section>
+          <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+          <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+          <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+          <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
         </div>
       `,
     };
