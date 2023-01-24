@@ -48,11 +48,11 @@ class RecaptchaDemo extends LitElement {
         line-height: 1;
       }
       label:not(:last-child) {
-        margin-bottom: 24px;
+        margin-bottom: var(--medium-space);
       }
       label > span {
         display: block;
-        margin-bottom: 12px;
+        margin-bottom: var(--small-space);
       }
       input,
       textarea {
@@ -65,7 +65,7 @@ class RecaptchaDemo extends LitElement {
         font-family: sans-serif;
         line-height: 1;
         margin: 0;
-        padding: 12px;
+        padding: var(--small-space);
         width: 100%;
       }
       a {
@@ -132,92 +132,128 @@ class RecaptchaDemo extends LitElement {
         --green-30: 172.4, 51.9%, 58.4%;
         --green-40: 174.3, 41.8%, 50.8%;
         --green-50: 172.7, 60.2%, 37.5%;
+        /* Custom Colors */
+        --drawer-ditch: 227, 63%, 14%;
+        --drawer-glow: hsl(227, 63%, 14%, 18%);
+        --drawer-highlight: 240, 52%, 11%;
+        --drawer-lowlight: 240, 52%, 1%;
+        --drawer-surface: 240, 52%, 6%;
+        /*
+        --drawer-lowlight: 245, 100%, 50%;
+        --drawer-highlight: 0, 100%, 50%;
+        */
+        --content-glow: 235, 69%, 18%;
+        --content-surface: 227, 63%, 9%;
         /* Sizes */
+        --castle-bottom: 25vh;
+        --content-bottom: calc(100vh - var(--castle-bottom));
         --drawer-width: 34vw;
         --example-width: 66vw;
-        --castle-bottom: 25vh;
+        --land-bottom: 10vh;
+        --large-space: 2rem;
+        --medium-space: 1.5rem;
+        --small-space: 0.75rem;
+        --xlarge-space: 2.25rem;
+        --xxlarge-space: 3rem;
+        /* Timings */
+        --full-lapse: 300ms;
+        --half-lapse: 150ms;
       }
       .demo {
         color: white;
         display: grid;
         grid-template-columns: var(--drawer-width) var(--example-width);
         grid-template-rows: 1fr;
-        transition: grid-template-columns 300ms ease-out;
+        transition: grid-template-columns var(--full-lapse) ease-out;
       }
-      .demo.closed {
+      .demo.drawer-closed {
         grid-template-columns: 0vw 100vw;
       }
       .drawer {
-        --highlight: 240, 52%, 11%;
-        --lowlight: 240, 52%, 1%;
-        --surface: 240, 52%, 6%;
-        --glow: hsl(227, 63%, 14%, 16%);
-        --ditch: hsl(227, 63%, 14%, 98%);
-        /*
-        --lowlight: 245, 100%, 50%;
-        --highlight: 0, 100%, 50%;
-        */
-        background: linear-gradient(to left, var(--ditch) 1px, transparent 1px)
+        background: linear-gradient(
+              to left,
+              hsl(var(--drawer-ditch)) 1px,
+              transparent 1px
+            )
             0 0 / var(--drawer-width) 100vh no-repeat fixed,
           radial-gradient(
               ellipse,
-              hsl(var(--lowlight), 75%) -10%,
+              hsl(var(--drawer-lowlight), 75%) -10%,
               transparent 69%
             )
             calc((100vw - (var(--drawer-width) / 2)) * -1) -50vh / 100vw 200vh no-repeat
             fixed,
           radial-gradient(
               ellipse,
-              hsl(var(--highlight), 75%) -10%,
+              hsl(var(--drawer-highlight), 75%) -10%,
               transparent 69%
             )
             calc(var(--drawer-width) / 2) -50vh / 100vw 200vh no-repeat fixed,
           linear-gradient(
               to right,
-              hsl(var(--lowlight), 25%) 0,
+              hsl(var(--drawer-lowlight), 25%) 0,
               transparent 50%
             )
             0 0 / var(--drawer-width) 100vh no-repeat fixed,
           linear-gradient(
               to bottom,
-              hsl(var(--lowlight), 35%) 0,
+              hsl(var(--drawer-lowlight), 35%) 0,
               transparent 50%
             )
             0 0 / var(--drawer-width) 100vh no-repeat fixed,
           linear-gradient(
               to left,
-              hsl(var(--highlight), 15%) 0,
+              hsl(var(--drawer-highlight), 15%) 0,
               transparent 25%
             )
             0 0 / var(--drawer-width) 100vh no-repeat fixed,
-          linear-gradient(to top, hsl(var(--highlight), 15%) 0, transparent 50%)
+          linear-gradient(
+              to top,
+              hsl(var(--drawer-highlight), 15%) 0,
+              transparent 50%
+            )
             0 0 / var(--drawer-width) 100vh no-repeat fixed,
           linear-gradient(
               to right,
-              hsl(var(--lowlight), 85%) 2px,
+              hsl(var(--drawer-lowlight), 85%) 2px,
               transparent 2px
             )
             0 0 / var(--drawer-width) 100vh no-repeat fixed,
           linear-gradient(
               to bottom,
-              hsl(var(--lowlight), 85%) 2px,
+              hsl(var(--drawer-lowlight), 85%) 2px,
               transparent 2px
             )
             0 0 / var(--drawer-width) 100vh no-repeat fixed,
           linear-gradient(
               to left,
-              hsl(var(--highlight), 85%) 1px,
+              hsl(var(--drawer-highlight), 85%) 1px,
               transparent 1px
             )
             0 0 / var(--drawer-width) 100vh no-repeat fixed,
           linear-gradient(
               to top,
-              hsl(var(--highlight), 85%) 1px,
+              hsl(var(--drawer-highlight), 85%) 1px,
               transparent 1px
             )
             0 0 / var(--drawer-width) 100vh no-repeat fixed,
-          hsl(var(--surface));
-        box-shadow: 5px 0 9px 0 var(--glow);
+          hsl(var(--drawer-surface));
+        box-shadow: 5px 0 9px 0 var(--drawer-glow);
+        position: relative;
+      }
+      .drawer > .drawer-close-icon {
+        inset: 0 0 auto auto;
+        position: absolute;
+        transition: opacity var(--half-lapse) ease-out;
+        z-index: 5;
+      }
+      .drawer-closed .drawer > .drawer-close-icon {
+        opacity: 0;
+        transition-delay: 0;
+      }
+      .drawer-open .drawer > .drawer-close-icon {
+        opacity: 1;
+        transition-delay: var(--half-lapse);
       }
       /* Content */
       .content {
@@ -239,15 +275,10 @@ class RecaptchaDemo extends LitElement {
         top: 0;
       }
       .content > .sticky {
-        --lowlight: 227, 63, 4%;
-        --surface: 227, 63%, 9%;
-        --highlight: 227, 63%, 14%;
-        --glow: 235, 69%, 18%;
-        --bottom: calc(100vh - var(--castle-bottom));
-        --land-bottom: 10vh;
         background: 
           /* castle */ url("../static/images/castle-alternate-unoptimized.svg")
-            center var(--bottom) / auto var(--castle-bottom) no-repeat fixed,
+            center var(--content-bottom) / auto var(--castle-bottom) no-repeat
+            fixed,
           /* land */ url("../static/images/land-unoptimized.svg") center
             calc(100vh - var(--land-bottom)) / auto var(--land-bottom) no-repeat
             fixed,
@@ -266,20 +297,79 @@ class RecaptchaDemo extends LitElement {
             )
             center 50vh / 200vw 100vh no-repeat fixed,
           /* blue */
-            radial-gradient(circle, hsl(var(--glow), 85%) 0, transparent 44%)
+            radial-gradient(
+              circle,
+              hsl(var(--content-glow), 85%) 0,
+              transparent 44%
+            )
             center -12vh / 100vw 100vh no-repeat fixed,
-          /* color */ hsl(var(--surface));
+          /* color */ hsl(var(--content-surface));
       }
       .content .h1,
       .content .h2 {
         font-family: "Press Start 2P", monospace;
         line-height: 1.25em;
       }
+      /* Sitemap */
+      .sitemap {
+        /* TODO: sitemap background */
+        background: hsl(var(--content-surface));
+        inset: 0 0 0 0;
+        position: fixed;
+        transition: transform var(--full-lapse) ease-out, opacity var(--full-lapse) var(--half-lapse) ease-in;
+        z-index: 7;
+      }
+      .sitemap-open {
+        opacity: 1;
+        transform: translateY(0);
+        transition-delay: 0, 0;
+      }
+      .sitemap-closed {
+        opacity: 0;
+        transform: translateY(100%);
+        transition-delay: 0, var(--half-lapse);
+      }
+      .sitemap-close-icon {
+        position: absolute;
+        /* TODO: icon position, nested bar? */
+        inset: 0.5rem 1rem auto auto;
+      }
       /* Bar */
       .bar {
         align-items: center;
         display: flex;
-        gap: 24px;
+        gap: var(--medium-space);
+        justify-content: space-between;
+        margin: 0 1rem 1rem 0;
+        padding: 0.5rem 1rem 0.5rem 0;
+      }
+      .bar .drawer-icon {
+        background: hsl(var(--drawer-surface));
+        border: 0 solid hsl(var(--drawer-ditch));
+        border-width: 1px 1px 1px 0;
+        border-radius: 0 6px 6px 0;
+        box-shadow: 0 0 6px 1px var(--drawer-glow);
+        padding: 6px;
+        transition: transform var(--half-lapse) ease-in,
+          opacity var(--half-lapse) linear;
+        transform-origin: left top;
+      }
+      .logo {
+        align-items: center;
+        display: flex;
+        gap: var(--small-space);
+      }
+      .bar .drawer-icon.show {
+        opacity: 1;
+        transform: scale(1) translateX(0);
+      }
+      .bar .drawer-icon.hide {
+        opacity: 0;
+        transform: scale(0.75) translateX(-100%);
+      }
+      .bar .h2 {
+        color: hsl(var(--gray-40));
+        font-size: 0.85rem;
       }
       /* Example */
       .example {
@@ -287,13 +377,13 @@ class RecaptchaDemo extends LitElement {
         margin: auto;
         max-width: 350px;
         width: 100%;
-        /* padding: 48px 0 var(--castle-bottom) 0; */
-        padding-bottom: 48px;
+        /* padding: var(--xxlarge-space) 0 var(--castle-bottom) 0; */
+        padding-bottom: var(--xxlarge-space);
         position: relative;
         z-index: 1;
       }
       .example fieldset {
-        margin-bottom: 48px;
+        margin-bottom: var(--xxlarge-space);
         position: relative;
         z-index: 1;
       }
@@ -302,7 +392,7 @@ class RecaptchaDemo extends LitElement {
         width: 100%;
       }
       .example p {
-        margin-bottom: 48px;
+        margin-bottom: var(--xxlarge-space);
       }
       .example legend .h2 {
         background: linear-gradient(
@@ -316,17 +406,17 @@ class RecaptchaDemo extends LitElement {
           radial-gradient(hsl(var(--purple-50), 25%), transparent 73%) center
             0.8em / 100% 100% no-repeat scroll,
           transparent;
-        margin: 0 -2em 16px;
+        margin: 0 -2em 1rem;
         padding: 0 2em 1em;
         text-shadow: 2px 2px 0 black;
       }
       .example fieldset p {
-        margin-bottom: 36px;
+        margin-bottom: var(--xlarge-space);
       }
       .example .h2 {
         font-size: 80%;
         line-height: 1.25em;
-        margin-bottom: 24px;
+        margin-bottom: var(--medium-space);
         text-transform: uppercase;
       }
       .example p {
@@ -336,7 +426,6 @@ class RecaptchaDemo extends LitElement {
       /* TODO any form styles */
       /* Guide */
       .guide {
-        --guide-space: 2rem;
         overflow: hidden;
         position: relative;
         transform: translateZ(0);
@@ -344,10 +433,10 @@ class RecaptchaDemo extends LitElement {
         z-index: 0;
       }
       .guide .h1 {
-        border: 0 solid var(--ditch);
+        border: 0 solid hsl(var(--drawer-ditch));
         border-width: 1px 0;
         letter-spacing: 0.5px;
-        padding: 12px var(--guide-space);
+        padding: var(--small-space) var(--large-space);
         text-transform: uppercase;
       }
       .guide .text:first-child .h1 {
@@ -362,19 +451,19 @@ class RecaptchaDemo extends LitElement {
       }
       .guide .h2 {
         line-height: 1.25em;
-        margin-bottom: 12px;
+        margin-bottom: var(--small-space);
         text-transform: capitalize;
       }
       .guide .h2,
       .guide p,
       .guide a {
-        padding: 0 var(--guide-space);
+        padding: 0 var(--large-space);
       }
       .guide .h1,
       .guide p,
       .guide a,
       .guide code {
-        margin-bottom: var(--guide-space);
+        margin-bottom: var(--large-space);
       }
       .guide p {
         line-height: 1.35em;
@@ -384,11 +473,12 @@ class RecaptchaDemo extends LitElement {
         /* TODO: background color */
         background: hsl(0, 0%, 100%, 4%);
         display: block;
-        margin: 0 var(--guide-space) var(--guide-space);
+        margin: 0 var(--large-space) var(--large-space);
         min-height: 4rem;
         padding: 1rem;
       }
       .guide a {
+        /* TODO: link color */
         --link-color: 218;
         align-items: center;
         color: hsl(var(--link-color), 27%, 68%);
@@ -401,7 +491,7 @@ class RecaptchaDemo extends LitElement {
         text-decoration: none;
       }
       .guide a span {
-        transition: 300ms ease-out;
+        transition: var(--full-lapse) ease-out;
       }
       .guide a:focus span,
       .guide a:hover span,
@@ -414,7 +504,7 @@ class RecaptchaDemo extends LitElement {
         color: white;
         flex: 0 0 auto;
         text-decoration: none !important;
-        transition: 300ms ease-out;
+        transition: var(--full-lapse) ease-out;
       }
       .guide a:focus mwc-icon,
       .guide a:hover mwc-icon,
@@ -425,22 +515,15 @@ class RecaptchaDemo extends LitElement {
       .guide a mwc-icon + span {
         margin-left: 0.5em;
       }
-      /* Menu */
-      mwc-icon-button.visible {
-        display: block;
-      }
-      mwc-icon-button.hidden {
-        display: none;
-      }
       /* Checkout Card */
       dl.cart {
-        margin-bottom: 48px;
+        margin-bottom: var(--xxlarge-space);
       }
       .cart .item {
         display: flex;
         align-items: top;
         justify-content: space-between;
-        margin-bottom: 24px;
+        margin-bottom: var(--medium-space);
       }
       .cart img {
         height: auto;
@@ -451,26 +534,28 @@ class RecaptchaDemo extends LitElement {
       }
       .cart dt {
         flex: 0 0 5em;
-        margin-right: 24px;
+        margin-right: var(--medium-space);
         padding-top: 13px;
       }
       .cart dd:not(:last-child) {
         flex: 1 0 auto;
-        margin-top: calc(1em + 13px + 12px);
+        margin-top: calc(1em + 13px + var(--small-space));
       }
       .cart dd:last-child {
         flex: 0 0 5em;
       }
       /* Guide Score */
       dl.score {
+        /* TODO: score blue */
         --custom-blue: 221, 91%, 65%;
         align-items: flex-end;
         display: flex;
         font-family: "Press Start 2P", monospace;
         gap: 0.5em calc(1 * 0.85em);
         line-height: 1;
-        margin: 0 var(--guide-space) var(--guide-space);
-        max-width: calc(10 * 0.85em);
+        margin: 0 var(--large-space) var(--large-space);
+        max-width: 50%;
+        justify-content: space-between;
       }
       .score dt {
         height: 1px;
@@ -488,6 +573,7 @@ class RecaptchaDemo extends LitElement {
       }
       dd.score-result {
         color: hsl(var(--custom-blue));
+        margin-right: var(--medium-space);
       }
       .score img.hide {
         display: none;
@@ -502,13 +588,13 @@ class RecaptchaDemo extends LitElement {
       ::slotted(div.g-recaptcha) {
         display: flex;
         justify-content: center;
-        margin: 0 auto 36px;
+        margin: 0 auto var(--xlarge-space);
         position: relative;
         z-index: 1;
       }
       /* Slotted Button / Button */
       .button {
-        margin-bottom: 48px;
+        margin-bottom: var(--xxlarge-space);
       }
       ::slotted(button),
       .button {
@@ -522,9 +608,9 @@ class RecaptchaDemo extends LitElement {
         font: inherit;
         font-family: "Press Start 2P", monospace;
         font-size: 0.8rem;
-        margin: 0 auto 24px;
+        margin: 0 auto var(--medium-space);
         outline: 0;
-        padding: 16px 32px;
+        padding: 1rem 32px;
         position: relative;
         text-transform: uppercase;
         width: 100%;
@@ -540,7 +626,9 @@ class RecaptchaDemo extends LitElement {
       .button::after,
       ::slotted(button)::before,
       .button::before {
-        transition: border 50ms ease-out 0s, border-radius 150ms ease-out 50ms,
+        /* TODO: timing variables */
+        transition: border 50ms ease-out 0s,
+          border-radius var(--half-lapse) ease-out 50ms,
           background 100ms ease 0s, box-shadow 200ms ease-out 0s,
           outline 50ms ease-out 0s, text-shadow 50ms ease-out 0s,
           transform 100ms ease-out 0s;
@@ -700,6 +788,7 @@ class RecaptchaDemo extends LitElement {
     step: { type: String },
     initialized: { type: Boolean, state: true, attribute: false },
     drawerOpen: { type: Boolean, state: true, attribute: false },
+    siteMapOpen: { type: Boolean, state: true, attribute: false },
     /* TODO: update score/verdict when payload is standardized */
     score: { type: String },
     verdict: { type: String },
@@ -711,7 +800,8 @@ class RecaptchaDemo extends LitElement {
     this.initialized = false;
     this.score = undefined;
     this.verdict = undefined;
-    this.drawerOpen = true;
+    this.drawerOpen = false;
+    this.siteMapOpen = false;
   }
 
   willUpdate() {}
@@ -726,6 +816,10 @@ class RecaptchaDemo extends LitElement {
 
   toggleDrawer() {
     this.drawerOpen = !this.drawerOpen;
+  }
+
+  toggleSiteMap() {
+    this.siteMapOpen = !this.siteMapOpen;
   }
 
   goToNextStep() {
@@ -884,7 +978,9 @@ class RecaptchaDemo extends LitElement {
       <div>
         <dl class="score unstyled">
           <dt>Score</dt>
-          <dd class="score-result">${this.score || "???"}</dd>
+          <dd class="score-result">
+            ${(this.score && this.score.slice(0, 3)) || "???"}
+          </dd>
           <dt>Verdict</dt>
           <dd class="verdict-result">
             <img
@@ -892,12 +988,8 @@ class RecaptchaDemo extends LitElement {
               alt="Human"
               class="${this.verdict === "Human" ? "show" : "hide"}"
             />
-            <img
-              src="../static/images/bot-color-unoptimized.svg"
-              alt="Bot"
-              class="${this.verdict === "Bot" ? "show" : "hide"}"
-            />
           </dd>
+          <dd class="verdict-result">Human</dd>
         </dl>
         <p>
           How would you interpret the score? For example, what does a score of
@@ -938,13 +1030,8 @@ class RecaptchaDemo extends LitElement {
               assessment? For example, do you require a backend to send a
               request to Google?
             </p>
-            <code>
-            TODO code snippet
-            </code>
-            <a
-              href="#"
-              target="_blank"
-            >
+            <code> TODO code snippet </code>
+            <a href="#" target="_blank">
               <mwc-icon>description</mwc-icon>
               <span>View log</span>
             </a>
@@ -1158,29 +1245,87 @@ class RecaptchaDemo extends LitElement {
     const BAR = html`
       <div class="bar" id="bar">
         <mwc-icon-button
-          icon="help_outline"
+          icon="menu_open"
           aria-controls="drawer"
           aria-expanded="${this.drawerOpen ? "true" : "false"}"
+          aria-label="Open the information panel"
           @click=${this.toggleDrawer}
-          class="${this.drawerOpen ? "hidden" : "visible"}"
+          class="drawer-icon ${this.drawerOpen ? "hide" : "show"}"
         ></mwc-icon-button>
+        <div class="logo">
+          <mwc-icon>location_searching</mwc-icon>
+          <h1 class="h1">BadFinder</h1>
+          <h2 class="h2">reCAPTCHA Examples</h2>
+        </div>
         <mwc-icon-button
-          icon="close"
-          aria-controls="drawer"
-          aria-expanded="${this.drawerOpen ? "true" : "false"}"
-          @click=${this.toggleDrawer}
-          class="${this.drawerOpen ? "visible" : "hidden"}"
+          icon="menu"
+          aria-controls="sitemap"
+          aria-expanded="${this.siteMapOpen ? "true" : "false"}"
+          aria-label="Show site map"
+          @click=${this.toggleSiteMap}
+          class="menu-icon ${this.siteMapOpen ? "show" : "hide"}"
         ></mwc-icon-button>
-        <h1 class="h1">reCAPTCHA Examples</h1>
       </div>
     `;
 
+    const SITEMAP = html`
+      <nav
+        id="sitemap"
+        class="sitemap ${this.siteMapOpen ? "sitemap-open" : "sitemap-closed"}"
+      >
+        <mwc-icon-button
+          icon="close"
+          aria-controls="sitemap"
+          aria-expanded="${this.siteMapOpen ? "true" : "false"}"
+          @click=${this.toggleSiteMap}
+          class="sitemap-close-icon ${this.siteMapOpen ? "show" : "hide"}"
+        ></mwc-icon-button>
+        <a href="#">Testing Link</a>
+        <a href="#">Testing Link</a>
+        <a href="#">Testing Link</a>
+        <a href="#">Testing Link</a>
+        <a href="#">Testing Link</a>
+        <a href="#">Testing Link</a>
+        <a href="#">Testing Link</a>
+        <h2 class="h2">Testing Heading</h2>
+        <p>
+          The quick brown fox jumped over the lazy dog. The lazy dog was so lazy
+          that he did not blink, nor even twitch. The quick brown fox snickered
+          and did it again. The quick brown fox jumped over the lazy dog. The
+          lazy dog was so lazy that he did not blink, nor even twitch. The quick
+          brown fox snickered and did it again. The quick brown fox jumped over
+          the lazy dog. The lazy dog was so lazy that he did not blink, nor even
+          twitch. The quick brown fox snickered and did it again.
+        </p>
+        <p>
+          The quick brown fox jumped over the lazy dog. The lazy dog was so lazy
+          that he did not blink, nor even twitch. The quick brown fox snickered
+          and did it again.The quick brown fox jumped over the lazy dog. The
+          lazy dog was so lazy that he did not blink, nor even twitch. The quick
+          brown fox snickered and did it again.
+        </p>
+      </nav>
+    `;
+
     return html`
-      <div id="demo" class="demo ${this.drawerOpen ? "open" : "closed"}">
-        <div id="drawer" class="drawer">${GUIDES[this.step]}</div>
+      <div
+        id="demo"
+        class="demo ${this.drawerOpen ? "drawer-open" : "drawer-closed"}"
+      >
+        <div id="drawer" class="drawer">
+          <mwc-icon-button
+            icon="close"
+            aria-controls="drawer"
+            aria-expanded="${this.drawerOpen ? "true" : "false"}"
+            @click=${this.toggleDrawer}
+            class="drawer-close-icon ${this.drawerOpen ? "show" : "hide"}"
+          ></mwc-icon-button>
+          ${GUIDES[this.step]}
+        </div>
         <div id="content" class="content">
           <div class="sticky">${BAR} ${FORMS[this.step]}</div>
         </div>
+        ${SITEMAP}
       </div>
     `;
   }
