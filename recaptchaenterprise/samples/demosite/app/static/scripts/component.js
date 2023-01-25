@@ -146,7 +146,6 @@ class RecaptchaDemo extends LitElement {
         --content-surface: 227, 63%, 9%;
         /* Sizes */
         --castle-bottom: 25vh;
-        --content-bottom: calc(100vh - var(--castle-bottom));
         --drawer-width: 34vw;
         --example-width: 66vw;
         --land-bottom: 10vh;
@@ -156,6 +155,7 @@ class RecaptchaDemo extends LitElement {
         --xlarge-space: 2.25rem;
         --xxlarge-space: 3rem;
         /* Timings */
+        --drawer-lapse: 100ms;
         --full-lapse: 300ms;
         --half-lapse: 150ms;
       }
@@ -164,7 +164,7 @@ class RecaptchaDemo extends LitElement {
         display: grid;
         grid-template-columns: var(--drawer-width) var(--example-width);
         grid-template-rows: 1fr;
-        transition: grid-template-columns var(--full-lapse) ease-out;
+        transition: grid-template-columns var(--drawer-lapse) ease-out;
       }
       .demo.drawer-closed {
         grid-template-columns: 0vw 100vw;
@@ -240,12 +240,13 @@ class RecaptchaDemo extends LitElement {
           hsl(var(--drawer-surface));
         box-shadow: 5px 0 9px 0 var(--drawer-glow);
         position: relative;
+        z-index: 25;
       }
       .drawer > .drawer-close-icon {
-        inset: 0 0 auto auto;
+        inset: -2px 0 auto auto;
         position: absolute;
         transition: opacity var(--half-lapse) ease-out;
-        z-index: 5;
+        z-index: 4;
       }
       .drawer-closed .drawer > .drawer-close-icon {
         opacity: 0;
@@ -260,28 +261,40 @@ class RecaptchaDemo extends LitElement {
         /* This transform is required due to paint issues with animated elements in drawer
            However, using this also prevents background-attachment: fixed from functioning
            Therefore, background has to be moved to internal wrapper .sticky */
-        transform: translateZ(0);
+        /* transform: translateZ(0); */
       }
       .content {
         font-family: monospace;
       }
-      .content > .sticky {
+      .content .sticky-example {
         /* Due to CSS grid and sticky restrictions, have to add internal wrapper
            to get sticky behavior, centering in viewport behavior, and fixed background */
-        display: flex;
-        flex-direction: column;
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr;
+        justify-content: safe center;
         min-height: 100vh;
         position: sticky;
         top: 0;
       }
-      .content > .sticky {
+      .drawer-open .content .sticky-example {
+        --offset: calc(50% + (var(--drawer-width) / 2));
+        background-position:
+          /* castle */ var(--offset)
+            var(--content-bottom),
+          /* land */ var(--offset) var(--land-content-bottom),
+          /* pink */ var(--offset) 75vh, /* purple */ var(--offset) 50vh,
+          /* blue */ var(--offset) -12vh;
+      }
+      .content .sticky-example {
+        --content-bottom: calc(100vh - var(--castle-bottom));
+        --land-content-bottom: calc(100vh - var(--land-bottom));
         background: 
           /* castle */ url("../static/images/castle-alternate-unoptimized.svg")
             center var(--content-bottom) / auto var(--castle-bottom) no-repeat
             fixed,
           /* land */ url("../static/images/land-unoptimized.svg") center
-            calc(100vh - var(--land-bottom)) / auto var(--land-bottom) no-repeat
-            fixed,
+            var(--land-content-bottom) / auto var(--land-bottom) no-repeat fixed,
           /* pink */
             radial-gradient(
               ellipse at bottom,
@@ -304,6 +317,7 @@ class RecaptchaDemo extends LitElement {
             )
             center -12vh / 100vw 100vh no-repeat fixed,
           /* color */ hsl(var(--content-surface));
+        transition: background-position var(--drawer-lapse) ease-out;
       }
       .content .h1,
       .content .h2 {
@@ -312,13 +326,28 @@ class RecaptchaDemo extends LitElement {
       }
       /* Sitemap */
       .sitemap {
-        /* TODO: sitemap background */
-        background: hsl(var(--content-surface));
-        inset: 0 0 0 0;
+        align-items: center;
+        background: linear-gradient(
+            345deg,
+            hsl(0, 0%, 0%, 25%) 5%,
+            hsl(var(--content-surface)) 60%
+          ),
+          hsl(var(--content-surface));
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        font-family: monospace;
+        justify-content: center;
+        inset: 4.5rem 0 0 0;
+        padding: var(--large-space);
         position: fixed;
         transition: transform var(--full-lapse) ease-out,
-          opacity var(--full-lapse) var(--half-lapse) ease-in;
-        z-index: 7;
+          opacity var(--drawer-lapse) var(--half-lapse) ease-in,
+          padding-left var(--drawer-lapse) ease-out;
+        z-index: 10;
+      }
+      .drawer-open .sitemap {
+        padding-left: calc(var(--drawer-width) + var(--large-space));
       }
       .sitemap-open {
         opacity: 1;
@@ -335,14 +364,42 @@ class RecaptchaDemo extends LitElement {
         /* TODO: icon position, nested bar? */
         inset: 0.5rem 1rem auto auto;
       }
+      .sitemap .links,
+      .sitemap .h1,
+      .sitemap p {
+        max-width: 36rem;
+        width: 100%;
+      }
+      .sitemap .links {
+        display: grid;
+        font-family: "Press Start 2P", monospace;
+        gap: 2em;
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-template-rows: 1fr;
+        margin-bottom: 4rem;
+      }
+      .sitemap .h1,
+      .sitemap p {
+        margin-bottom: 1rem;
+      }
+      .sitemap .h1 {
+        font-weight: bold;
+      }
       /* Bar */
       .bar {
         align-items: center;
+        background: hsl(var(--content-surface));
         display: flex;
         gap: var(--medium-space);
         justify-content: space-between;
-        margin: 0 1rem 1rem 0;
+        margin: 0 1rem var(--large-space) 0;
         padding: 0.5rem 1rem 0.5rem 0;
+        position: sticky;
+        top: 0;
+        z-index: 20;
+      }
+      .bar mwc-icon-button {
+        border: 0;
       }
       .bar .drawer-icon {
         background: hsl(var(--drawer-surface));
@@ -378,15 +435,12 @@ class RecaptchaDemo extends LitElement {
         margin: auto;
         max-width: 350px;
         width: 100%;
-        /* padding: var(--xxlarge-space) 0 var(--castle-bottom) 0; */
         padding-bottom: var(--xxlarge-space);
-        position: relative;
-        z-index: 1;
       }
       .example fieldset {
         margin-bottom: var(--xxlarge-space);
         position: relative;
-        z-index: 1;
+        z-index: 2;
       }
       .example legend {
         text-align: center;
@@ -420,6 +474,10 @@ class RecaptchaDemo extends LitElement {
         margin-bottom: var(--medium-space);
         text-transform: uppercase;
       }
+      .example.home .h2 {
+        font-size: 130%;
+        text-transform: none;
+      }
       .example p {
         line-height: 1.65em;
       }
@@ -428,10 +486,11 @@ class RecaptchaDemo extends LitElement {
       /* Guide */
       .guide {
         overflow: hidden;
-        position: relative;
         transform: translateZ(0);
+        width: 100%;
+      }
+      .guide-mask {
         width: var(--drawer-width);
-        z-index: 0;
       }
       .guide .h1 {
         border: 0 solid hsl(var(--drawer-ditch));
@@ -448,7 +507,7 @@ class RecaptchaDemo extends LitElement {
         font-weight: bold;
       }
       .guide .h1 {
-        line-height: 1;
+        line-height: 1.2;
       }
       .guide .h2 {
         line-height: 1.25em;
@@ -478,42 +537,45 @@ class RecaptchaDemo extends LitElement {
         min-height: 4rem;
         padding: 1rem;
       }
-      .guide a {
+      a {
         /* TODO: link color */
         --link-color: 218;
         align-items: center;
         color: hsl(var(--link-color), 27%, 68%);
         display: inline-flex;
       }
-      .guide a:focus,
-      .guide a:hover,
-      .guide a:active {
+      a:focus,
+      a:hover,
+      a:active {
         color: hsl(var(--link-color), 35%, 68%);
         text-decoration: none;
       }
-      .guide a span {
+      a span {
         transition: var(--full-lapse) ease-out;
       }
-      .guide a:focus span,
-      .guide a:hover span,
-      .guide a:active span {
+      .links a:focus,
+      .links a:hover,
+      .links a:active,
+      a:focus span,
+      a:hover span,
+      a:active span {
         text-decoration: white dashed underline 1px;
         text-underline-offset: 2px;
       }
-      .guide a mwc-icon {
+      a mwc-icon {
         --mdc-icon-size: 1em;
         color: white;
         flex: 0 0 auto;
         text-decoration: none !important;
         transition: var(--full-lapse) ease-out;
       }
-      .guide a:focus mwc-icon,
-      .guide a:hover mwc-icon,
-      .guide a:active mwc-icon {
+      a:focus mwc-icon,
+      a:hover mwc-icon,
+      a:active mwc-icon {
         transform: scale(1.25);
       }
-      .guide a span + mwc-icon,
-      .guide a mwc-icon + span {
+      a span + mwc-icon,
+      a mwc-icon + span {
         margin-left: 0.5em;
       }
       /* Store Card */
@@ -546,17 +608,20 @@ class RecaptchaDemo extends LitElement {
         flex: 0 0 5em;
       }
       /* Guide Score */
-      dl.score {
+      .score {
+        align-items: center;
+        display: flex;
+        gap: 2rem;
+        margin: 0 var(--large-space) var(--large-space);
+      }
+      .score dl {
         /* TODO: score blue */
         --custom-blue: 221, 91%, 65%;
-        align-items: flex-end;
+        align-items: flex-start;
         display: flex;
-        font-family: "Press Start 2P", monospace;
-        gap: 0.5em calc(1 * 0.85em);
+        flex-direction: column;
+        gap: 1rem;
         line-height: 1;
-        margin: 0 var(--large-space) var(--large-space);
-        max-width: 50%;
-        justify-content: space-between;
       }
       .score dt {
         height: 1px;
@@ -567,23 +632,23 @@ class RecaptchaDemo extends LitElement {
         width: 1px;
       }
       .score dd {
-        flex: 1 0 auto;
         font-size: 1.25rem;
         line-height: 1.25em;
         text-transform: uppercase;
       }
       dd.score-result {
         color: hsl(var(--custom-blue));
-        margin-right: var(--medium-space);
+        font-size: 2.5rem;
+        font-weight: bold;
+        line-height: 1em;
+        text-indent: -0.1em;
       }
-      .score img.hide {
-        display: none;
-      }
-      .score img.show {
-        display: block;
+      dd.verdict-result {
+        font-family: "Press Start 2P", monospace;
       }
       .score img {
-        width: 1.75rem;
+        width: auto;
+        height: 5rem;
       }
       /* Slotted Checkbox */
       ::slotted(div.g-recaptcha) {
@@ -801,7 +866,7 @@ class RecaptchaDemo extends LitElement {
     this.initialized = false;
     this.score = undefined;
     this.verdict = undefined;
-    this.drawerOpen = false;
+    this.drawerOpen = true;
     this.siteMapOpen = false;
   }
 
@@ -855,12 +920,16 @@ class RecaptchaDemo extends LitElement {
     // TODO update login/store form examples with comment
     const FORMS = {
       home: html`
-        <section class="example">
-          <h2 class="h2">Homepage example</h2>
+        <section class="example home">
+          <h2 class="h2">Stop the bad</h2>
           <p>
-            Text explaining example and next step. For example, might say that
-            this a set of reCAPTCHA examples, say that there is a game, and say
-            that there is an information panel.
+            BadFinder is a pretend world that's kinda like the real world. It's
+            built to let developers explore ways of using reCAPTCHA to protect
+            your site. It can be deployed via a demosite here.
+          </p>
+          <p>
+            Play the game, search the store, pretend to a be a BadBad, or just
+            poke around and have fun!
           </p>
           <button @click=${this.handleSubmit} class="button" type="button">
             Continue
@@ -977,220 +1046,276 @@ class RecaptchaDemo extends LitElement {
     // TODO undefined case when it expires
     const SCORE = html`
       <div>
-        <dl class="score unstyled">
-          <dt>Score</dt>
-          <dd class="score-result">
-            ${(this.score && this.score.slice(0, 3)) || "???"}
-          </dd>
-          <dt>Verdict</dt>
-          <dd class="verdict-result">
-            <img
-              src="../static/images/human-color-unoptimized.svg"
-              alt="Human"
-              class="${this.verdict === "Human" ? "show" : "hide"}"
-            />
-          </dd>
-          <dd class="verdict-result">Human</dd>
-        </dl>
+        <div class="score">
+          <img src="../static/images/human-color-unoptimized.svg" alt="Human" />
+          <dl class="unstyled">
+            <dt>Score</dt>
+            <dd class="score-result">
+              ${(this.score && this.score.slice(0, 3)) || "???"}
+            </dd>
+            <dt>Verdict</dt>
+            <dd class="verdict-result">Human</dd>
+          </dl>
+        </div>
+        <!--
         <p>
           How would you interpret the score? For example, what does a score of
           0.4 mean vs 0.6? How would you handle the final score? For example,
           would you output an error, fail silently, use a "redemption path", or
           supplement with another product?
         </p>
+        -->
+        <p>
+          The 100+ signals ran on this page when it loaded and has a
+          ${(this.score && Number(this.score.slice(0, 3))) * 100 || "???"}%
+          confidence that you're a human.
+        </p>
       </div>
     `;
+
+    const CODE = `
+    {
+      "success": true, 
+      "action": none 
+      "challenge_ts": timestamp, 
+      "hostname": string, 
+      "error-codes": [...]
+}`
+      .replace(/([ ]+)/g, " ")
+      .trim();
 
     const GUIDES = {
       home: html`
         <div class="guide">
-          <section class="text static">
-            <h1 class="h1">Pattern</h1>
-            <h2 class="h2">On page load</h2>
-            <p>
-              What is this an example of (score when the page loads)? Why would
-              you verify when the page loads? What kind of key? Why? How would
-              you create? How would you load JS API? How would you set up the
-              challenge?
-            </p>
-            <a
-              href="https://cloud.google.com/recaptcha-enterprise/docs/instrument-web-pages#page-load"
-              target="_blank"
-            >
-              <span>Learn more about scoring when the page loads</span>
-              <mwc-icon>launch</mwc-icon>
-            </a>
-          </section>
-          <section class="text">
-            <h1 class="h1">Result</h1>
-            ${SCORE}
-            <h2 class="h1">Response Details</h2>
-            <p>
-              How would you fetch the token? For example, do you send a
-              client-side request to a backend? How would you create an
-              assessment? For example, do you require a backend to send a
-              request to Google?
-            </p>
-            <code> TODO code snippet </code>
-            <a href="#" target="_blank">
-              <mwc-icon>description</mwc-icon>
-              <span>View log</span>
-            </a>
-          </section>
-          <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
-          <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+          <div class="guide-mask">
+            <section class="text static">
+              <h1 class="h1">Pattern</h1>
+              <h2 class="h2">On page load</h2>
+              <p>
+                A common pattern for homepages,reCAPTCHA runs on page load - the
+                more pages that contain reCAPTCHA the better the signal, so even
+                if you aren't making decisions based on what reCAPTCHA returns
+                here, it can still enhance signals later on.
+              </p>
+              <!--
+              <p>
+                What is this an example of (score when the page loads)? Why
+                would you verify when the page loads? What kind of key? Why? How
+                would you create? How would you load JS API? How would you set
+                up the challenge?
+              </p>
+              -->
+              <a
+                href="https://cloud.google.com/recaptcha-enterprise/docs/instrument-web-pages#page-load"
+                target="_blank"
+              >
+                <span>Learn more about scoring when the page loads</span>
+                <mwc-icon>launch</mwc-icon>
+              </a>
+            </section>
+            <section class="text">
+              <h1 class="h1">Result</h1>
+              ${SCORE}
+              <h2 class="h1">Response Details</h2>
+              <!--
+              <p>
+                How would you fetch the token? For example, do you send a
+                client-side request to a backend? How would you create an
+                assessment? For example, do you require a backend to send a
+                request to Google?
+              </p>
+              -->
+              <code>
+                <pre>${CODE}</pre>
+              </code>
+              <!--
+              <a href="#" target="_blank">
+                <mwc-icon>description</mwc-icon>
+                <span>View log</span>
+              </a>
+              -->
+            </section>
+          </div>
         </div>
       `,
       store: html`
         <div class="guide">
-          <section class="text static">
-            <h1 class="h1">Pattern</h1>
-            <h2 class="h2">When users interact</h2>
-            <p>
-              What is this an example of (score on programmatic user action)?
-              Why would you use an score programmatically on user interaction?
-              What kind of key? Why? How would you create? How would you load JS
-              API? How would you set up the challenge?
-            </p>
-            <a
-              href="https://cloud.google.com/recaptcha-enterprise/docs/instrument-web-pages#user-action"
-              target="_blank"
-              ><span>Learn more about scoring when users interact</span>
-              <mwc-icon>launch</mwc-icon></a
-            >
-          </section>
-          <section class="text">
-            <h1 class="h1">Result</h1>
-            ${SCORE}
-            <h2 class="h1">Response Details</h2>
-            <p>
-              How would you fetch the token? For example, do you send a
-              client-side request to a backend? How would you create an
-              assessment? For example, do you require a backend to send a
-              request to Google?
-            </p>
-            <code> TODO code snippet </code>
-            <a href="#" target="_blank">
-              <mwc-icon>description</mwc-icon>
-              <span>View log</span>
-            </a>
-          </section>
-          <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
-          <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+          <div class="guide-mask">
+            <section class="text static">
+              <h1 class="h1">Pattern</h1>
+              <h2 class="h2">When users interact</h2>
+              <p>
+                What is this an example of (score on programmatic user action)?
+                Why would you use an score programmatically on user interaction?
+                What kind of key? Why? How would you create? How would you load
+                JS API? How would you set up the challenge?
+              </p>
+              <a
+                href="https://cloud.google.com/recaptcha-enterprise/docs/instrument-web-pages#user-action"
+                target="_blank"
+                ><span>Learn more about scoring when users interact</span>
+                <mwc-icon>launch</mwc-icon></a
+              >
+            </section>
+            <section class="text">
+              <h1 class="h1">Result</h1>
+              ${SCORE}
+              <h2 class="h1">Response Details</h2>
+              <!--
+              <p>
+                How would you fetch the token? For example, do you send a
+                client-side request to a backend? How would you create an
+                assessment? For example, do you require a backend to send a
+                request to Google?
+              </p>
+              -->
+              <code>
+                <pre>${CODE}</pre>
+              </code>
+              <!--
+              <a href="#" target="_blank">
+                <mwc-icon>description</mwc-icon>
+                <span>View log</span>
+              </a>
+              -->
+            </section>
+          </div>
         </div>
       `,
       login: html`
         <div class="guide">
-          <section class="text static">
-            <h1 class="h1">Pattern</h1>
-            <h2 class="h2">On an HTML button</h2>
-            <p>
-              What is this an example of (score auto bind html button)? Why
-              would you use an score auto bound to an html button? What kind of
-              key? Why? How would you create? How would you load JS API? How
-              would you set up the challenge?
-            </p>
-            <a
-              href="https://cloud.google.com/recaptcha-enterprise/docs/instrument-web-pages#html-button"
-              target="_blank"
-              ><span>Learn more about adding reCATPCHA on an HTML button</span>
-              <mwc-icon>launch</mwc-icon></a
-            >
-          </section>
-          <section class="text">
-            <h1 class="h1">Result</h1>
-            ${SCORE}
-            <h2 class="h1">Response Details</h2>
-            <p>
-              How would you fetch the token? For example, do you send a
-              client-side request to a backend? How would you create an
-              assessment? For example, do you require a backend to send a
-              request to Google?
-            </p>
-            <code> TODO code snippet </code>
-            <a href="#" target="_blank">
-              <mwc-icon>description</mwc-icon>
-              <span>View log</span>
-            </a>
-          </section>
-          <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
-          <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+          <div class="guide-mask">
+            <section class="text static">
+              <h1 class="h1">Pattern</h1>
+              <h2 class="h2">On an HTML button</h2>
+              <p>
+                What is this an example of (score auto bind html button)? Why
+                would you use an score auto bound to an html button? What kind
+                of key? Why? How would you create? How would you load JS API?
+                How would you set up the challenge?
+              </p>
+              <a
+                href="https://cloud.google.com/recaptcha-enterprise/docs/instrument-web-pages#html-button"
+                target="_blank"
+                ><span
+                  >Learn more about adding reCATPCHA on an HTML button</span
+                >
+                <mwc-icon>launch</mwc-icon></a
+              >
+            </section>
+            <section class="text">
+              <h1 class="h1">Result</h1>
+              ${SCORE}
+              <h2 class="h1">Response Details</h2>
+              <!--
+              <p>
+                How would you fetch the token? For example, do you send a
+                client-side request to a backend? How would you create an
+                assessment? For example, do you require a backend to send a
+                request to Google?
+              </p>
+              -->
+              <code>
+                <pre>${CODE}</pre>
+              </code>
+              <!--
+              <a href="#" target="_blank">
+                <mwc-icon>description</mwc-icon>
+                <span>View log</span>
+              </a>
+              -->
+            </section>
+          </div>
         </div>
       `,
       comment: html`
         <div class="guide">
-          <section class="text static">
-            <h1 class="h1">Pattern</h1>
-            <h2 class="h2">Automatically render a checkbox</h2>
-            <p>
-              What is this an example of (checkbox automatically rendered)? Why
-              would you use a checkbox and automatically render it? What kind of
-              key? Why? How would you create? How would you load JS API? How
-              would you set up the challenge?
-            </p>
-            <a
-              href="https://cloud.google.com/recaptcha-enterprise/docs/instrument-web-pages-with-checkbox#expandable-1"
-              target="_blank"
-              ><span>Learn more about automatically rendering checkboxes</span>
-              <mwc-icon>launch</mwc-icon></a
-            >
-          </section>
-          <section class="text">
-            <h1 class="h1">Result</h1>
-            ${SCORE}
-            <h2 class="h1">Response Details</h2>
-            <p>
-              How would you fetch the token? For example, do you send a
-              client-side request to a backend? How would you create an
-              assessment? For example, do you require a backend to send a
-              request to Google?
-            </p>
-            <code> TODO code snippet </code>
-            <a href="#" target="_blank">
-              <mwc-icon>description</mwc-icon>
-              <span>View log</span>
-            </a>
-          </section>
-          <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
-          <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+          <div class="guide-mask">
+            <section class="text static">
+              <h1 class="h1">Pattern</h1>
+              <h2 class="h2">Automatically render a checkbox</h2>
+              <p>
+                What is this an example of (checkbox automatically rendered)?
+                Why would you use a checkbox and automatically render it? What
+                kind of key? Why? How would you create? How would you load JS
+                API? How would you set up the challenge?
+              </p>
+              <a
+                href="https://cloud.google.com/recaptcha-enterprise/docs/instrument-web-pages-with-checkbox#expandable-1"
+                target="_blank"
+                ><span
+                  >Learn more about automatically rendering checkboxes</span
+                >
+                <mwc-icon>launch</mwc-icon></a
+              >
+            </section>
+            <section class="text">
+              <h1 class="h1">Result</h1>
+              ${SCORE}
+              <h2 class="h1">Response Details</h2>
+              <!--
+              <p>
+                How would you fetch the token? For example, do you send a
+                client-side request to a backend? How would you create an
+                assessment? For example, do you require a backend to send a
+                request to Google?
+              </p>
+              -->
+              <code>
+                <pre>${CODE}</pre>
+              </code>
+              <!--
+              <a href="#" target="_blank">
+                <mwc-icon>description</mwc-icon>
+                <span>View log</span>
+              </a>
+              -->
+            </section>
+          </div>
         </div>
       `,
       signup: html`
         <div class="guide">
-          <section class="text static">
-            <h1 class="h1">Pattern</h1>
-            <h2 class="h2">Explicitly render a checkbox</h2>
-            <p>
-              What is this an example of (checkbox explicitly rendered)? Why
-              would you use a checkbox and explicitly render it? What kind of
-              key? Why? How would you create? How would you load JS API? How
-              would you set up the challenge?
-            </p>
-            <a
-              href="https://cloud.google.com/recaptcha-enterprise/docs/instrument-web-pages-with-checkbox#expandable-2"
-              target="_blank"
-              ><span>Learn more about explicitly rendering checkboxes</span>
-              <mwc-icon>launch</mwc-icon></a
-            >
-          </section>
-          <section class="text">
-            <h1 class="h1">Result</h1>
-            ${SCORE}
-            <h2 class="h1">Response Details</h2>
-            <p>
-              How would you fetch the token? For example, do you send a
-              client-side request to a backend? How would you create an
-              assessment? For example, do you require a backend to send a
-              request to Google?
-            </p>
-            <code> TODO code snippet </code>
-            <a href="#" target="_blank">
-              <mwc-icon>description</mwc-icon>
-              <span>View log</span>
-            </a>
-          </section>
-          <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
-          <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+          <div class="guide-mask">
+            <section class="text static">
+              <h1 class="h1">Pattern</h1>
+              <h2 class="h2">Explicitly render a checkbox</h2>
+              <p>
+                What is this an example of (checkbox explicitly rendered)? Why
+                would you use a checkbox and explicitly render it? What kind of
+                key? Why? How would you create? How would you load JS API? How
+                would you set up the challenge?
+              </p>
+              <a
+                href="https://cloud.google.com/recaptcha-enterprise/docs/instrument-web-pages-with-checkbox#expandable-2"
+                target="_blank"
+                ><span>Learn more about explicitly rendering checkboxes</span>
+                <mwc-icon>launch</mwc-icon></a
+              >
+            </section>
+            <section class="text">
+              <h1 class="h1">Result</h1>
+              ${SCORE}
+              <h2 class="h1">Response Details</h2>
+              <!--
+              <p>
+                How would you fetch the token? For example, do you send a
+                client-side request to a backend? How would you create an
+                assessment? For example, do you require a backend to send a
+                request to Google?
+              </p>
+              -->
+              <code>
+                <pre>${CODE}</pre>
+              </code>
+              <!--
+              <a href="#" target="_blank">
+                <mwc-icon>description</mwc-icon>
+                <span>View log</span>
+              </a>
+              -->
+            </section>
+          </div>
         </div>
       `,
     };
@@ -1211,10 +1336,10 @@ class RecaptchaDemo extends LitElement {
           <h2 class="h2">reCAPTCHA Examples</h2>
         </div>
         <mwc-icon-button
-          icon="menu"
+          icon="${this.siteMapOpen ? "close" : "menu"}"
           aria-controls="sitemap"
           aria-expanded="${this.siteMapOpen ? "true" : "false"}"
-          aria-label="Show site map"
+          aria-label="${this.siteMapOpen ? "Show site map" : "Hide site map"}"
           @click=${this.toggleSiteMap}
           class="menu-icon ${this.siteMapOpen ? "show" : "hide"}"
         ></mwc-icon-button>
@@ -1226,36 +1351,23 @@ class RecaptchaDemo extends LitElement {
         id="sitemap"
         class="sitemap ${this.siteMapOpen ? "sitemap-open" : "sitemap-closed"}"
       >
-        <mwc-icon-button
-          icon="close"
-          aria-controls="sitemap"
-          aria-expanded="${this.siteMapOpen ? "true" : "false"}"
-          @click=${this.toggleSiteMap}
-          class="sitemap-close-icon ${this.siteMapOpen ? "show" : "hide"}"
-        ></mwc-icon-button>
-        <a href="#">Testing Link</a>
-        <a href="#">Testing Link</a>
-        <a href="#">Testing Link</a>
-        <a href="#">Testing Link</a>
-        <a href="#">Testing Link</a>
-        <a href="#">Testing Link</a>
-        <a href="#">Testing Link</a>
-        <h2 class="h2">Testing Heading</h2>
+        <ul class="unstyled links">
+          <li><a href="/">Home</a></li>
+          <li><a href="/game">Game</a></li>
+          <li><a href="/login">Log in</a></li>
+          <li><a href="/signup">Sign up</a></li>
+          <li><a href="/store">Store</a></li>
+          <li><a href="/comment">Comment</a></li>
+        </ul>
+        <h2 class="h1">About</h2>
         <p>
-          The quick brown fox jumped over the lazy dog. The lazy dog was so lazy
-          that he did not blink, nor even twitch. The quick brown fox snickered
-          and did it again. The quick brown fox jumped over the lazy dog. The
-          lazy dog was so lazy that he did not blink, nor even twitch. The quick
-          brown fox snickered and did it again. The quick brown fox jumped over
-          the lazy dog. The lazy dog was so lazy that he did not blink, nor even
-          twitch. The quick brown fox snickered and did it again.
+          BadFinder is a pretend world, built to give developers examples of
+          using reCAPTCHA to protect your site. It can be deployed via a
+          demosite here.
         </p>
         <p>
-          The quick brown fox jumped over the lazy dog. The lazy dog was so lazy
-          that he did not blink, nor even twitch. The quick brown fox snickered
-          and did it again.The quick brown fox jumped over the lazy dog. The
-          lazy dog was so lazy that he did not blink, nor even twitch. The quick
-          brown fox snickered and did it again.
+          You can play the game, search the store, pretend to a be a BadBad, or
+          just poke around and have fun!
         </p>
       </nav>
     `;
@@ -1276,7 +1388,7 @@ class RecaptchaDemo extends LitElement {
           ${GUIDES[this.step]}
         </div>
         <div id="content" class="content">
-          <div class="sticky">${BAR} ${FORMS[this.step]}</div>
+          <div class="sticky-example">${BAR} ${FORMS[this.step]}</div>
         </div>
         ${SITEMAP}
       </div>
