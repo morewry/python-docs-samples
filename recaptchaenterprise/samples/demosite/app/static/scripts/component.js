@@ -192,7 +192,7 @@ class RecaptchaDemo extends LitElement {
       @media (max-width: 63.9375em) /* <1024px */ {}
 
       @media (max-width: 79.9375em) /* <1280px */ {}
-0
+      
       @media (max-width: 89.9375em) /* <1440px */ {}
 
       @media (max-width: 89.9375em) /* <1440px */ {}
