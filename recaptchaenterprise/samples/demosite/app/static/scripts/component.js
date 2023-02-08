@@ -141,39 +141,105 @@ class RecaptchaDemo extends LitElement {
         --drawer-highlight: 240, 52%, 11%;
         --drawer-lowlight: 240, 52%, 1%;
         --drawer-surface: 240, 52%, 6%;
-        --content-glow: 235, 69%, 18%;
+        --content-glow: 235, 69%, 26%;
+        --content-gloam: 235, 69%, 18%;
         --content-surface: 227, 63%, 9%;
         --highlight-text: white;
         --lowlight-text: 218, 27%, 68%;
         --link-normal: 221, 92%, 71%;
         --link-focus: 221, 92%, 100%;
         /* Sizes */
-        --bar-height: 4.6rem;
-        --button-corners: 22px;
-        --castle-bottom: 24vh;
-        --drawer-width: 30vw;
-        --example-width: 70vw;
-        --land-bottom: 10vh;
-        --line-length: 36em;
-        --line-short: 1.38em;
-        --line-tall: 1.68em;
-        --size-gigantic: 5.2rem;
+        --bar-height-flex: var(--bar-height-short);
+        --bar-height-short: 4.68rem;
+        --bar-height-tall: 8.74rem;
+        --bottom-castle: 24vh;
+        --bottom-land: 10vh;
+        --button-corners: 3.125rem;
+        --content-width: calc(100vw - var(--drawer-width));
+        --drawer-width: calc(
+          var(--line-length-short) + (var(--size-xhuge) * 2)
+        );
+        --example-width: min(var(--line-length-wide), var(--content-width));
+        --field-width: calc(var(--example-width) * 0.74);
+        --line-length-short: 28rem;
+        --line-length-wide: 40rem;
+        --line-short: 1.4em;
+        --line-tall: 1.8em;
+        --size-colassal: 4rem;
+        --size-gigantic: 5rem;
         --size-huge: 2rem;
         --size-jumbo: 3rem;
-        --size-large-em: 1.26em;
-        --size-large: 1.26rem;
-        --size-micro: 0.28rem;
+        --size-large-em: 1.4em;
+        --size-large: 1.2rem;
+        --size-micro: 0.4rem;
         --size-mini: 0.6rem;
         --size-normal: 1rem;
         --size-small: 0.8rem;
-        --size-xgigantic: 6.26rem;
+        --size-xgigantic: 5.6rem;
         --size-xhuge: 2.6rem;
-        --size-xlarge: 1.66rem;
+        --size-xlarge: 1.6rem;
         /* Timings */
         --drawer-lapse: 100ms;
         --full-lapse: 300ms;
         --half-lapse: 150ms;
         --quick-lapse: 50ms;
+      }
+      #demo::after {
+        display: none; /* TODO: util for wip on responsive */
+        background: white;
+        color: black;
+        font-size: 200%;
+        font-weight: bold;
+        padding: 15px;
+        position: fixed;
+        right: 0;
+        top: 50%;
+        z-index: 9000;
+      }
+      @media screen and (min-width: 128em) /* >=2048px */ {
+        #demo::after {
+          content: ">=2048px";
+        }
+      }
+      @media screen and (min-width: 120em) and (max-width: 127.9375em) /* 1920px-2047px */ {
+        #demo::after {
+          content: "1920px-2047px";
+        }
+      }
+      @media screen and (min-width: 100em) and (max-width: 119.9375em) /* 1600px-1919px */ {
+        #demo::after {
+          content: "1600px-1919px";
+        }
+      }
+      @media screen and (min-width: 90em) and (max-width: 99.9375em) /* 1440px-1599px */ {
+        #demo::after {
+          content: "1440px-1599px";
+        }
+      }
+      @media screen and (min-width: 80em) and (max-width: 89.9375em) /* 1280px-1439px */ {
+        #demo::after {
+          content: "1280px-1439px";
+        }
+      }
+      @media screen and (min-width: 64em) and (max-width: 79.9375em) /* 1024px-1279px */ {
+        #demo::after {
+          content: "1024px-1279px";
+        }
+      }
+      @media screen and (min-width: 40em) and (max-width: 63.9375em) /* 640px-1023px */ {
+        #demo::after {
+          content: "640px-1023px";
+        }
+      }
+      @media screen and (min-width: 23.4375em) and (max-width: 39.9375em) /* 375px-640px */ {
+        #demo::after {
+          content: "375px-639px";
+        }
+      }
+      @media screen and (max-width: 23.375em) /* <=374px */ {
+        #demo::after {
+          content: "<=374px";
+        }
       }
       /* Links */
       a {
@@ -250,12 +316,13 @@ class RecaptchaDemo extends LitElement {
       #demo {
         color: var(--highlight-text);
         display: grid;
-        grid-template-columns: var(--drawer-width) var(--example-width);
+        grid-template-columns: var(--drawer-width) var(--content-width);
         grid-template-rows: 1fr;
         transition: grid-template-columns var(--drawer-lapse) ease-out 0s;
       }
       #demo.drawerClosed {
-        grid-template-columns: 0vw 100vw;
+        /* TODO: redo for new drawer-peek layout, share variables */
+        grid-template-columns: 2vw 98vw;
       }
       #drawer {
         background: linear-gradient(
@@ -265,91 +332,94 @@ class RecaptchaDemo extends LitElement {
             )
             0 0 / var(--drawer-width) 100vh no-repeat fixed,
           radial-gradient(
-              ellipse,
-              hsl(var(--drawer-lowlight), 70%) -10%,
+              ellipse at left,
+              hsl(var(--drawer-lowlight), 76%) -10%,
               transparent 69%
             )
-            calc((100vw - (var(--drawer-width) / 2)) * -1) -50vh / 100vw 200vh no-repeat
+            calc((100vw - (var(--drawer-width) / 2)) * -1) -150vh / 100vw 400vh no-repeat
             fixed,
           radial-gradient(
-              ellipse,
-              hsl(var(--drawer-highlight), 70%) -10%,
+              ellipse at right,
+              hsl(var(--drawer-highlight), 76%) -10%,
               transparent 69%
             )
-            calc(var(--drawer-width) / 2) -50vh / 100vw 200vh no-repeat fixed,
+            calc(var(--drawer-width) / 2) -150vh / 100vw 400vh no-repeat fixed,
           linear-gradient(
               to right,
-              hsl(var(--drawer-lowlight), 20%) 0,
+              hsl(var(--drawer-lowlight), 26%) 0,
               transparent 50%
             )
             0 0 / var(--drawer-width) 100vh no-repeat fixed,
           linear-gradient(
               to bottom,
-              hsl(var(--drawer-lowlight), 30%) 0,
+              hsl(var(--drawer-lowlight), 36%) 0,
               transparent 50%
             )
             0 0 / var(--drawer-width) 100vh no-repeat fixed,
           linear-gradient(
               to left,
-              hsl(var(--drawer-highlight), 10%) 0,
+              hsl(var(--drawer-highlight), 16%) 0,
               transparent 25%
             )
             0 0 / var(--drawer-width) 100vh no-repeat fixed,
           linear-gradient(
               to top,
-              hsl(var(--drawer-highlight), 10%) 0,
+              hsl(var(--drawer-highlight), 16%) 0,
               transparent 50%
             )
             0 0 / var(--drawer-width) 100vh no-repeat fixed,
           linear-gradient(
               to right,
-              hsl(var(--drawer-lowlight), 80%) 2px,
+              hsl(var(--drawer-lowlight), 86%) 2px,
               transparent 2px
             )
             0 0 / var(--drawer-width) 100vh no-repeat fixed,
           linear-gradient(
               to bottom,
-              hsl(var(--drawer-lowlight), 80%) 2px,
+              hsl(var(--drawer-lowlight), 86%) 2px,
               transparent 2px
             )
             0 0 / var(--drawer-width) 100vh no-repeat fixed,
           linear-gradient(
               to left,
-              hsl(var(--drawer-highlight), 80%) 1px,
-              transparent 1px
+              hsl(var(--drawer-highlight), 86%) 2px,
+              transparent 2px
             )
             0 0 / var(--drawer-width) 100vh no-repeat fixed,
           linear-gradient(
               to top,
-              hsl(var(--drawer-highlight), 80%) 1px,
-              transparent 1px
+              hsl(var(--drawer-highlight), 86%) 2px,
+              transparent 2px
             )
             0 0 / var(--drawer-width) 100vh no-repeat fixed,
           hsl(var(--drawer-surface));
         box-shadow: 5px 0 9px 0 var(--drawer-glow);
         position: relative;
-        z-index: 25;
+        z-index: 20;
       }
-      #drawer > .drawerCloseIcon {
+      #drawer > .drawerIcon {
+        /* TODO: redo for new drawer-peek layout, share variables */
+        --mdc-icon-size: var(--size-xlarge);
         inset: auto 0 auto auto;
         position: absolute;
-        transition: opacity var(--half-lapse) ease-out 0s;
+        transition: transform var(--drawer-lapse) ease-out 0s;
         z-index: 4;
       }
-      .drawerClosed #drawer > .drawerCloseIcon {
-        opacity: 0;
-        transition-delay: 0;
+      #drawer > .drawerIcon[disabled] {
+        --mdc-theme-text-disabled-on-light: hsl(var(--gray-40));
+        opacity: 0.74;
       }
-      .drawerOpen #drawer > .drawerCloseIcon {
-        opacity: 1;
-        transition-delay: var(--half-lapse);
+      .drawerClosed #drawer > .drawerIcon {
+        /* TODO: redo for new drawer-peek layout, share variables */
+        --offset: calc(1vw + (var(--mdc-icon-size) / 2));
+        transform: translate(var(--offset), var(--size-small));
       }
       /* Content */
       #content {
-        /* This transform is required due to paint issues with animated elements in drawer
+        font-family: monospace;
+        /* This transform may be required due to paint issues with animated elements in drawer
            However, using this also prevents background-attachment: fixed from functioning
            Therefore, background has to be moved to internal wrapper .sticky */
-        font-family: monospace;
         /* transform: translateZ(0); */
       }
       #content .sticky {
@@ -379,65 +449,79 @@ class RecaptchaDemo extends LitElement {
             var(--content-bottom),
           /* land */ var(--offset) var(--land-content-bottom),
           /* pink */ var(--offset) 75vh, /* purple */ var(--offset) 50vh,
-          /* blue */ var(--offset) var(--bar-height);
+          /* blue */ var(--offset) var(--bar-height-short);
       }
       #content .sticky {
-        --content-bottom: calc(100vh - var(--castle-bottom));
-        --land-content-bottom: calc(100vh - var(--land-bottom));
+        --content-bottom: calc(100vh - var(--bottom-castle));
+        --land-content-bottom: calc(100vh - var(--bottom-land));
         background: 
           /* castle */ url("../static/images/castle-alternate-unoptimized.svg")
-            center var(--content-bottom) / auto var(--castle-bottom) no-repeat
+            center var(--content-bottom) / auto var(--bottom-castle) no-repeat
             fixed,
           /* land */ url("../static/images/land-unoptimized.svg") center
-            var(--land-content-bottom) / auto var(--land-bottom) no-repeat fixed,
+            var(--land-content-bottom) / auto var(--bottom-land) no-repeat fixed,
           /* pink */
             radial-gradient(
               ellipse at bottom,
-              hsl(var(--pink-40), 64%) 0,
-              transparent 69%
+              hsl(var(--pink-40), 80%) 0,
+              transparent 68%
             )
-            center 75vh / 100vw 100vh no-repeat fixed,
+            center 75vh / 80vw 100vh no-repeat fixed,
           /* purple */
             radial-gradient(
               ellipse at bottom,
               hsl(var(--purple-30), 64%) 0,
-              transparent 69%
+              transparent 68%
             )
             center 50vh / 200vw 100vh no-repeat fixed,
           /* blue */
             radial-gradient(
               circle,
-              hsl(var(--content-glow), 80%) 0,
-              transparent 44%
+              hsl(var(--content-gloam), 56%) -20%,
+              transparent 50%
             )
-            center var(--bar-height) / 100vw 100vh no-repeat fixed,
+            center var(--bar-height-short) / 68vw 68vh no-repeat fixed,
           /* color */ hsl(var(--content-surface));
         transition: background-position var(--drawer-lapse) ease-out 0s;
       }
       /* Sitemap */
       #sitemap {
+        /* TODO: redo for new drawer-peek layout, share variables */
+        --bg-width: 240vw;
+        --bg-height: 62vh;
+        --bg-offset: 52vh;
+        align-content: center;
         align-items: center;
-        background: linear-gradient(
-            345deg,
-            hsl(0, 0%, 0%, 15%) 5%,
-            hsl(var(--content-surface)) 58%
-          ),
+        /* TODO: redo for new drawer-peek layout, share variables */
+        background: radial-gradient(
+              ellipse at bottom,
+              hsl(0, 0%, 0%, 40%) 5%,
+              hsl(var(--content-surface)) 58%
+            )
+            center var(--bg-offset) / var(--bg-width) var(--bg-height) no-repeat
+            fixed,
           hsl(var(--content-surface));
         box-sizing: border-box;
-        display: flex;
-        flex-direction: column;
+        display: grid;
+        grid-template-columns: auto;
+        grid-template-rows: auto auto auto;
         font-family: monospace;
         justify-content: center;
-        inset: var(--bar-height) 0 0 0;
+        inset: var(--bar-height-flex) 0 0 0;
         margin-left: 0;
         padding: var(--size-huge);
         position: absolute;
         transition: transform var(--full-lapse) ease-out 0s,
-          padding-left var(--drawer-lapse) ease-out 0s,
-          margin-left var(--drawer-lapse) ease-out 0s;
+          background-position var(--drawer-lapse) ease-out 0s,
+          background-size var(--drawer-lapse) ease-out 0s,
+          margin-left var(--drawer-lapse) ease-out 0s,
+          padding-left var(--drawer-lapse) ease-out 0s;
         z-index: 10;
       }
       #sitemap .fade {
+        margin: auto;
+        max-width: var(--content-width);
+        width: var(--example-width);
         transition: opacity var(--full-lapse) ease-in 0s;
       }
       .sitemapOpen #sitemap {
@@ -455,30 +539,48 @@ class RecaptchaDemo extends LitElement {
       }
       .drawerOpen #sitemap {
         --stack-size: calc(var(--drawer-width) + var(--size-huge));
-        margin-left: calc(var(--stack-size) * -1);
+        /* TODO: redo for new drawer-peek layout, share variables */
+        background-position: calc(50% + (var(--stack-size) / 2))
+          var(--map-offset);
+        background-size: calc(var(--map-width) - var(--stack-size))
+          var(--map-height);
+        margin-left: calc(var(--drawer-width) * -1);
         padding-left: var(--stack-size);
       }
       #demo:not(.animating).sitemapClosed #sitemap {
         max-height: 0;
         max-width: 0;
         opacity: 0;
-        z-index: -4;
-      }
-      #sitemap .links,
-      #sitemap .h1,
-      #sitemap p {
-        max-width: var(--line-length);
-        width: 100%;
+        z-index: -2;
       }
       #sitemap .links {
         display: grid;
         font-family: "Press Start 2P", monospace;
         gap: var(--size-huge);
-        grid-template-areas: "row-1-1 row-1-2 row-1-3" "row-2-1 row-2-2 row-2-3" ". row-3-2 .";
-        grid-template-columns: auto auto auto;
-        grid-template-rows: auto auto;
+        grid-template-areas: "game home signup" "game comments store" "game login .";
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-template-rows: auto auto auto;
         margin-bottom: var(--size-gigantic);
+        white-space: nowrap;
       }
+      /* TODO: redo for new drawer-peek layout, updated queries
+      @media screen and (max-width: 32.8125em), screen and (max-width: 28.125em) {
+        #sitemap .links {
+          grid-template-areas: "game home" "login signup" "comments store";
+          grid-template-columns: auto auto;
+          grid-template-rows: auto auto auto;
+          margin-bottom: var(--size-jumbo);
+        }
+      }
+      @media screen and (max-width: 21.875em) {
+        #sitemap .links {
+          grid-template-areas: "game" "home" "signup" "login" "store" "comments";
+          grid-template-columns: auto;
+          grid-template-rows: auto auto auto auto auto auto;
+          margin-bottom: var(--size-huge);
+        }
+      }
+      */
       #sitemap .h1,
       #sitemap p {
         line-height: var(--line-tall);
@@ -494,91 +596,82 @@ class RecaptchaDemo extends LitElement {
         margin-bottom: var(--size-normal);
       }
       #sitemap .game {
-        grid-area: row-1-1;
+        grid-area: game;
+        /* TODO: ??? white-space: break-spaces; */
       }
       #sitemap .home {
-        grid-area: row-1-2;
+        grid-area: home;
       }
       #sitemap .comments {
-        grid-area: row-2-2;
+        grid-area: comments;
       }
       #sitemap .login {
-        grid-area: row-3-2;
+        grid-area: login;
       }
       #sitemap .signup {
-        grid-area: row-1-3;
+        grid-area: signup;
       }
       #sitemap .store {
-        grid-area: row-2-3;
+        grid-area: store;
       }
       /* Bar */
       #bar {
-        align-items: center;
+        align-items: end;
         background: hsl(var(--content-surface));
-        display: flex;
-        gap: var(--size-xlarge);
-        justify-content: space-between;
-        margin: 0 var(--size-normal) var(--size-huge) 0;
-        padding: var(--size-mini) var(--size-normal) var(--size-mini) 0;
+        display: grid;
+        gap: 0 var(--size-small);
+        grid-template-areas: "h1 sitemapIcon" "h2 sitemapIcon";
+        grid-template-columns: max-content auto;
+        grid-template-rows: auto auto;
+        justify-content: stretch;
+        margin: 0 0 var(--size-huge) 0;
+        padding: var(--size-small);
         position: sticky;
         top: 0;
-        z-index: 20;
+        z-index: 30;
       }
-      #bar mwc-icon-button {
-        border: 0;
+      /* TODO: redo for new drawer-peek layout, share variables */
+      .drawerOpen #bar {
+        padding-left: var(--size-xlarge);
       }
-      #bar .drawerIcon {
-        background: hsl(var(--drawer-surface));
-        border: 0 solid hsl(var(--drawer-ditch));
-        border-width: 1px 1px 1px 0;
-        border-radius: 0 6px 6px 0;
-        box-shadow: 0 0 6px 1px var(--drawer-glow);
-        padding: 6px;
-        transition: transform var(--quick-lapse) ease-in 0s,
-          opacity var(--quick-lapse) linear 0s;
-        transform-origin: left top;
+      .drawerClosed #bar {
+        padding-left: calc(var(--size-xlarge) + (var(--size-xlarge) / 2));
       }
-      .drawerClosed #bar .drawerIcon {
-        opacity: 1;
-        transform: scale(1) translateX(0);
+      /* TODO: redo for new drawer-peek layout >=1600px
+      @media screen and (min-width: 100em) {
+        #bar {
+          grid-template-areas: "h1 h2 sitemapIcon";
+          grid-template-columns: max-content max-content auto;
+          grid-template-rows: auto;
+        }
       }
-      .drawerOpen #bar .drawerIcon {
-        opacity: 0;
-        transform: scale(0.75) translateX(-100%);
-      }
-      #bar .drawerIcon[disabled],
-      .drawerClosed #bar .drawerIcon[disabled],
-      .drawerOpen #bar .drawerIcon[disabled] {
-        --mdc-theme-text-disabled-on-light: hsl(var(--gray-40));
-        opacity: 0.74;
-      }
-      .logo {
-        align-items: center;
-        display: flex;
+      */
+      #bar .h1 {
         font-family: "Press Start 2P", monospace;
-        gap: var(--size-small);
-      }
-      .logoWord {
-        align-items: flex-end;
-        display: flex;
-        gap: var(--size-large);
-      }
-      .logo .h1 {
         font-size: var(--size-large);
+        grid-area: h1;
       }
-      .logo .h2 {
+      #bar .h2 {
         color: hsl(var(--gray-40));
         font-size: var(--size-normal);
+        grid-area: h2;
       }
-      .logo .h2 abbr {
+      #bar .h2 abbr {
         text-decoration: none;
+      }
+      #bar .sitemapIcon {
+        --mdc-icon-size: var(--size-xlarge);
+        grid-area: sitemapIcon;
+        justify-self: right;
       }
       /* Example */
       #example {
         box-sizing: border-box;
         margin: auto;
-        max-width: max(400px, var(--line-length));
-        padding-bottom: var(--size-jumbo);
+        max-width: var(--content-width);
+        width: var(--example-width);
+        padding: var(--size-jumbo) var(--size-jumbo)
+          calc(var(--bottom-castle) * 0.75) var(--size-jumbo);
       }
       #example fieldset {
         margin-bottom: var(--size-jumbo);
@@ -587,29 +680,16 @@ class RecaptchaDemo extends LitElement {
       }
       #example .fields {
         margin: 0 auto;
-        max-width: 400px;
-      }
-      #example legend {
+        max-width: var(--content-width);
+        width: var(--field-width);
       }
       #example .h3 {
-        background: linear-gradient(
-              90deg,
-              transparent 0%,
-              hsl(var(--content-glow)) 20%,
-              hsl(var(--content-glow)) 80%,
-              transparent 100%
-            )
-            center bottom / 100% 1px no-repeat scroll,
-          radial-gradient(hsl(var(--content-glow), 50%), transparent 73%) center
-            0.8em / 100% 100% no-repeat scroll,
-          transparent;
         color: var(--highlight-text);
         font-family: "Press Start 2P", monospace;
         font-size: var(--size-xlarge);
         letter-spacing: 2px;
         line-height: var(--size-large-em);
-        margin: 0 -3em var(--size-normal) -3em;
-        padding: 0 3em var(--size-normal);
+        margin-bottom: var(--size-normal);
         text-transform: capitalize;
       }
       #example.home .h3 {
@@ -617,23 +697,48 @@ class RecaptchaDemo extends LitElement {
         text-transform: none;
       }
       #example .h3 {
-        text-shadow: -2px -2px 0 hsl(var(--content-glow)),
-          2px 2px 0 hsl(var(--content-surface));
-      }
-      #example p {
-        text-shadow: -1px -1px 0 hsl(var(--content-glow)),
-          1px 1px 0 hsl(var(--content-surface));
+        text-shadow: -2px -2px 0 hsl(var(--content-gloam)),
+          2px 2px 0 hsl(var(--content-surface)),
+          -2px 2px 0 hsl(var(--content-surface)),
+          2px -2px 0 hsl(var(--content-surface));
       }
       #example p {
         color: hsl(var(--lowlight-text));
         line-height: var(--line-tall);
-        margin-bottom: var(--bar-height);
-      }
-      #example.home p {
         margin-bottom: var(--size-huge);
+        text-shadow: -1px -1px 0 hsl(var(--content-surface)),
+          1px 1px 0 hsl(var(--content-surface)),
+          -1px 1px 0 hsl(var(--content-surface)),
+          1px -1px 0 hsl(var(--content-surface));
+      }
+      #example p:last-of-type {
+        --negative-size: calc(var(--size-colassal) * -1);
+        background: linear-gradient(
+              90deg,
+              transparent 0%,
+              hsl(var(--content-gloam)) 15%,
+              hsl(var(--content-gloam)) 30%,
+              hsl(var(--content-glow)) 50%,
+              hsl(var(--content-gloam)) 70%,
+              hsl(var(--content-gloam)) 85%,
+              transparent 100%
+            )
+            center bottom / 100% 1px no-repeat scroll,
+          radial-gradient(
+              ellipse at bottom,
+              hsl(var(--content-gloam), 36%),
+              transparent 70%
+            )
+            center bottom / 100% 50% no-repeat scroll,
+          transparent;
+        margin: 0 var(--negative-size) var(--size-jumbo) var(--negative-size);
+        padding: 0 var(--size-colassal) var(--size-large);
       }
       #example.home p:last-of-type {
+        background: none;
+        border: 0;
         margin-bottom: var(--size-jumbo);
+        padding-bottom: 0;
       }
       /* Form */
       fieldset {
@@ -690,7 +795,14 @@ class RecaptchaDemo extends LitElement {
         width: 100%;
       }
       .mask {
+        transition: opacity var(--half-lapse) ease-out 0s;
         width: var(--drawer-width);
+      }
+      .drawerOpen .mask {
+        opacity: 1;
+      }
+      .drawerClosed .mask {
+        opacity: 0;
       }
       #guide .h1,
       #guide .h2 {
@@ -717,7 +829,7 @@ class RecaptchaDemo extends LitElement {
       #guide p {
         color: hsl(var(--lowlight-text));
         line-height: var(--line-short);
-        max-width: var(--line-length);
+        max-width: var(--line-length-short);
       }
       #guide a,
       #guide code,
@@ -850,16 +962,19 @@ class RecaptchaDemo extends LitElement {
       #guide .response,
       #verdict p,
       .scoreExample {
-        transition: opacity var(--full-lapse) ease-out var(--half-lapse);
+        transition: max-height var(--full-lapse) ease-out var(--half-lapse),
+          opacity var(--full-lapse) ease-out var(--half-lapse);
       }
       .unscored #guide .response,
       .unscored #verdict p,
       .unscored .scoreExample {
+        max-height: 0;
         opacity: 0;
       }
       .scored #guide .response,
       .scored #verdict p,
       .scored .scoreExample {
+        max-height: 20rem; /* TODO max height */
         opacity: 1;
       }
       /* Slotted Checkbox */
@@ -1002,6 +1117,7 @@ class RecaptchaDemo extends LitElement {
       ::slotted(button:focus-visible)::after,
       .button:focus-visible::after {
         /* Focus Outline */
+        /* outline: 2px solid hsl(var(--blue-30)); */
         outline: 2px solid hsl(var(--pink-30));
         outline-offset: 4px;
       }
@@ -1017,33 +1133,33 @@ class RecaptchaDemo extends LitElement {
       ::slotted(button:hover)::after,
       .button:hover::after {
         /* Focus/Hover Square Glow */
-        box-shadow: 1px 2px var(--size-jumbo) 2px hsl(var(--blue-50), 38%);
+        box-shadow: 1px 2px var(--size-jumbo) 2px hsl(var(--blue-50), 32%);
       }
       ::slotted(button:active)::after,
       .button:active::after {
         /* Active Square Glow */
-        box-shadow: 1px 2px var(--size-jumbo) 2px hsl(0, 0%, 0%, 12%);
+        box-shadow: 1px 2px var(--size-jumbo) 2px hsl(0, 0%, 0%, 10%);
       }
       ::slotted(button:focus)::before,
       .button:focus::before,
       ::slotted(button:hover)::before,
       .button:hover::before {
         /* Focus/Hover Round Glow */
-        box-shadow: 2px 2px var(--size-xgigantic) 20px hsl(var(--blue-50), 38%);
+        box-shadow: 2px 2px var(--size-xgigantic) 20px hsl(var(--blue-50), 32%);
       }
       ::slotted(button:active)::before,
       .button:active::before {
         /* Active Round Glow */
-        box-shadow: 2px 2px var(--size-xgigantic) 20px hsl(0, 0%, 0%, 12%);
+        box-shadow: 2px 2px var(--size-xgigantic) 20px hsl(0, 0%, 0%, 10%);
       }
       /* Game */
       #game {
         align-items: center;
         display: flex;
-        font-size: 4rem;
+        font-size: var(--size-colassal);
         inset: 0 0 0 0;
         justify-content: center;
-        margin-top: -4rem;
+        margin-top: calc(var(--size-colassal) * -1);
         position: absolute;
       }
     `;
@@ -1072,6 +1188,16 @@ class RecaptchaDemo extends LitElement {
     this._score = undefined;
     this.score = this._score;
     this.verdict = undefined;
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    window.addEventListener("popstate", this.goToGame);
+  }
+
+  disconnectedCallback() {
+    window.addEventListener("popstate", this.goToGame);
+    super.disconnectedCallback();
   }
 
   /* TODO: better/more reliable way to change button state */
@@ -1116,7 +1242,19 @@ class RecaptchaDemo extends LitElement {
     this.sitemapOpen = !this.sitemapOpen;
   }
 
+  goToGame(event) {
+    this.animating = true;
+    if (event?.type === "click") {
+      event?.preventDefault();
+    }
+    if (window.location.pathname !== "/game") {
+      window.history.pushState({}, "Game: reCAPTCHA Demo", "/game");
+    }
+    this.step = "game";
+  }
+
   goToResult() {
+    this.animating = true;
     const resultElement = this.shadowRoot.getElementById("result");
     const topOffset =
       Number(resultElement.getBoundingClientRect().top) +
@@ -1131,12 +1269,19 @@ class RecaptchaDemo extends LitElement {
     const nextIndex = STEPS.indexOf(this.step) + 1;
     const nextStep = STEPS[nextIndex];
     if (nextStep) {
-      this.animating = true;
-      window.location.assign(`${window.location.origin}\\${nextStep}`);
+      if (nextStep === "game") {
+        this.goToGame();
+        return;
+      }
+      if (nextStep !== "game") {
+        this.animating = true;
+        window.location.assign(`${window.location.origin}\\${nextStep}`);
+        return;
+      }
     }
   }
 
-  handleAnimation(event) {
+  handleAnimation() {
     const currentlyRunning = this.shadowRoot.getAnimations({ subtree: true });
     this.animating = Boolean(currentlyRunning?.length || 0);
   }
@@ -1157,31 +1302,17 @@ class RecaptchaDemo extends LitElement {
   get BAR() {
     return html`
       <nav aria-label="Main Menu" id="bar">
-        <mwc-icon-button
-          @click=${this.toggleDrawer}
-          aria-controls="drawer"
-          aria-expanded="${this.drawerOpen ? "true" : "false"}"
-          aria-label="Open the information panel"
-          class="drawerIcon"
-          ?disabled=${this.step === "game"}
-          icon="menu_open"
-        ></mwc-icon-button>
-        <div class="logo">
-          <mwc-icon>location_searching</mwc-icon>
-          <div class="logoWord">
-            <h1 class="h1">BadFinder</h1>
-            <h2 class="h2">
-              reCAPTCHA <abbr title="Demonstration">Demo</abbr>
-            </h2>
-          </div>
-        </div>
+        <h1 class="h1">BadFinder</h1>
+        <h2 class="h2">
+          A reCAPTCHA <abbr title="Demonstration">demo</abbr> site
+        </h2>
         <mwc-icon-button
           @click=${this.toggleSiteMap}
           aria-controls="sitemap"
           aria-expanded="${this.sitemapOpen ? "true" : "false"}"
           aria-label="${this.sitemapOpen ? "Show site map" : "Hide site map"}"
           class="sitemapIcon"
-          icon="${this.sitemapOpen ? "close" : "menu"}"
+          icon="${this.sitemapOpen ? "close" : "menu_open"}"
         ></mwc-icon-button>
       </nav>
     `;
@@ -1220,10 +1351,14 @@ class RecaptchaDemo extends LitElement {
       <aside id="drawer">
         <mwc-icon-button
           @click=${this.toggleDrawer}
+          ?disabled=${this.step === "game"}
           aria-controls="drawer"
           aria-expanded="${this.drawerOpen ? "true" : "false"}"
-          class="drawerCloseIcon"
-          icon="close"
+          aria-label="${this.drawerOpen
+            ? "Close the information panel"
+            : "Open the information panel"}"
+          class="drawerIcon"
+          icon="${this.drawerOpen ? "close" : "integration_instructions"}"
         ></mwc-icon-button>
         ${this[GUIDES[this.step]]}
       </aside>
@@ -1244,11 +1379,11 @@ class RecaptchaDemo extends LitElement {
       <form id="example">
         <fieldset>
           <legend><h3 class="h3">Confident comments</h3></legend>
-          <p>Add reCAPTCHA Enterprise to comment and contact forms to prevent spam. Click the "send comment" button to see the result.</p>
+          <p>Use with comment and contact forms to prevent spam. Click the "send comment" button to see your score.</p>
           <div class="fields">
           <label>
             <span>Comment</span>
-            <textarea disabled />Good job protecting your users.</textarea>
+            <textarea disabled />Great job protecting your users!</textarea>
           </label>
           </div>
         </fieldset>
@@ -1283,8 +1418,8 @@ class RecaptchaDemo extends LitElement {
         <fieldset>
           <legend><h3 class="h3">Locked log in</h3></legend>
           <p>
-            Add reCAPTCHA Enterprise to log in forms to secure accounts. Click
-            the "log in" button to see the result.
+            Use with log in forms to secure accounts. Click the "log in" button
+            to see your score.
           </p>
           <div class="fields">
             <label>
@@ -1308,8 +1443,8 @@ class RecaptchaDemo extends LitElement {
         <fieldset>
           <legend><h3 class="h3">Secure Sign up</h3></legend>
           <p>
-            Add reCAPTCHA Enterprise to sign up forms to verify new accounts.
-            Click the "sign up" button to see the result.
+            Use with sign up forms to verify new accounts. Click the "sign up"
+            button to see your score.
           </p>
           <div class="fields">
             <label>
@@ -1338,7 +1473,7 @@ class RecaptchaDemo extends LitElement {
           <legend><h3 class="h3">Safe stores</h3></legend>
           <p>
             Add reCAPTCHA to stores and check out wizards to prevent fraud.
-            Click the "buy now" button to see the result.
+            Click the "buy now" button to see your score.
           </p>
           <div class="fields">
             <dl class="unstyled cart">
@@ -1434,18 +1569,17 @@ class RecaptchaDemo extends LitElement {
           <section class="text pattern">
             <h4 class="h1">Pattern</h4>
             <h5 class="h2">When users interact</h5>
+            <p>Add to user interactions like posting user comments.</p>
             <p>
-              Add reCAPTCHA Enterprise verification on important user
-              interactions like posting user comments. Verification can be added
-              to JavaScript events. With a score-based site key, you can include
-              reCAPTCHA Enterprise throughout your site without requiring users
-              to solve CAPTCHA challenges.
+              With a score-based site key, you can include reCAPTCHA Enterprise
+              without nagging your users with challenges.
             </p>
             <a
               class="documentation"
               href="https://cloud.google.com/recaptcha-enterprise/docs/instrument-web-pages#user-action"
               target="_blank"
-              ><span>Learn more about scoring when users interact</span
+              ><span
+                >Learn more about scoring when&nbsp;users&nbsp;interact</span
               ><mwc-icon>launch</mwc-icon></a
             >
           </section>
@@ -1463,18 +1597,20 @@ class RecaptchaDemo extends LitElement {
             <h4 class="h1">Pattern</h4>
             <h5 class="h2">On page load</h5>
             <p>
-              Try running reCAPTCHA Enterprise on every page load. With a
-              score-based site key, you can include reCAPTCHA Enterprise
-              throughout your site without requiring users to solve CAPTCHA
-              challenges. We recommend that you include reCAPTCHA Enterprise on
-              every page of your site because data about how real users and bots
-              transition between different pages and actions improves scores.
+              Add to every page of your site when it loads. Tracking the
+              behavior of real users and bots between different pages and
+              actions will improve scores.
+            </p>
+            <p>
+              With a score-based site key, you can include reCAPTCHA Enterprise
+              without nagging your users with challenges.
             </p>
             <a
               class="documentation"
               href="https://cloud.google.com/recaptcha-enterprise/docs/instrument-web-pages#page-load"
               target="_blank"
-              ><span>Learn more about scoring when the page loads</span
+              ><span
+                >Learn more about scoring when the&nbsp;page&nbsp;loads</span
               ><mwc-icon>launch</mwc-icon></a
             >
           </section>
@@ -1491,18 +1627,17 @@ class RecaptchaDemo extends LitElement {
           <section class="text pattern">
             <h4 class="h1">Pattern</h4>
             <h5 class="h2">When users interact</h5>
+            <p>Add to user interactions like logging into user accounts.</p>
             <p>
-              Add reCAPTCHA Enterprise verification on important user
-              interactions like logging into user accounts. Verification can be
-              added to JavaScript events. With a score-based site key, you can
-              include reCAPTCHA Enterprise throughout your site without
-              requiring users to solve CAPTCHA challenges.
+              With a score-based site key, you can include reCAPTCHA Enterprise
+              without nagging your users with challenges.
             </p>
             <a
               class="documentation"
               href="https://cloud.google.com/recaptcha-enterprise/docs/instrument-web-pages#user-action"
               target="_blank"
-              ><span>Learn more about scoring when users interact</span
+              ><span
+                >Learn more about scoring when&nbsp;users&nbsp;interact</span
               ><mwc-icon>launch</mwc-icon></a
             >
           </section>
@@ -1545,17 +1680,19 @@ class RecaptchaDemo extends LitElement {
             <h4 class="h1">Pattern</h4>
             <h5 class="h2">On an HTML button</h5>
             <p>
-              Add reCAPTCHA Enterprise verification on important user
-              interactions like signing up for new user accounts. Verification
-              can be added to simple HTML buttons. With a score-based site key,
-              you can include reCAPTCHA Enterprise throughout your site without
-              requiring users to solve CAPTCHA challenges.
+              Add to user interactions like signing up for new user accounts.
+            </p>
+            <p>
+              With a score-based site key, you can include reCAPTCHA Enterprise
+              without nagging your users with challenges.
             </p>
             <a
               class="documentation"
               href="https://cloud.google.com/recaptcha-enterprise/docs/instrument-web-pages#html-button"
               target="_blank"
-              ><span>Learn more about adding reCATPCHA on an HTML button</span
+              ><span
+                >Learn more about adding reCATPCHA on
+                an&nbsp;HTML&nbsp;button</span
               ><mwc-icon>launch</mwc-icon></a
             >
           </section>
@@ -1572,18 +1709,17 @@ class RecaptchaDemo extends LitElement {
           <section class="text pattern">
             <h4 class="h1">Pattern</h4>
             <h5 class="h2">When users interact</h5>
+            <p>Add to user interactions like making purchases.</p>
             <p>
-              Add reCAPTCHA Enterprise verification on important user
-              interactions like making purchases. Verification can be added to
-              JavaScript events. With a score-based site key, you can include
-              reCAPTCHA Enterprise throughout your site without requiring users
-              to solve CAPTCHA challenges.
+              With a score-based site key, you can include reCAPTCHA Enterprise
+              without nagging your users with challenges.
             </p>
             <a
               class="documentation"
               href="https://cloud.google.com/recaptcha-enterprise/docs/instrument-web-pages#user-action"
               target="_blank"
-              ><span>Learn more about scoring when users interact</span
+              ><span
+                >Learn more about scoring when&nbsp;users&nbsp;interact</span
               ><mwc-icon>launch</mwc-icon></a
             >
           </section>
@@ -1758,21 +1894,25 @@ class RecaptchaDemo extends LitElement {
           <ul class="unstyled links">
             <li class="home"><a href="/">Home</a></li>
             <li class="comments"><a href="/comment">Comments</a></li>
-            <li class="game"><a href="/game">The game</a></li>
+            <li class="game">
+              <a @click=${this.goToGame} href="/game">The game</a>
+            </li>
             <li class="login"><a href="/login">Log in</a></li>
             <li class="signup"><a href="/signup">Sign up</a></li>
             <li class="store"><a href="/store">Store</a></li>
           </ul>
-          <h3 class="h1">About</h3>
-          <p>
-            BadFinder is a pretend world that's kinda like the real world. It's
-            built to explore the different ways of using reCAPTCHA Enterprise to
-            protect web sites and applications.
-          </p>
-          <p>
-            Play the game, search the store, view the source, or just poke
-            around and have fun!
-          </p>
+          <section>
+            <h3 class="h1">About</h3>
+            <p>
+              BadFinder is a pretend world that's kinda like the real world.
+              It's built to explore the different ways of using reCAPTCHA
+              Enterprise to protect web sites and applications.
+            </p>
+            <p>
+              Play the game, search the store, view the source, or just poke
+              around and have fun!
+            </p>
+          </section>
         </div>
       </nav>
     `;
